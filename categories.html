@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Категории — myelon.tj</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="assets/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <button class="back-button" onclick="history.back()" title="Назад">←</button>
+        <a class="brand" href="index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text">
+            <strong>myelon.tj</strong>
+            <small>Категории</small>
+          </span>
+        </a>
+      </header>
+
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="catalog-grid">
+            <a class="catalog-card" href="transport/auto-brands.html">
+              <div>
+                <h3>Автомобили</h3>
+                <p>Легковые, грузовые, запчасти</p>
+              </div>
+              <span class="pill">12 000+</span>
+            </a>
+            <a class="catalog-card" href="real-estate/estate-types.html">
+              <div>
+                <h3>Недвижимость</h3>
+                <p>Квартиры, дома, участки</p>
+              </div>
+              <span class="pill">8 400+</span>
+            </a>
+            <a class="catalog-card" href="electronics/electronics-types.html">
+              <div>
+                <h3>Электроника</h3>
+                <p>Телефоны, ноутбуки, техника</p>
+              </div>
+              <span class="pill">9 100+</span>
+            </a>
+            <a class="catalog-card" href="clothing/clothing-types.html">
+              <div>
+                <h3>Одежда и обувь</h3>
+                <p>Мода, бренды, аксессуары</p>
+              </div>
+              <span class="pill">6 200+</span>
+            </a>
+            <a class="catalog-card" href="services/services-types.html">
+              <div>
+                <h3>Услуги</h3>
+                <p>Ремонт, доставка, обучение</p>
+              </div>
+              <span class="pill">5 000+</span>
+            </a>
+            <a class="catalog-card" href="jobs/jobs-types.html">
+              <div>
+                <h3>Работа</h3>
+                <p>Вакансии, подбор персонала</p>
+              </div>
+              <span class="pill">2 700+</span>
+            </a>
+            <a class="catalog-card" href="kids/kids-types.html">
+              <div>
+                <h3>Детский мир</h3>
+                <p>Игрушки, коляски, одежда</p>
+              </div>
+              <span class="pill">3 200+</span>
+            </a>
+            <a class="catalog-card" href="home-garden/home-garden-types.html">
+              <div>
+                <h3>Дом и сад</h3>
+                <p>Мебель, техника, ремонт</p>
+              </div>
+              <span class="pill">4 900+</span>
+            </a>
+            <a class="catalog-card" href="pets/pets-types.html">
+              <div>
+                <h3>Животные</h3>
+                <p>Собаки, кошки, корма, уход</p>
+              </div>
+              <span class="pill">1 800+</span>
+            </a>
+            <a class="catalog-card" href="sports/sports-types.html">
+              <div>
+                <h3>Спорт и хобби</h3>
+                <p>Бег, туризм, велосипеды</p>
+              </div>
+              <span class="pill">2 300+</span>
+            </a>
+            <a class="catalog-card" href="appliances/appliances-types.html">
+              <div>
+                <h3>Бытовая техника</h3>
+                <p>Холодильники, стиральные машины</p>
+              </div>
+              <span class="pill">3 600+</span>
+            </a>
+            <a class="catalog-card" href="construction/construction-types.html">
+              <div>
+                <h3>Строительство и ремонт</h3>
+                <p>Материалы, инструменты</p>
+              </div>
+              <span class="pill">2 900+</span>
+            </a>
+          </div>
+
+          <div class="section-heading" style="margin-top: 24px;">
+            <h2>Новые объявления</h2>
+            <a href="#">Смотреть всё</a>
+          </div>
+          <div class="market-feed mobile-grid" id="marketFeed" data-feed-category="mixed"></div>
+        </section>
+      </main>
+
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+  </body>
+</html>

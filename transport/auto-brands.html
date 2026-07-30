@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Марки автомобилей и объявления — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      /* Стили для блока рандомных объявлений внизу */
+      .feed-section-title {
+        margin-top: 32px;
+        margin-bottom: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #0f172a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .market-feed.mobile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .ad-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease;
+      }
+
+      .ad-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .ad-image-container {
+        width: 100%;
+        height: 140px;
+        background-color: #f1f5f9;
+      }
+
+      .ad-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .ad-details {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .ad-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .tag-shop {
+        background-color: #fff7ed;
+        color: #ea580c;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .ad-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ad-title {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.3;
+        color: #0f172a;
+        margin: 0;
+      }
+
+      .ad-location {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="../categories.html" title="Назад к категориям">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text">
+            <strong>myelon.tj</strong>
+            <small>Автомобили</small>
+          </span>
+        </a>
+      </header>
+
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading">
+            <h2>Популярные марки автомобилей</h2>
+            <span>Топ-24 бренда</span>
+          </div>
+
+          <!-- Сетка брендов -->
+          <div class="catalog-grid">
+            <a class="catalog-card" href="auto-listings.html?brand=toyota"><div><h3>Toyota</h3><p>Camry, RAV4, Land Cruiser</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=hyundai"><div><h3>Hyundai</h3><p>Sonata, Elantra, Santa Fe</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=kia"><div><h3>Kia</h3><p>K5, Sportage, Sorento</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=mercedes"><div><h3>Mercedes-Benz</h3><p>Class E, S, G, ML</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=bmw"><div><h3>BMW</h3><p>Series 3, 5, X5, X7</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=chevrolet"><div><h3>Chevrolet</h3><p>Cobalt, Lacetti, Malibu</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=volkswagen"><div><h3>Volkswagen</h3><p>Passat, Golf, Tiguan</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=nissan"><div><h3>Nissan</h3><p>Teana, X-Trail, Patrol</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=lexus"><div><h3>Lexus</h3><p>RX, GX, LX, ES</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=daewoo"><div><h3>Daewoo</h3><p>Matiz, Nexia, Gentra</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=audi"><div><h3>Audi</h3><p>A4, A6, Q5, Q7</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=honda"><div><h3>Honda</h3><p>Civic, Accord, CR-V</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=ford"><div><h3>Ford</h3><p>Focus, Fusion, Explorer</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=skoda"><div><h3>Škoda</h3><p>Octavia, Rapid, Kodiaq</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=renault"><div><h3>Renault</h3><p>Logan, Duster, Sandero</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=mazda"><div><h3>Mazda</h3><p>Mazda 3, 6, CX-5</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=mitsubishi"><div><h3>Mitsubishi</h3><p>Lancer, Pajero, Outlander</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=subaru"><div><h3>Subaru</h3><p>Forester, Outback, Impreza</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=chery"><div><h3>Chery</h3><p>Tiggo 4, 7 Pro, 8 Pro</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=geely"><div><h3>Geely</h3><p>Monjaro, Coolray, Atlas</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=BYD"><div><h3>BYD</h3><p>Song Plus, Han, Yuan</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=lada"><div><h3>Lada (ВАЗ)</h3><p>Granta, Niva, Vesta</p></div></a>
+            <a class="catalog-card" href="auto-listings.html?brand=gaz"><div><h3>ГАЗ</h3><p>Газель Next, Соболь</p></div></a>
+            
+            <!-- Раздел «Другое» -->
+            <a class="catalog-card" href="auto-listings.html?brand=other" style="border: 2px dashed var(--border-color); background: #f1f5f9;">
+              <div>
+                <h3>Другие марки</h3>
+                <p>Остальные бренды и редкие авто</p>
+              </div>
+              <span class="pill">Ещё 20+</span>
+            </a>
+          </div>
+
+          <!-- Рандомные объявления сразу после брендов -->
+          <div class="feed-section-title">
+            <span>Свежие предложения</span>
+            <span style="font-size: 13px; font-weight: 400; color: #64748b;">Рандом</span>
+          </div>
+
+          <div class="market-feed mobile-grid">
+            <!-- Карточка 1 -->
+            <a href="auto-detail.html" class="ad-card">
+              <div class="ad-image-container">
+                <img src="https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=400&auto=format&fit=crop" alt="Toyota" />
+              </div>
+              <div class="ad-details">
+                <div class="ad-meta">
+                  <span class="tag-shop">Магазин</span>
+                  <span class="ad-price">145,000 TJS</span>
+                </div>
+                <h3 class="ad-title">Новый Toyota Corolla 2021</h3>
+                <p class="ad-location">Авторынок Душанбе</p>
+              </div>
+            </a>
+
+            <!-- Карточка 2 -->
+            <a href="auto-detail.html" class="ad-card">
+              <div class="ad-image-container">
+                <img src="https://images.unsplash.com/photo-1563720223185-6142f3a8d18e?q=80&w=400&auto=format&fit=crop" alt="Mercedes" />
+              </div>
+              <div class="ad-details">
+                <div class="ad-meta">
+                  <span class="tag-shop">Магазин</span>
+                  <span class="ad-price">310,000 TJS</span>
+                </div>
+                <h3 class="ad-title">Mercedes-Benz E-Class, 2020</h3>
+                <p class="ad-location">Душанбе, центр</p>
+              </div>
+            </a>
+
+            <!-- Карточка 3 -->
+            <a href="auto-detail.html" class="ad-card">
+              <div class="ad-image-container">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=400&auto=format&fit=crop" alt="Kia" />
+              </div>
+              <div class="ad-details">
+                <div class="ad-meta">
+                  <span class="tag-shop">Магазин</span>
+                  <span class="ad-price">220,000 TJS</span>
+                </div>
+                <h3 class="ad-title">Kia K5 Рестайлинг, 2022</h3>
+                <p class="ad-location">Худжанд</p>
+              </div>
+            </a>
+
+            <!-- Карточка 4 -->
+            <a href="auto-detail.html" class="ad-card">
+              <div class="ad-image-container">
+                <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=400&auto=format&fit=crop" alt="Hyundai" />
+              </div>
+              <div class="ad-details">
+                <div class="ad-meta">
+                  <span class="tag-shop">Магазин</span>
+                  <span class="ad-price">175,000 TJS</span>
+                </div>
+                <h3 class="ad-title">Hyundai Sonata, 2019</h3>
+                <p class="ad-location">Авторынок Бохтар</p>
+              </div>
+            </a>
+          </div>
+
+        </section>
+      </main>
+
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+  </body>
+</html>

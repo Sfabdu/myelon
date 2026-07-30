@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Объявления по недвижимости — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .filters-container {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 4px 0 12px 0;
+        scrollbar-width: none;
+      }
+      .filters-container::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-pill {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #334155;
+        white-space: nowrap;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .filter-pill:hover, .filter-pill.active {
+        background: #0f172a;
+        color: #fff;
+        border-color: #0f172a;
+      }
+      .market-feed.mobile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding-top: 8px;
+      }
+      .ad-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+      }
+      .ad-image-container {
+        width: 100%;
+        height: 140px;
+        background-color: #f1f5f9;
+      }
+      .ad-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .ad-details {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .ad-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .tag-agency {
+        background-color: #eff6ff;
+        color: #2563eb;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .ad-price {
+        font-size: 15px;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .ad-title {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.3;
+        color: #0f172a;
+        margin: 0;
+      }
+      .ad-location {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="estate-types.html" title="Назад к типам недвижимости">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text">
+            <strong>myelon.tj</strong>
+            <small id="estateSubtitle">Недвижимость</small>
+          </span>
+        </a>
+      </header>
+
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading">
+            <h2 id="listingsTitle">Объявления</h2>
+            <span>В наличии</span>
+          </div>
+
+          <!-- Фильтры (меняются в зависимости от типа: комнаты, сотки или квадраты) -->
+          <div class="filters-container" id="quickFilters"></div>
+
+          <div class="market-feed mobile-grid">
+            <a href="#" class="ad-card">
+              <div class="ad-image-container">
+                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=400&auto=format&fit=crop" alt="Объект" />
+              </div>
+              <div class="ad-details">
+                <div class="ad-meta">
+                  <span class="tag-agency">Агентство</span>
+                  <span class="ad-price">520,000 TJS</span>
+                </div>
+                <h3 class="ad-title">Объект недвижимости</h3>
+                <p class="ad-location">Душанбе</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const type = urlParams.get('type') || 'apartments';
+      const currentFilter = urlParams.get('filter') || 'all';
+      
+      const names = {
+        'apartments': 'Квартиры',
+        'houses': 'Дома и участки',
+        'commercial': 'Коммерческая',
+        'rent': 'Аренда жилья'
+      };
+      
+      document.getElementById('listingsTitle').textContent = names[type] || 'Объекты';
+      document.getElementById('estateSubtitle').textContent = names[type] || 'Недвижимость';
+
+      const filtersContainer = document.getElementById('quickFilters');
+      let filters = [];
+
+      // Логика фильтров под каждый раздел
+      if (type === 'houses') {
+        // Участки — сотки
+        filters = [
+          { id: 'all', label: 'Все' },
+          { id: '4', label: '4 сотки' },
+          { id: '8', label: '8 соток' },
+          { id: '12', label: '12 соток' },
+          { id: '16', label: '16 соток' },
+          { id: 'other', label: 'Другие сотки 🔍' }
+        ];
+      } else if (type === 'commercial') {
+        // Коммерческая — квадратные метры
+        filters = [
+          { id: 'all', label: 'Все' },
+          { id: 'to50', label: 'до 50 м²' },
+          { id: '50-100', label: '50 - 100 м²' },
+          { id: '100-200', label: '100 - 200 м²' },
+          { id: '200plus', label: '200+ м²' },
+          { id: 'other', label: 'Другие м² 🔍' }
+        ];
+      } else {
+        // Квартиры и аренда — комнаты
+        filters = [
+          { id: 'all', label: 'Все' },
+          { id: '1', label: '1 комната' },
+          { id: '2', label: '2 комнаты' },
+          { id: '3', label: '3 комнаты' },
+          { id: '4plus', label: '4+ комнат' },
+          { id: 'other', label: 'Другие 🔍' }
+        ];
+      }
+
+      filtersContainer.innerHTML = filters.map(f => `
+        <a href="estate-listings.html?type=${type}&filter=${f.id}" 
+           class="filter-pill ${currentFilter === f.id ? 'active' : ''}">
+           ${f.label}
+        </a>
+      `).join('');
+    </script>
+  </body>
+</html>

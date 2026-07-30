@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Одежда и обувь — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .feed-section-title { margin-top: 32px; margin-bottom: 16px; font-size: 18px; font-weight: 700; color: #0f172a; display: flex; justify-content: space-between; align-items: center; }
+      .market-feed.mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .ad-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: transform 0.2s ease; }
+      .ad-card:hover { transform: translateY(-4px); }
+      .ad-image-container { width: 100%; height: 140px; background-color: #f1f5f9; }
+      .ad-image-container img { width: 100%; height: 100%; object-fit: cover; }
+      .ad-details { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+      .ad-meta { display: flex; justify-content: space-between; align-items: center; }
+      .tag-shop { background-color: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+      .ad-price { font-size: 16px; font-weight: 700; color: #0f172a; }
+      .ad-title { font-size: 14px; font-weight: 600; line-height: 1.3; color: #0f172a; margin: 0; }
+      .ad-location { font-size: 12px; color: #64748b; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="../categories.html" title="Назад к категориям">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text"><strong>myelon.tj</strong><small>Одежда и обувь</small></span>
+        </a>
+      </header>
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading"><h2>Категории одежды и обуви</h2><span>Выберите категорию</span></div>
+          <div class="catalog-grid">
+            <a class="catalog-card" href="clothing-listings.html?type=men"><div><h3>Мужская одежда</h3><p>Футболки, джинсы, куртки</p></div><span class="pill">6 200+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=women"><div><h3>Женская одежда</h3><p>Платья, юбки, блузки</p></div><span class="pill">9 800+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=shoes"><div><h3>Обувь</h3><p>Кроссовки, ботинки, туфли</p></div><span class="pill">5 400+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=accessories"><div><h3>Аксессуары</h3><p>Сумки, шляпы, поясы</p></div><span class="pill">3 100+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=kids"><div><h3>Детская одежда</h3><p>Ползовки, футболки, платья</p></div><span class="pill">4 200+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=sports"><div><h3>Спортивная одежда</h3><p>Купальники, лыжные костюмы</p></div><span class="pill">2 800+</span></a>
+            <a class="catalog-card" href="clothing-listings.html?type=other"><div><h3>Другое</h3><p>Прочая одежда и обувь</p></div><span class="pill">Ещё 40+</span></a>
+          </div>
+          <div class="feed-section-title"><span>Свежие предложения</span><span style="font-size: 13px; font-weight: 400; color: #64748b;">Рекомендации</span></div>
+          <div class="market-feed mobile-grid">
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80" alt="Оверсайз худи" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">140 TJS</span></div><h3 class="ad-title">Оверсайз худи</h3><p class="ad-location">Рынок Корвон</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1544965692-6c8f5f0b8d70?auto=format&fit=crop&w=400&q=80" alt="Кроссовки" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">320 TJS</span></div><h3 class="ad-title">Кроссовки Nike Air Max</h3><p class="ad-location">Душанбе, ТЦ «Сомон»</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1551218808-b29e9b2947e9?auto=format&fit=crop&w=400&q=80" alt="Платье" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">280 TJS</span></div><h3 class="ad-title">Платье вечернее</h3><p class="ad-location">Худжанд</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1593095939098-0e5e5e5e5e5e?auto=format&fit=crop&w=400&q=80" alt="Сумка" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">190 TJS</span></div><h3 class="ad-title">Сумка женская с ремешком</h3><p class="ad-location">Душанбе, Сино</p></div>
+            </a>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+  </body>
+</html>

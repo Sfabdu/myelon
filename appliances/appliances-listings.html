@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Бытовая техника — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .filters-container { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px 0; scrollbar-width: none; }
+      .filters-container::-webkit-scrollbar { display: none; }
+      .filter-pill { background: #fff; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #334155; white-space: nowrap; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+      .filter-pill:hover, .filter-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+      .market-feed.mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 8px; }
+      .ad-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+      .ad-image-container { width: 100%; height: 140px; background-color: #f1f5f9; }
+      .ad-image-container img { width: 100%; height: 100%; object-fit: cover; }
+      .ad-details { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+      .ad-meta { display: flex; justify-content: space-between; align-items: center; }
+      .tag-shop { background-color: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+      .ad-price { font-size: 16px; font-weight: 700; color: #0f172a; }
+      .ad-title { font-size: 14px; font-weight: 600; line-height: 1.3; color: #0f172a; margin: 0; }
+      .ad-location { font-size: 12px; color: #64748b; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="appliances-types.html" title="Назад к типам">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text"><strong>myelon.tj</strong><small id="appliancesSubtitle">Бытовая техника</small></span>
+        </a>
+      </header>
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading"><h2 id="listingsTitle">Товары</h2><span id="listingsCount">В наличии</span></div>
+          <div class="filters-container" id="quickFilters"></div>
+          <div class="market-feed mobile-grid">
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1504139458679-5eb0f84de1e6?q=80&w=400&auto=format&fit=crop" alt="Холодильник" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">2 800 TJS</span></div><h3 class="ad-title">Холодильник Samsung, 350л</h3><p class="ad-location">Душанбе, ТЦ «Сомон»</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1581595220834-523bae14cca8?q=80&w=400&auto=format&fit=crop" alt="Стиральная" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">1 900 TJS</span></div><h3 class="ad-title">Стиральная машина Bosch</h3><p class="ad-location">Худжанд</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1544965692-6c8f5f0b8d70?auto=format&fit=crop&w=400&q=80" alt="Духовка" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">1 200 TJS</span></div><h3 class="ad-title">Духовка электрическая</h3><p class="ad-location">Душанбе, Сино</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1585351584416-9871b33f3e15?q=80&w=400&auto=format&fit=crop" alt="Кондиционер" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">3 500 TJS</span></div><h3 class="ad-title">Кондиционер портативный</h3><p class="ad-location">Душанбе, район И. Сомони</p></div>
+            </a>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const type = urlParams.get('type') || 'refrigerators';
+      const currentFilter = urlParams.get('filter') || 'all';
+      const names = {
+        'refrigerators': 'Холодильники', 'washing': 'Стиральные машины', 'ovens': 'Печи и духовки',
+        'microwaves': 'Микроволновки', 'climate': 'Климат', 'other': 'Другое'
+      };
+      document.getElementById('listingsTitle').textContent = names[type] || 'Товары';
+      document.getElementById('appliancesSubtitle').textContent = names[type] || 'Бытовая техника';
+      const filtersContainer = document.getElementById('quickFilters');
+      let filters = [];
+      if (type === 'refrigerators') {
+        filters = [{id:'all',label:'Все'},{id:'side',label:'Боковые'},{id:'two',label:'Двухкамерные'},{id:'minibar',label:'Мини-бары'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'washing') {
+        filters = [{id:'all',label:'Все'},{id:'front',label:'Фронтальные'},{id:'top',label:'Вертикальные'},{id:'combo',label:'Комбинированные'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'ovens') {
+        filters = [{id:'all',label:'Все'},{id:'electric',label:'Электрические'},{id:'gas',label:'Газовые'},{id:'microwave',label:'Микроволновые'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'microwaves') {
+        filters = [{id:'all',label:'Все'},{id:'solo',label:'Соло'},{id:'convection',label:'Конвекция'},{id:'grill',label:'Гриль'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'climate') {
+        filters = [{id:'all',label:'Все'},{id:'split',label:'Сплит-системы'},{id:'portable',label:'Портативные'},{id:'fans',label:'Вентиляторы'},{id:'other',label:'Другие 🔍'}];
+      } else {
+        filters = [{id:'all',label:'Все'},{id:'other',label:'Другие 🔍'}];
+      }
+      filtersContainer.innerHTML = filters.map(f => `<a href="appliances-listings.html?type=${type}&filter=${f.id}" class="filter-pill ${currentFilter === f.id ? 'active' : ''}">${f.label}</a>`).join('');
+    </script>
+  </body>
+</html>

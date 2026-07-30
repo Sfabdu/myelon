@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вакансии — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .filters-container { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px 0; scrollbar-width: none; }
+      .filters-container::-webkit-scrollbar { display: none; }
+      .filter-pill { background: #fff; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #334155; white-space: nowrap; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+      .filter-pill:hover, .filter-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+      .market-feed.mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 8px; }
+      .ad-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+      .ad-image-container { width: 100%; height: 140px; background-color: #f1f5f9; }
+      .ad-image-container img { width: 100%; height: 100%; object-fit: cover; }
+      .ad-details { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+      .ad-meta { display: flex; justify-content: space-between; align-items: center; }
+      .tag-shop { background-color: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+      .ad-price { font-size: 16px; font-weight: 700; color: #0f172a; }
+      .ad-title { font-size: 14px; font-weight: 600; line-height: 1.3; color: #0f172a; margin: 0; }
+      .ad-location { font-size: 12px; color: #64748b; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="jobs-types.html" title="Назад к типам">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text"><strong>myelon.tj</strong><small id="jobsSubtitle">Работа</small></span>
+        </a>
+      </header>
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading"><h2 id="listingsTitle">Вакансии</h2><span id="listingsCount">В наличии</span></div>
+          <div class="filters-container" id="quickFilters"></div>
+          <div class="market-feed mobile-grid">
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1581595220834-523bae14cca8?q=80&w=400&auto=format&fit=crop" alt="Python" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">От 15 000 TJS</span></div><h3 class="ad-title">Программист Python</h3><p class="ad-location">Душанбе, центр</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1505740420928-5e560c6d304a?auto=format&fit=crop&w=400&q=80" alt="Продавец" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">От 10 000 TJS</span></div><h3 class="ad-title">Продавец в магазин</h3><p class="ad-location">Худжанд</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1544965692-6c8f5f0b8d70?auto=format&fit=crop&w=400&q=80" alt="Водитель" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">От 12 000 TJS</span></div><h3 class="ad-title">Водитель скорой помощи</h3><p class="ad-location">Душанбе</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1585351584416-9871b33f3e15?q=80&w=400&auto=format&fit=crop" alt="Бармен" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">От 8 000 TJS</span></div><h3 class="ad-title">Бармен в ресторан</h3><p class="ad-location">Душанбе, Сино</p></div>
+            </a>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const type = urlParams.get('type') || 'it';
+      const currentFilter = urlParams.get('filter') || 'all';
+      const names = {
+        'it': 'IT и техника', 'trade': 'Торговля', 'construction': 'Строительство',
+        'logistics': 'Логистика', 'service': 'Сервис', 'other': 'Другое'
+      };
+      document.getElementById('listingsTitle').textContent = names[type] || 'Вакансии';
+      document.getElementById('jobsSubtitle').textContent = names[type] || 'Работа';
+      const filtersContainer = document.getElementById('quickFilters');
+      let filters = [];
+      if (type === 'it') {
+        filters = [{id:'all',label:'Все'},{id:'python',label:'Python'},{id:'js',label:'JavaScript'},{id:'devops',label:'DevOps'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'trade') {
+        filters = [{id:'all',label:'Все'},{id:'sales',label:'Продажи'},{id:'cashier',label:'Кассир'},{id:'manager',label:'Менеджер'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'construction') {
+        filters = [{id:'all',label:'Все'},{id:'foreman',label:'Бригадир'},{id:'electrician',label:'Электрик'},{id:'plumber',label:'Сантехик'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'logistics') {
+        filters = [{id:'all',label:'Все'},{id:'driver',label:'Водитель'},{id:'courier',label:'Курьер'},{id:'warehouse',label:'Склад'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'service') {
+        filters = [{id:'all',label:'Все'},{id:'waiter',label:'Официант'},{id:'barman',label:'Бармен'},{id:'reception',label:'Ресепшен'},{id:'other',label:'Другие 🔍'}];
+      } else {
+        filters = [{id:'all',label:'Все'},{id:'other',label:'Другие 🔍'}];
+      }
+      filtersContainer.innerHTML = filters.map(f => `<a href="jobs-listings.html?type=${type}&filter=${f.id}" class="filter-pill ${currentFilter === f.id ? 'active' : ''}">${f.label}</a>`).join('');
+    </script>
+  </body>
+</html>

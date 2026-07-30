@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myelon.tj | Премиум торговля Таджикистан</title>
+    <!-- Подключаем наш общий файл краски со всей структурой -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <div class="header">
+        <div class="logo">myelon.tj</div>
+        <div class="lang-switch">Тоҷикӣ</div>
+    </div>
+
+    <!-- Кнопка переключателя Магазины / Б_У -->
+    <button class="main-toggle" id="toggleBtn" onclick="toggleFeedType()">
+        <span id="toggleText">Показать Б/У вещи</span>
+        <span>➔</span>
+    </button>
+
+    <!-- Главная живая лента объявлений -->
+    <div class="market-feed mobile-grid" id="feed-grid">
+        <!-- Картон полностью стерт! Сюда мост будет сам подставлять живые машины из Сингапура -->
+    </div>
+
+    <!-- Нижняя мобильная панель меню -->
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div>Главная</div>
+        </a>
+        <a href="catalog.html" class="nav-item">
+            <div class="nav-icon">📂</div>
+            <div>Категории</div>
+        </a>
+        <a href="chats.html" class="nav-item">
+            <div class="nav-icon">💬</div>
+            <div>Чаты</div>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div>Профиль</div>
+        </a>
+    </div>
+
+    <!-- Подключаем наш невидимый мост к Сингапуру -->
+    <script src="./supabase-bridge.js"></script>
+    <script>
+        // Переключатель типов объявлений (магазин / б_у)
+        let currentType = "shop";
+
+        function toggleFeedType() {
+            const btn = document.getElementById("toggleBtn");
+            const text = document.getElementById("toggleText");
+            
+            if (currentType === "shop") {
+                currentType = "bu";
+                btn.classList.add("bu-active");
+                text.innerText = "Показать Магазины";
+            } else {
+                currentType = "shop";
+                btn.classList.remove("bu-active");
+                text.innerText = "Показать Б/У вещи";
+            }
+            
+            // Запускаем живую загрузку из Сингапура под выбранный тип
+            if (typeof loadLiveFeed === "function") {
+                loadLiveFeed(currentType);
+            }
+        }
+
+        // Автоматический запуск при открытии сайта
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof loadLiveFeed === "function") {
+                loadLiveFeed(currentType);
+            }
+        });
+    </script>
+</body>
+</html>

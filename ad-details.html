@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Объявление — myelon.tj</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="page-shell mobile-shell">
+        <header class="topbar compact-topbar">
+            <a class="back-button" href="javascript:history.back()" title="Назад">←</a>
+            <a class="brand" href="index.html" aria-label="myelon.tj home" style="opacity: 0; pointer-events: none;"></a>
+            <button style="background: none; border: none; font-size: 18px; cursor: pointer;" title="Поделиться">📤</button>
+        </header>
+
+        <main class="content-stack">
+            <!-- Ad Gallery -->
+            <div class="ad-gallery">
+                <img src="https://images.unsplash.com/photo-1581595220834-523bae14cca8?q=80&w=400&auto=format&fit=crop" alt="Фото объявления" class="gallery-img">
+                <img src="https://images.unsplash.com/photo-1504139458679-5eb0f84de1e6?q=80&w=400&auto=format&fit=crop" alt="Фото объявления 2" class="gallery-img">
+            </div>
+
+            <!-- Ad Subinfo (Views, Likes, Time) -->
+            <div class="ad-subinfo">
+                <div class="subinfo-item">👁️ 128</div>
+                <div class="subinfo-item">🤍 0</div>
+                <div style="margin-left: auto;" class="subinfo-item">🕒 5 часов назад</div>
+            </div>
+
+            <!-- Detail Card -->
+            <div class="detail-card">
+                <div class="main-price">500 $</div>
+                <div class="price-note">Фиксированная цена</div>
+                <h1 class="main-title">Смартфон Samsung Galaxy S21 128GB</h1>
+            </div>
+
+            <!-- Description -->
+            <div class="detail-card">
+                <div class="section-subtitle">Описание</div>
+                <p class="description-text">
+                    Продам смартфон Samsung Galaxy S21 в отличном состоянии. 
+                    128GB памяти, 8GB RAM, отличная камера. 
+                    Полный комплект: коробка, зарядка, наушники. 
+                    Без царапин и повреждений. Гарантия до конца года.
+                </p>
+            </div>
+
+            <!-- Seller Info -->
+            <div class="detail-card">
+                <a href="profile.html" class="seller-card-box">
+                    <div class="seller-left">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Продавец" class="seller-avatar">
+                        <div>
+                            <h3 class="seller-name">Алишер Рахмонов</h3>
+                            <p class="seller-type">Частное лицо • 12 объявлений</p>
+                        </div>
+                    </div>
+                    <div class="seller-arrow">›</div>
+                </a>
+            </div>
+
+            <!-- Show Phone Button -->
+            <div class="detail-card" style="text-align: center;">
+                <button id="showPhoneBtn" class="primary-btn" style="width: 100%; max-width: 400px; margin: 0 auto;">
+                    Показать телефон
+                </button>
+                <div id="phoneNumber" style="display: none; margin-top: 12px; text-align: center; font-size: 18px; font-weight: 700; color: var(--orange);">
+                    +992 00 000 00 00
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Action Bar -->
+        <div class="bottom-action-bar">
+            <a href="tel:+992000000000" class="action-btn-call">
+                <span>📞</span> Позвонить
+            </a>
+<a href="chat.html" class="action-btn-chat">
+                <span>💬</span> Чат
+            </a>
+            <button class="favorite-action-btn" title="В избранное">🤍</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('showPhoneBtn').addEventListener('click', function() {
+            const phoneNumber = document.getElementById('phoneNumber');
+            if (phoneNumber.style.display === 'none') {
+                phoneNumber.style.display = 'block';
+                this.textContent = 'Скрыть телефон';
+            } else {
+                phoneNumber.style.display = 'none';
+                this.textContent = 'Показать телефон';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Холодильник Samsung — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .ad-gallery { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
+      .ad-gallery::-webkit-scrollbar { display: none; }
+      .gallery-img { width: 240px; height: 160px; border-radius: 12px; object-fit: cover; flex-shrink: 0; background-color: #f1f5f9; }
+      .detail-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 16px; }
+      .ad-subinfo { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #64748b; margin-bottom: 12px; }
+      .subinfo-item { display: flex; align-items: center; gap: 4px; }
+      .main-price { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+      .price-note { font-size: 13px; color: #64748b; margin-bottom: 10px; }
+      .main-title { font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 16px 0; line-height: 1.3; }
+      .auto-specs-list { display: flex; flex-direction: column; gap: 12px; }
+      .spec-row { display: flex; justify-content: space-between; font-size: 14px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9; }
+      .spec-label { color: #64748b; }
+      .spec-value { color: #0f172a; font-weight: 600; text-align: right; }
+      .toggle-specs-btn { background: none; border: none; color: #f97316; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px 0 0 0; display: block; }
+      .section-subtitle { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+      .description-text { font-size: 14px; color: #334155; line-height: 1.5; margin: 0; }
+      .seller-card-box { display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: inherit; }
+      .seller-left { display: flex; align-items: center; gap: 12px; }
+      .seller-avatar { width: 50px; height: 50px; border-radius: 50%; background: #f1f5f9; object-fit: cover; }
+      .seller-name { font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 2px 0; }
+      .seller-type { font-size: 13px; color: #64748b; margin: 0; }
+      .seller-arrow { font-size: 18px; color: #94a3b8; }
+      .location-title { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 8px; }
+      .map-preview { width: 100%; height: 120px; background: #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; margin-top: 8px; }
+      .similar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .similar-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+      .similar-img { width: 100%; height: 110px; object-fit: cover; background: #e2e8f0; }
+      .similar-content { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+      .similar-price { font-size: 15px; font-weight: 700; color: #0f172a; }
+      .similar-title { font-size: 12px; color: #475569; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .similar-info { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+      .bottom-action-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 12px 16px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; z-index: 100; max-width: 480px; margin: 0 auto; }
+      .action-btn-call { flex: 1; background: #f97316; color: #fff; border: none; border-radius: 12px; padding: 12px; text-align: center; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .action-btn-chat { flex: 1; background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; border-radius: 12px; padding: 12px; text-align: center; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .favorite-action-btn { width: 46px; height: 46px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; flex-shrink: 0; }
+      body { padding-bottom: 80px; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="javascript:history.back()" title="Назад">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home" style="opacity: 0; pointer-events: none;"></a>
+        <button style="background: none; border: none; font-size: 18px; cursor: pointer;" title="Поделиться">📤</button>
+      </header>
+      <main class="content-stack">
+        <div class="ad-gallery">
+          <img src="https://images.unsplash.com/photo-1504139458679-5eb0f84de1e6?q=80&w=400&auto=format&fit=crop" alt="Фото 1" class="gallery-img" />
+          <img src="https://images.unsplash.com/photo-1581595220834-523bae14cca8?q=80&w=400&auto=format&fit=crop" alt="Фото 2" class="gallery-img" />
+        </div>
+        <div class="ad-subinfo">
+          <div class="subinfo-item">👁️ 189</div>
+          <div class="subinfo-item">🤍 0</div>
+          <div style="margin-left: auto;" class="subinfo-item">🕒 1 день назад</div>
+        </div>
+        <div class="detail-card">
+          <div class="main-price">2 800 TJS</div>
+          <div class="price-note">350л, двухкамерный</div>
+          <h1 class="main-title">Холодильник Samsung, 350л</h1>
+          <div class="auto-specs-list" id="specsList">
+            <div class="spec-row"><span class="spec-label">Бренд</span><span class="spec-value">Samsung</span></div>
+            <div class="spec-row"><span class="spec-label">Объем</span><span class="spec-value">350 л</span></div>
+            <div class="spec-row"><span class="spec-label">Тип</span><span class="spec-value">Двухкамерный</span></div>
+            <div class="spec-row"><span class="spec-label">Класс энергопотребления</span><span class="spec-value">A++</span></div>
+            <div class="spec-row"><span class="spec-label">Функции</span><span class="spec-value">Ночее свет, охлаждение</span></div>
+            <div class="spec-row"><span class="spec-label">Состояние</span><span class="spec-value">Новый</span></div>
+            <div class="spec-row"><span class="spec-label">Гарантия</span><span class="spec-value">2 года</span></div>
+          </div>
+          <button class="toggle-specs-btn" id="toggleSpecsBtn">Показать меньше</button>
+        </div>
+        <div class="detail-card">
+          <div class="section-subtitle">Описание</div>
+          <p class="description-text">Холодильник Samsung, 350л, двухкамерный. Класс A++. Новая техника с гарантией 2 года. Функции: ночее свет, режим быстрого охлаждения.</p>
+        </div>
+        <div class="detail-card">
+          <a href="../profile.html" class="seller-card-box">
+            <div class="seller-left">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="ТехноМир" class="seller-avatar" />
+              <div><h3 class="seller-name">ТехноМир</h3><p class="seller-type">Компания • 89 объявлений</p></div>
+            </div>
+            <div class="seller-arrow">›</div>
+          </a>
+        </div>
+        <div class="detail-card">
+          <div class="location-title">Город</div>
+          <p style="font-size: 14px; color: #334155; margin: 0;">Душанбе</p>
+          <div class="map-preview"><span>Карта Душанбе</span></div>
+        </div>
+        <div class="detail-card">
+          <div class="section-subtitle" style="margin-bottom: 12px;">Похожие объявления</div>
+          <div class="similar-grid">
+            <a href="ad-detail.html" class="similar-item">
+              <img src="https://images.unsplash.com/photo-1581595220834-523bae14cca8?q=80&w=300&auto=format&fit=crop" alt="Стиральная" class="similar-img" />
+              <div class="similar-content"><div class="similar-price">1 900 TJS</div><div class="similar-title">Стиральная машина Bosch</div><div class="similar-info">Худжанд • Новый</div></div>
+            </a>
+            <a href="ad-detail.html" class="similar-item">
+              <img src="https://images.unsplash.com/photo-1585351584416-9871b33f3e15?q=80&w=300&auto=format&fit=crop" alt="Кондиционер" class="similar-img" />
+              <div class="similar-content"><div class="similar-price">3 500 TJS</div><div class="similar-title">Кондиционер портативный</div><div class="similar-info">Душанбе • Новый</div></div>
+            </a>
+          </div>
+        </div>
+      </main>
+      <div class="bottom-action-bar">
+        <a href="tel:+992000000000" class="action-btn-call"><span>📞</span> Позвонить</a>
+        <a href="#" class="action-btn-chat"><span>💬</span> Чат</a>
+        <button class="favorite-action-btn" title="В избранное">🤍</button>
+      </div>
+    </div>
+    <script>
+      const toggleBtn = document.getElementById('toggleSpecsBtn');
+      const specsList = document.getElementById('specsList');
+      let expanded = true;
+      toggleBtn.addEventListener('click', () => {
+        expanded = !expanded;
+        const rows = specsList.querySelectorAll('.spec-row');
+        rows.forEach((row, index) => { if (index >= 4) row.style.display = expanded ? 'flex' : 'none'; });
+        toggleBtn.textContent = expanded ? 'Показать меньше' : 'Показать больше';
+      });
+    </script>
+  </body>
+</html>

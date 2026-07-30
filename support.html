@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Поддержка — myelon.tj</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="assets/app.js" defer></script>
+    <style>
+      .support-section { padding: 16px; }
+      .support-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 16px; }
+      .support-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+      .support-icon { width: 44px; height: 44px; border-radius: 12px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+      .support-title { font-size: 16px; font-weight: 600; color: #0f172a; margin: 0; }
+      .support-desc { font-size: 13px; color: #64748b; margin: 2px 0 0 0; }
+      .support-link { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; color: #0f172a; text-decoration: none; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+      .support-link:last-child { border-bottom: none; }
+      .support-link .link-arrow { color: #94a3b8; font-size: 16px; }
+      .faq-item { margin-bottom: 16px; }
+      .faq-question { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+      .faq-answer { font-size: 13px; color: #64748b; line-height: 1.5; }
+      .contact-form input, .contact-form textarea { width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 12px; box-sizing: border-box; }
+      .contact-form input:focus, .contact-form textarea:focus { border-color: #f97316; }
+      .contact-form textarea { min-height: 100px; resize: vertical; }
+      .contact-submit-btn { width: 100%; background: #f97316; color: #fff; border: none; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; }
+      .contact-submit-btn:hover { background: #ea580c; }
+      .support-phone { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: #0f172a; margin: 4px 0; }
+      .support-hours { font-size: 12px; color: #64748b; margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="index.html" title="Назад">←</a>
+        <a class="brand" href="index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text"><strong>myelon.tj</strong><small>Поддержка</small></span>
+        </a>
+      </header>
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="support-section">
+            <div class="support-card">
+              <div class="support-card-header">
+                <div class="support-icon">📞</div>
+                <div>
+                  <h3 class="support-title">Телефон поддержки</h3>
+                  <p class="support-desc">Позвоните нам в любой момент</p>
+                </div>
+              </div>
+              <div class="support-phone">+992 (00) 000-00-00</div>
+              <div class="support-hours">Пн–Вс: 9:00–21:00</div>
+            </div>
+            <div class="support-card">
+              <div class="support-card-header">
+                <div class="support-icon">💬</div>
+                <div>
+                  <h3 class="support-title">Онлайн-чат</h3>
+                  <p class="support-desc">Мгновенная помощь в чате</p>
+                </div>
+              </div>
+              <a href="chat-room.html?id=help" class="support-link">
+                <span>Написать в чат поддержки</span>
+                <span class="link-arrow">›</span>
+              </a>
+            </div>
+            <div class="support-card">
+              <div class="support-card-header">
+                <div class="support-icon">📧</div>
+                <div>
+                  <h3 class="support-title">Электронная почта</h3>
+                  <p class="support-desc">Отправьте нам письмо</p>
+                </div>
+              </div>
+              <a href="mailto:support@myelon.tj" class="support-link">
+                <span>support@myelon.tj</span>
+                <span class="link-arrow">›</span>
+              </a>
+            </div>
+            <div class="support-card">
+              <h3 style="font-size: 16px; font-weight: 600; color: #0f172a; margin: 0 0 12px 0;">Частые вопросы</h3>
+              <div class="faq-item">
+                <div class="faq-question">❓ Как разместить объявление?</div>
+                <div class="faq-answer">Нажмите кнопку "Продать" внизу экрана, заполните форму и загрузите фото. Объявление будет проверено модератором в течение 15 минут.</div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">❓ Как связаться с продавцом?</div>
+                <div class="faq-answer">На странице объявления нажмите "Позвонить" или "Чат". Вы также можете написать продавцу напрямую через личные сообщения.</div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">❓ Как удалить объявление?</div>
+                <div class="faq-answer">Перейдите в "Мой профиль" → "Мои объявления" и нажмите кнопку "Удалить" на нужном объявлении.</div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">❓ Что делать, если мошенник?</div>
+                <div class="faq-answer">Сообщите о нарушителе через кнопку "Пожаловаться" на странице объявления или напишите в поддержку с указанием ссылки на объявление.</div>
+              </div>
+            </div>
+            <div class="support-card">
+              <h3 style="font-size: 16px; font-weight: 600; color: #0f172a; margin: 0 0 12px 0;">Напишите нам</h3>
+              <form class="contact-form">
+                <input type="text" placeholder="Ваше имя" required />
+                <input type="email" placeholder="Email или телефон" required />
+                <textarea placeholder="Опишите проблему или вопрос..." required></textarea>
+                <button type="submit" class="contact-submit-btn">Отправить</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="categories.html" class="tab-item">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="chat.html" class="tab-item">💬<span>Чат</span></a>
+        <a href="profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+  </body>
+</html>

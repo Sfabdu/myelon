@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Объявления по электронике — myelon.tj</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script src="../assets/app.js" defer></script>
+    <style>
+      .filters-container { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px 0; scrollbar-width: none; }
+      .filters-container::-webkit-scrollbar { display: none; }
+      .filter-pill { background: #fff; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: #334155; white-space: nowrap; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+      .filter-pill:hover, .filter-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+      .market-feed.mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 8px; }
+      .ad-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+      .ad-image-container { width: 100%; height: 140px; background-color: #f1f5f9; }
+      .ad-image-container img { width: 100%; height: 100%; object-fit: cover; }
+      .ad-details { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+      .ad-meta { display: flex; justify-content: space-between; align-items: center; }
+      .tag-shop { background-color: #fff7ed; color: #ea580c; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+      .ad-price { font-size: 16px; font-weight: 700; color: #0f172a; }
+      .ad-title { font-size: 14px; font-weight: 600; line-height: 1.3; color: #0f172a; margin: 0; }
+      .ad-location { font-size: 12px; color: #64748b; margin: 0; }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell mobile-shell">
+      <header class="topbar compact-topbar">
+        <a class="back-button" href="electronics-types.html" title="Назад к типам">←</a>
+        <a class="brand" href="../index.html" aria-label="myelon.tj home">
+          <span class="brand-mark">E</span>
+          <span class="brand-text"><strong>myelon.tj</strong><small id="electronicsSubtitle">Электроника</small></span>
+        </a>
+      </header>
+      <main class="content-stack">
+        <section class="section-block">
+          <div class="section-heading"><h2 id="listingsTitle">Объявления</h2><span id="listingsCount">В наличии</span></div>
+          <div class="filters-container" id="quickFilters"></div>
+          <div class="market-feed mobile-grid">
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff22aa9?auto=format&fit=crop&w=400&q=80" alt="iPhone" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">8 900 TJS</span></div><h3 class="ad-title">iPhone 13 новый с Садбарга</h3><p class="ad-location">Рынок Садбарг</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=400&q=80" alt="Ноутбук" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">5 100 TJS</span></div><h3 class="ad-title">Ноутбук Lenovo, 15.6"</h3><p class="ad-location">Панджшанбе</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&w=400&q=80" alt="Смартфон" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">3 200 TJS</span></div><h3 class="ad-title">Смартфон Xiaomi новый</h3><p class="ad-location">ТЦ Душанбе</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1505740420928-5e560c6d304a?auto=format&fit=crop&w=400&q=80" alt="Наушники" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">1 200 TJS</span></div><h3 class="ad-title">Наушники Sony WH-1000XM4</h3><p class="ad-location">Душанбе, ТЦ «Сомон»</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1547095255-5589310a4404?auto=format&fit=crop&w=400&q=80" alt="Планшет" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">4 800 TJS</span></div><h3 class="ad-title">iPad Air 2022, 64ГБ</h3><p class="ad-location">Худжанд, ТЦ «Парситекс»</p></div>
+            </a>
+            <a href="ad-detail.html" class="ad-card">
+              <div class="ad-image-container"><img src="https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&w=400&q=80" alt="Смартфон" /></div>
+              <div class="ad-details"><div class="ad-meta"><span class="tag-shop">Магазин</span><span class="ad-price">2 700 TJS</span></div><h3 class="ad-title">Смартфон Samsung Galaxy A52</h3><p class="ad-location">Душанбе, Сино</p></div>
+            </a>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
+        <a href="../index.html" class="tab-item">🏠<span>Главная</span></a>
+        <a href="../categories.html" class="tab-item active">📁<span>Категории</span></a>
+        <a href="#" class="tab-item center-tab">🔍</a>
+        <a href="#" class="tab-item">❤️<span>Избранное</span></a>
+        <a href="../profile.html" class="tab-item">👤<span>Профиль</span></a>
+      </nav>
+    </div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const type = urlParams.get('type') || 'phones';
+      const currentFilter = urlParams.get('filter') || 'all';
+      const names = {
+        'phones': 'Смартфоны', 'laptops': 'Ноутбуки', 'audio': 'Аудио и наушники',
+        'tv': 'ТВ и мониторы', 'cameras': 'Фото и видео', 'gaming': 'Игры и консоли',
+        'accessories': 'Аксессуары', 'other': 'Другое'
+      };
+      document.getElementById('listingsTitle').textContent = names[type] || 'Объекты';
+      document.getElementById('electronicsSubtitle').textContent = names[type] || 'Электроника';
+      const filtersContainer = document.getElementById('quickFilters');
+      let filters = [];
+      if (type === 'phones') {
+        filters = [{id:'all',label:'Все'},{id:'iphone',label:'iPhone'},{id:'samsung',label:'Samsung'},{id:'xiaomi',label:'Xiaomi'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'laptops') {
+        filters = [{id:'all',label:'Все'},{id:'gaming',label:'Игровые'},{id:'business',label:'Бизнес'},{id:'ultra',label:'Ультрабуки'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'audio') {
+        filters = [{id:'all',label:'Все'},{id:'headphones',label:'Наушники'},{id:'speakers',label:'Колонки'},{id:'bluetooth',label:'Bluetooth'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'tv') {
+        filters = [{id:'all',label:'Все'},{id:'smart',label:'Смарт-ТВ'},{id:'monitor',label:'Мониторы'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'cameras') {
+        filters = [{id:'all',label:'Все'},{id:'dslr',label:'Зеркальные'},{id:'drone',label:'Дроны'},{id:'action',label:'Экшн-камеры'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'gaming') {
+        filters = [{id:'all',label:'Все'},{id:'ps5',label:'PlayStation'},{id:'xbox',label:'Xbox'},{id:'switch',label:'Nintendo'},{id:'other',label:'Другие 🔍'}];
+      } else if (type === 'accessories') {
+        filters = [{id:'all',label:'Все'},{id:'charging',label:'Зарядки'},{id:'cables',label:'Кабели'},{id:'cases',label:'Чехлы'},{id:'other',label:'Другие 🔍'}];
+      } else {
+        filters = [{id:'all',label:'Все'},{id:'other',label:'Другие 🔍'}];
+      }
+      filtersContainer.innerHTML = filters.map(f => `<a href="electronics-listings.html?type=${type}&filter=${f.id}" class="filter-pill ${currentFilter === f.id ? 'active' : ''}">${f.label}</a>`).join('');
+    </script>
+  </body>
+</html>

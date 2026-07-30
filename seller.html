@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дашборд продавца — myelon.tj</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="assets/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="back-button" onclick="history.back()" title="Назад">←</button>
+        <a class="brand" href="index.html">
+          <span class="brand-mark">E</span>
+          <span class="brand-text">
+            <strong>myelon.tj</strong>
+            <small data-i18n="brandSmall">Маркетплейс</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <button class="lang-switch" id="langToggle" type="button" data-i18n="langToggle">Тоҷикӣ</button>
+          <nav class="top-nav">
+            <a href="index.html" data-i18n="navMarketplace">Маркет</a>
+            <a href="profile.html" data-i18n="navProfile">Профиль</a>
+            <a href="seller.html" class="active" data-i18n="navSeller">Продавец</a>
+            <a href="login.html" data-i18n="navLogin">Вход</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="dashboard-grid seller-grid">
+        <section class="panel hero-panel">
+          <div class="section-heading">
+            <h2 data-i18n="sellerWorkspace">Рабочее пространство бизнеса</h2>
+            <a href="#" data-i18n="sellerInsights">Живые аналитики</a>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <small data-i18n="sellerRevenue">Ежедневный доход</small>
+              <strong>4,820 TJS</strong>
+            </div>
+            <div class="kpi-card">
+              <small data-i18n="sellerOrders">Ожидающие заказы</small>
+              <strong>21</strong>
+            </div>
+            <div class="kpi-card">
+              <small data-i18n="sellerRepeat">Повторные покупатели</small>
+              <strong>87%</strong>
+            </div>
+          </div>
+          <div class="alert-box">
+            <h3 data-i18n="sellerAlertTitle">Оповещение о вечернем сборе</h3>
+            <p data-i18n="sellerAlertText">Курьер Elon должен забрать 8 премиальных посылок из вашего адреса в 19:30.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2 data-i18n="sellerShipments">Ожидающие отправки</h2>
+            <a href="#" data-i18n="sellerRoute">Маршрут</a>
+          </div>
+          <div class="table-card">
+            <div class="table-row"><span>Заказ #1082</span><span data-i18n="sellerNorth">Северный Душанбе</span><span>18:20</span></div>
+            <div class="table-row"><span>Заказ #1084</span><span data-i18n="sellerSouth">Южный Душанбе</span><span>19:00</span></div>
+            <div class="table-row"><span>Заказ #1087</span><span data-i18n="sellerKhujand">Худжанд</span><span>22:10</span></div>
+          </div>
+        </section>
+
+        <section class="panel review-panel">
+          <div class="section-heading">
+            <h2 data-i18n="sellerFeedback">Система отзывов</h2>
+            <a href="#" data-i18n="sellerProof">Загрузить подтверждение</a>
+          </div>
+          <form class="review-form">
+            <input type="text" data-i18n-placeholder="sellerName" placeholder="Ваше имя" />
+            <textarea rows="4" data-i18n-placeholder="sellerReview" placeholder="Опишите ваш опыт с товаром"></textarea>
+            <label class="upload-box">
+              <input type="file" />
+              <span data-i18n="sellerUpload">Загрузить фото подтверждения покупки</span>
+            </label>
+            <button class="primary-btn" type="button" data-i18n="sellerPublish">Опубликовать отзыв</button>
+          </form>
+          <div class="review-list">
+            <article class="review-card">
+              <strong>Фарида</strong>
+              <p data-i18n="sellerReviewOne">«Доставка пришла точно в срок. Очень красивая упаковка.»</p>
+              <span>★★★★★</span>
+            </article>
+            <article class="review-card">
+              <strong>Рустам</strong>
+              <p data-i18n="sellerReviewTwo">«Отличное качество товара и хорошая коммуникация.»</p>
+              <span>★★★★★</span>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

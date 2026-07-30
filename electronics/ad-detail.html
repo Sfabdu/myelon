@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Electronics Ad Details</title>
+    <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <!-- Back Button -->
+        <button class="back-button">←</button>
+        
+        <!-- Top Actions -->
+        <div class="top-actions">
+            <div class="lang-switch">Lang</div>
+            <div class="brand">
+                <div class="brand-mark">M</div>
+                <div class="brand-text">
+                    <strong>Myelon</strong>
+                    <small>Classifieds Platform</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Details -->
+        <div class="listing-card">
+            <!-- Photo -->
+            <img src="photo.jpg" alt="Electronics Item">
+            
+            <!-- Price -->
+            <div class="price">$500</div>
+            
+            <!-- Description -->
+            <div class="hero-text">
+                <p>High-quality smartphone with 128GB storage and 6GB RAM. Perfect for daily use.</p>
+            </div>
+            
+            <!-- Seller Name -->
+            <div class="seller-info">
+                <strong>Seller Name</strong>
+                <small>Verified</small>
+            </div>
+            
+            <!-- Show Phone Button -->
+            <button class="primary-btn" id="showPhoneBtn">Show Phone</button>
+            <div id="phoneNumber" style="display:none;">+1234567890</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('showPhoneBtn').addEventListener('click', function() {
+            document.getElementById('phoneNumber').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
