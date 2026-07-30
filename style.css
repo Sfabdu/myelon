@@ -1,0 +1,125 @@
+body {
+    background-color: #F9FAFB;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 80px;
+}
+.header {
+    background-color: #FFFFFF;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #E5E7EB;
+}
+.logo {
+    font-size: 20px;
+    font-weight: 800;
+    color: #FF6600;
+}
+.main-toggle {
+    background-color: #FF6600;
+    color: #FFFFFF;
+    border: none;
+    width: calc(100% - 32px);
+    margin: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+    cursor: pointer;
+}
+.bu-active {
+    background-color: #1F2937 !important;
+}
+.market-feed {
+    padding: 0 16px;
+}
+.mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #F3F4F6;
+}
+.card-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+.card-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+.badge-shop { background-color: #FF6600; }
+.badge-bu { background-color: #1F2937; }
+.card-info {
+    padding: 10px;
+}
+.card-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: #111827;
+}
+.card-price span {
+    font-size: 12px;
+    color: #FF6600;
+    margin-left: 2px;
+}
+.card-title {
+    font-size: 12px;
+    color: #4B5563;
+    margin: 4px 0;
+}
+.card-location {
+    font-size: 10px;
+    color: #9CA3AF;
+}
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    z-index: 1000;
+}
+.nav-item {
+    text-align: center;
+    color: #9CA3AF;
+    font-size: 10px;
+    text-decoration: none;
+}
+.nav-item.active {
+    color: #FF6600;
+}
+.nav-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+.empty-message {
+    grid-column: span 2;
+    text-align: center;
+    color: #6B7280;
+    padding: 40px 20px;
+    font-size: 14px;
+}
