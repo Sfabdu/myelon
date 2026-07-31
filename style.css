@@ -323,3 +323,30 @@ body {
     margin-top: 30px;
     line-height: 1.5;
 }
+/* Финальный замок для нижнего меню навигации */
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 14px 0;
+    z-index: 9999;
+}
+.nav-item {
+    text-align: center;
+    color: #9CA3AF;
+    font-size: 11px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.nav-item.active {
+    color: #FF6600; /* Оранжевая подсветка активной вкладки */
+}
+.nav-icon {
+    font-size: 22px;
+    margin-bottom: 2px;
+}
