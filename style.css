@@ -171,3 +171,17 @@ body {
     margin-top: 30px;
     line-height: 1.5;
 }
+/* Стили для центральной кнопки Добавить объявление */
+.nav-add-btn .nav-icon {
+    background-color: #FF6600; /* Наш фирменный оранжевый */
+    color: #FFFFFF;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 2px auto;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3);
+}
