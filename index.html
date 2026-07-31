@@ -17,19 +17,31 @@
         </div>
     </div>
 
-    <!-- 2. НАША НОВАЯ ПОИСКОВАЯ СИСТЕМА (То, чего не было в коде) -->
-    <div class="search-section">
-        <div class="search-container">
+    <!-- 2. НОВАЯ ШИРОКАЯ ПОИСКОВАЯ СИСТЕМА С КНОПКОЙ ФИЛЬТРА -->
+<div class="search-section">
+    <div class="search-wrapper">
+        <div class="search-container-new">
             <span class="search-icon">🔍</span>
             <input type="text" id="main-search" placeholder="Поиск (найдёт даже с ошибками)..." oninput="smartFilter()">
         </div>
+        <!-- Кнопка Фильтра прямо в конце поисковой строки -->
+        <button class="btn-filter-toggle" onclick="alert('Открываем шторку фильтров со скриншота...')">
+            ⚙️
+        </button>
     </div>
+</div>
 
-    <!-- 3. Кнопка-переключатель Б/У и Магазины -->
-    <button class="main-toggle" id="toggle-mode" onclick="toggleMarketMode()">
-        <span>Показать Б/У вещи</span>
-        <span>➔</span>
-    </button>
+<!-- 3. БЛОК СТИЛЬНЫХ КАТЕГОРИЙ (Вместо старой кнопки Б/У) -->
+<div class="categories-horizontal-block">
+    <div class="category-pill active" onclick="alert('Показываем все товары')">Все</div>
+    <div class="category-pill" onclick="alert('Фильтр: Новые вещи')">Магазины</div>
+    <div class="category-pill" onclick="alert('Фильтр: Б/У вещи')">Б/У товары</div>
+</div>
+
+<!-- 4. СТРОЧКА: ЧАСТО ПОСЕЩАЕМЫЕ КАТЕГОРИИ -->
+<div class="frequent-categories-title">
+    Часто посещаемые категории
+</div>
 
     <!-- 4. Лента товаров (Сетка) -->
     <div class="market-feed">
