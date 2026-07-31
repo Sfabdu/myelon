@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyElon | Маркетплейс</title>
     <link rel="stylesheet" href="style.css">
+    <script src="filter.js" defer></script>
 </head>
 <body>
 
@@ -18,7 +19,7 @@
         <div class="search-container-avito">
             <span class="search-icon">🔍</span>
             <input type="text" id="main-search" placeholder="Поиск в MyElon" oninput="smartFilter()">
-            <span class="search-filter-avito-btn" onclick="alert('Открываем шторку фильтров...')">🎛️</span>
+            <span class="search-filter-avito-btn" onclick="openFilterModal()">🎛️</span>
         </div>
     </div>
 
