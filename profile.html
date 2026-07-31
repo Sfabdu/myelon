@@ -1,427 +1,80 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Профиль — myelon.tj</title>
-    <link rel="stylesheet" href="assets/styles.css" />
-    <script src="assets/app.js" defer></script>
-    <style>
-      :root {
-        --primary: #f97316;
-        --primary-hover: #ea580c;
-        --bg-main: #f8fafc;
-        --card-bg: #ffffff;
-        --text-main: #0f172a;
-        --text-muted: #64748b;
-        --border-color: #e2e8f0;
-      }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль | MyElon</title>
+    <!-- Наш единый файл стилей -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      body {
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        font-family: system-ui, -apple-system, sans-serif;
-        margin: 0;
-        padding-bottom: 40px;
-      }
-
-      .page-shell {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 16px;
-      }
-
-      /* Шапка профиля */
-      .profile-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      }
-
-      .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 20px;
-      }
-
-      .avatar {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, #f97316, #ea580c);
-        color: #fff;
-        font-size: 28px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-      }
-
-      .profile-info h1 {
-        font-size: 20px;
-        margin: 0 0 4px 0;
-      }
-
-      .profile-info .eyebrow {
-        font-size: 13px;
-        color: var(--primary);
-        font-weight: 600;
-        text-transform: uppercase;
-        margin: 0 0 2px 0;
-      }
-
-      .profile-info p {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin: 0;
-        line-height: 1.4;
-      }
-
-      .profile-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        text-align: center;
-        background: #f8fafc;
-        padding: 14px;
-        border-radius: 14px;
-        margin-bottom: 20px;
-      }
-
-      .profile-stats div strong {
-        display: block;
-        font-size: 18px;
-        color: var(--text-main);
-      }
-
-      .profile-stats div span {
-        font-size: 12px;
-        color: var(--text-muted);
-      }
-
-      .profile-actions {
-        display: flex;
-        gap: 10px;
-      }
-
-      .btn {
-        flex: 1;
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        border: none;
-        transition: background 0.2s;
-      }
-
-      .btn-primary {
-        background: var(--primary);
-        color: #fff;
-      }
-
-      .btn-primary:hover {
-        background: var(--primary-hover);
-      }
-
-      .btn-outline {
-        background: #fff;
-        border: 1px solid var(--border-color);
-        color: var(--text-main);
-      }
-
-      .btn-outline:hover {
-        background: #f1f5f9;
-      }
-
-      /* Секции */
-      .section-panel {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      }
-
-      .section-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-      }
-
-      .section-heading h2 {
-        font-size: 16px;
-        margin: 0;
-      }
-
-      .section-heading a {
-        font-size: 13px;
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      /* Сетка товаров (как на главной) */
-      .items-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 14px;
-      }
-
-      .market-card {
-        background: #fff;
-        border: 1px solid var(--border-color);
-        border-radius: 14px;
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
-
-      .market-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-      }
-
-      .card-img-wrap {
-        width: 100%;
-        height: 140px;
-        background: #f1f5f9;
-        overflow: position relative;
-      }
-
-      .card-img-wrap img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .card-body {
-        padding: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        flex: 1;
-      }
-
-      .card-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .badge-status {
-        background: #fff7ed;
-        color: var(--primary);
-        font-size: 11px;
-        font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 6px;
-      }
-
-      .badge-sold {
-        background: #f1f5f9;
-        color: var(--text-muted);
-        font-size: 11px;
-        font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 6px;
-      }
-
-      .card-price {
-        font-weight: 700;
-        color: var(--text-main);
-        font-size: 14px;
-      }
-
-      .card-title {
-        font-size: 14px;
-        font-weight: 600;
-        margin: 0;
-        color: var(--text-main);
-        line-height: 1.3;
-      }
-
-      .card-location {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin: auto 0 0 0;
-      }
-
-      /* Отзывы */
-      .reviews-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .review-item {
-        background: #f8fafc;
-        border-radius: 12px;
-        padding: 12px;
-        border: 1px solid var(--border-color);
-      }
-
-      .review-top {
-        display: flex;
-        justify-content: space-between;
-        font-weight: 600;
-        font-size: 14px;
-        margin-bottom: 4px;
-      }
-
-      .review-stars {
-        color: #f59e0b;
-        font-size: 12px;
-      }
-
-      .review-item p {
-        margin: 0;
-        font-size: 13px;
-        color: var(--text-muted);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page-shell">
-      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <button class="btn btn-outline" style="flex: 0 0 auto; width: auto; padding: 8px 14px;" onclick="history.back()">← Назад</button>
-        <a class="brand" href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
-          <span class="brand-mark" style="background: #f97316; color: #fff; padding: 4px 8px; border-radius: 6px; font-weight: bold;">E</span>
-          <strong>myelon.tj</strong>
-        </a>
-        <button class="btn btn-outline" id="langToggle" style="flex: 0 0 auto; width: auto; padding: 8px 12px; font-size: 12px;" type="button">Тоҷикӣ</button>
-      </header>
-
-      <!-- Блок информации о пользователе -->
-      <section class="profile-card">
-        <div class="profile-header">
-          <div class="avatar">А</div>
-          <div class="profile-info">
-            <p class="eyebrow">Частный продавец</p>
-            <h1>Азиз С.</h1>
-            <p>Надёжный продавец в Душанбе • 4.8 звёзд • 132 сделки</p>
-          </div>
-        </div>
-        <div class="profile-stats">
-          <div><strong>24</strong><span>Активные</span></div>
-          <div><strong>118</strong><span>Продано</span></div>
-          <div><strong>4.8</strong><span>Рейтинг</span></div>
-        </div>
-        <div class="profile-actions">
-          <button class="btn btn-primary">+ Разместить объявление</button>
-          <a href="seller-kyc.html" class="btn btn-outline">Стать продавцом →</a>
-        </div>
-      </section>
-
-      <!-- Активные объявления (в виде красивых карточек товаров) -->
-      <section class="section-panel">
-        <div class="section-heading">
-          <h2>Активные объявления</h2>
-          <a href="#">Смотреть всё (24)</a>
-        </div>
-        <div class="items-grid">
-          <a href="transport/auto-detail.html" class="market-card">
-            <div class="card-img-wrap">
-              <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop" alt="Ноутбук" />
-            </div>
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="badge-status">Активно</span>
-                <span class="card-price">$1,200</span>
-              </div>
-              <h3 class="card-title">Игровой ноутбук Core i7</h3>
-              <p class="card-location">Душанбе, центр</p>
-            </div>
-          </a>
-
-          <a href="transport/auto-detail.html" class="market-card">
-            <div class="card-img-wrap">
-              <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=400&auto=format&fit=crop" alt="Диван" />
-            </div>
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="badge-status">Активно</span>
-                <span class="card-price">$850</span>
-              </div>
-              <h3 class="card-title">Дизайнерский диван (дуб)</h3>
-              <p class="card-location">Душанбе</p>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <!-- История продаж -->
-      <section class="section-panel">
-        <div class="section-heading">
-          <h2>История продаж</h2>
-          <a href="#">Архив</a>
-        </div>
-        <div class="items-grid">
-          <a href="#" class="market-card" style="opacity: 0.9;">
-            <div class="card-img-wrap">
-              <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=400&auto=format&fit=crop" alt="iPad" />
-            </div>
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="badge-sold">Продано</span>
-                <span class="card-price">$350</span>
-              </div>
-              <h3 class="card-title">iPad Air (2022)</h3>
-              <p class="card-location">Доставлено покупателю</p>
-            </div>
-          </a>
-
-          <a href="#" class="market-card" style="opacity: 0.9;">
-            <div class="card-img-wrap">
-              <img src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?q=80&w=400&auto=format&fit=crop" alt="Кофемашина" />
-            </div>
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="badge-sold">Продано</span>
-                <span class="card-price">$180</span>
-              </div>
-              <h3 class="card-title">Кофемашина капсульная</h3>
-              <p class="card-location">Самовывоз</p>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Отзывы покупателей -->
-      <section class="section-panel">
-        <div class="section-heading">
-          <h2>Отзывы покупателей</h2>
-          <a href="#">Все отзывы (132)</a>
-        </div>
-        <div class="reviews-list">
-          <div class="review-item">
-            <div class="review-top">
-              <span>Махмад</span>
-              <span class="review-stars">★★★★★</span>
-            </div>
-            <p>«Быстрый ответ и отличная упаковка товара. Очень рекомендую продавца!»</p>
-          </div>
-          <div class="review-item">
-            <div class="review-top">
-              <span>Наргис</span>
-              <span class="review-stars">★★★★★</span>
-            </div>
-            <p>«Товар полностью совпал с описанием в объявлении, сервис на высоте.»</p>
-          </div>
-        </div>
-      </section>
+<div class="profile-page">
+    <!-- Шапка профиля с кнопкой Настройки -->
+    <div class="profile-header">
+        <button class="btn-back" onclick="window.history.back()">← Назад</button>
+        <button class="btn-settings" onclick="alert('Открываем настройки профиля...')">⚙️ Настройки</button>
     </div>
-  </body>
+
+    <!-- Карточка продавца -->
+    <div class="seller-card">
+        <div class="avatar-block">А</div>
+        <div class="seller-info">
+            <span class="seller-badge">ЧАСТНЫЙ ПРОДАВЕЦ</span>
+            <h2 class="seller-name">Азиз С.</h2>
+            <p class="seller-sub">Надёжный продавец в Душанбе • 4.8 звёзд • 132 сделки</p>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="stats-grid">
+        <div class="stat-item"><strong>24</strong><span>Активные</span></div>
+        <div class="stat-item"><strong>118</strong><span>Продано</span></div>
+        <div class="stat-item"><strong>4.8</strong><span>Рейтинг</span></div>
+    </div>
+
+    <!-- Действия -->
+    <div class="profile-actions">
+        <button class="btn-add-item" onclick="alert('Переход к созданию объявления...')">+ Разместить объявление</button>
+        <button class="btn-become-seller">Стать продавцом →</button>
+    </div>
+
+    <!-- Блок товаров -->
+    <div class="products-section">
+        <h3>Активные объявления</h3>
+        <div class="mobile-grid">
+            <div class="card">
+                <img src="https://unsplash.com" class="card-img" alt="Ноутбук">
+                <div class="card-badge badge-shop">Активно</div>
+                <div class="card-info">
+                    <div class="card-price">$1,200</div>
+                    <div class="card-title">Игровой ноутбук Core i7</div>
+                    <div class="card-location">Душанбе, центр</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://unsplash.com" class="card-img" alt="Диван">
+                <div class="card-badge badge-shop">Активно</div>
+                <div class="card-info">
+                    <div class="card-price">$850</div>
+                    <div class="card-title">Дизайнерский диван (дуб)</div>
+                    <div class="card-location">Душанбе</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ САЙТА: Информация о платформе в самом низу -->
+    <footer class="platform-footer">
+        <div class="footer-brand">MyElon Platform</div>
+        <p class="footer-legal">© 2026 MyElon. Все права защищены. Эмайшь Платформ — безопасный маркетплейс объявлений в Таджикистане.</p>
+        <div class="footer-links">
+            <a href="#" onclick="alert('Помощь')">Помощь</a> • 
+            <a href="#" onclick="alert('Правила')">Правила безопасности</a> • 
+            <a href="#" onclick="alert('Поддержка')">Служба поддержки</a>
+        </div>
+    </footer>
+</div>
+
+</body>
 </html>
