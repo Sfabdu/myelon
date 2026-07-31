@@ -185,3 +185,146 @@ body {
     font-size: 14px;
     box-shadow: 0 4px 10px rgba(255, 102, 0, 0.3);
 }
+/* ==========================================
+   5. КРУПНЫЙ ПОИСК С ШЕСТЕРЁНКОЙ ВНУТРИ И УМНАЯ КНОПКА
+   ========================================== */
+.search-section {
+    padding: 16px 16px 8px 16px;
+    background-color: #FFFFFF;
+}
+/* Крупный и высокий контейнер поиска */
+.search-container-large {
+    display: flex;
+    align-items: center;
+    background-color: #F3F4F6;
+    border-radius: 16px; /* Более мягкое закругление */
+    padding: 16px 18px; /* Сделали больше и выше */
+    border: 1px solid transparent;
+    position: relative;
+}
+.search-container-large input {
+    width: calc(100% - 40px);
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 16px; /* Крупный шрифт для ввода */
+    color: #111827;
+}
+.search-icon {
+    font-size: 18px;
+    color: #9CA3AF;
+    margin-right: 12px;
+}
+/* Кнопка-шестерёнка заперта внутри поисковика в конце строки */
+.search-filter-inside-btn {
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 18px;
+    color: #4B5563;
+    padding: 4px;
+}
+
+/* Контейнер для кнопки переключателя */
+.toggle-container-block {
+    padding: 8px 16px 16px 16px;
+    background-color: #FFFFFF;
+}
+/* Наша главная умная кнопка на оранжевом фоне по умолчанию */
+.smart-market-toggle {
+    width: 100%;
+    background-color: #FF6600; /* Наш фирменный оранжевый */
+    color: #FFFFFF;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+}
+/* Когда включается режим Б/У — кнопка плавно перекрашивается в темный */
+.smart-market-toggle.bu-mode-active {
+    background-color: #1F2937 !important;
+    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+}
+
+/* Контейнер под авто-категории пользователя */
+.smart-user-categories {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    overflow-x: auto;
+}/* ==========================================
+   5. КРУПНЫЙ ПОИСК С ШЕСТЕРЁНКОЙ ВНУТРИ И УМНАЯ КНОПКА
+   ========================================== */
+.search-section {
+    padding: 16px 16px 8px 16px;
+    background-color: #FFFFFF;
+}
+/* Крупный и высокий контейнер поиска */
+.search-container-large {
+    display: flex;
+    align-items: center;
+    background-color: #F3F4F6;
+    border-radius: 16px; /* Более мягкое закругление */
+    padding: 16px 18px; /* Сделали больше и выше */
+    border: 1px solid transparent;
+    position: relative;
+}
+.search-container-large input {
+    width: calc(100% - 40px);
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 16px; /* Крупный шрифт для ввода */
+    color: #111827;
+}
+.search-icon {
+    font-size: 18px;
+    color: #9CA3AF;
+    margin-right: 12px;
+}
+/* Кнопка-шестерёнка заперта внутри поисковика в конце строки */
+.search-filter-inside-btn {
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 18px;
+    color: #4B5563;
+    padding: 4px;
+}
+
+/* Контейнер для кнопки переключателя */
+.toggle-container-block {
+    padding: 8px 16px 16px 16px;
+    background-color: #FFFFFF;
+}
+/* Наша главная умная кнопка на оранжевом фоне по умолчанию */
+.smart-market-toggle {
+    width: 100%;
+    background-color: #FF6600; /* Наш фирменный оранжевый */
+    color: #FFFFFF;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+}
+/* Когда включается режим Б/У — кнопка плавно перекрашивается в темный */
+.smart-market-toggle.bu-mode-active {
+    background-color: #1F2937 !important;
+    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.2);
+}
+
+/* Контейнер под авто-категории пользователя */
+.smart-user-categories {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    overflow-x: auto;
+}
