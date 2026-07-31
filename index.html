@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyElon | Маркетплейс Таджикистана</title>
-    <!-- Подключаем наш один общий файл стилей -->
+    <title>MyElon | Маркетплейс</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. Шапка сайта (Только логотип, кнопку профиля убрали) -->
+    <!-- 1. Шапка сайта (УБРАЛИ КНОПКУ ПРОФИЛЯ НАВСЕГДА, ОСТАЛСЯ ТОЛЬКО ЛОГОТИП) -->
     <div class="header">
         <div class="logo">MyElon</div>
     </div>
@@ -23,17 +22,17 @@
         </div>
     </div>
 
-    <!-- 3. ИДЕАЛЬНЫЙ РЯД КНОПОК: Переключатель + Категории (Можно листать пальцем вбок) -->
-    <div class="categories-scroll-row">
-        <!-- Наш переключатель: стал шире для удобного нажатия, но высота аккуратная -->
+    <!-- 3. ДВЕ КНОПКИ РОВНО ПОПОЛАМ (50% на 50%) -->
+    <div class="split-buttons-row">
+        <!-- Левая половина: Твой переключатель режимов -->
         <button class="smart-pill-toggle" id="market-mode-btn" onclick="handleMarketToggle()">
             <span id="toggle-text">Новые товары 🔄</span>
         </button>
         
-        <!-- Дальше идут категории, которые система покажет как часто посещаемые -->
-        <div class="category-pill" onclick="alert('Категория: Авто')">Авто</div>
-        <div class="category-pill" onclick="alert('Категория: Электроника')">Электроника</div>
-        <div class="category-pill" onclick="alert('Категория: Одежда')">Одежда</div>
+        <!-- Правая половина: Кнопка категорий -->
+        <button class="category-pill-button" onclick="window.location.href='categories.html'">
+            Категории 📁
+        </button>
     </div>
 
 <!-- 4. РЯД ЧАСТО ПОСЕЩАЕМЫХ КАТЕГОРИЙ (Живая система в будущем сама заполнит этот ряд) -->
