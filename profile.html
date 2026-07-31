@@ -4,70 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль | MyElon</title>
-    <!-- Наш единый файл стилей -->
+    <!-- Подключаем наш один общий файл стилей -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="profile-page">
-    <!-- Шапка профиля с кнопкой Настройки -->
+    <!-- Шапка профиля: Настройки сайта в правом углу -->
     <div class="profile-header">
-        <button class="btn-back" onclick="window.history.back()">← Назад</button>
-        <button class="btn-settings" onclick="alert('Открываем настройки профиля...')">⚙️ Настройки</button>
+        <button class="btn-back" onclick="window.location.href='index.html'">← На главную</button>
+        <button class="btn-settings" onclick="alert('Открываем настройки сайта...')">⚙️ Настройки</button>
     </div>
 
-    <!-- Карточка продавца -->
+    <!-- Карточка пользователя/продавца -->
     <div class="seller-card">
         <div class="avatar-block">А</div>
         <div class="seller-info">
-            <span class="seller-badge">ЧАСТНЫЙ ПРОДАВЕЦ</span>
+            <span class="seller-badge">ЛИЧНЫЙ ПРОФИЛЬ</span>
             <h2 class="seller-name">Азиз С.</h2>
-            <p class="seller-sub">Надёжный продавец в Душанбе • 4.8 звёзд • 132 сделки</p>
+            <p class="seller-sub">Душанбе • На платформе с 2026 года</p>
         </div>
     </div>
 
-    <!-- Статистика -->
+    <!-- Раздел статистики маркетплейса -->
     <div class="stats-grid">
-        <div class="stat-item"><strong>24</strong><span>Активные</span></div>
-        <div class="stat-item"><strong>118</strong><span>Продано</span></div>
-        <div class="stat-item"><strong>4.8</strong><span>Рейтинг</span></div>
+        <div class="stat-item"><strong>0</strong><span>Объявления</span></div>
+        <div class="stat-item"><strong>0</strong><span>Продано</span></div>
+        <div class="stat-item"><strong>5.0</strong><span>Рейтинг</span></div>
     </div>
 
-    <!-- Действия -->
+    <!-- Главная кнопка действий -->
     <div class="profile-actions">
         <button class="btn-add-item" onclick="alert('Переход к созданию объявления...')">+ Разместить объявление</button>
-        <button class="btn-become-seller">Стать продавцом →</button>
     </div>
 
-    <!-- Блок товаров -->
+    <!-- Блок пустых объявлений пока ничего не загружено -->
     <div class="products-section">
-        <h3>Активные объявления</h3>
-        <div class="mobile-grid">
-            <div class="card">
-                <img src="https://unsplash.com" class="card-img" alt="Ноутбук">
-                <div class="card-badge badge-shop">Активно</div>
-                <div class="card-info">
-                    <div class="card-price">$1,200</div>
-                    <div class="card-title">Игровой ноутбук Core i7</div>
-                    <div class="card-location">Душанбе, центр</div>
-                </div>
-            </div>
-            <div class="card">
-                <img src="https://unsplash.com" class="card-img" alt="Диван">
-                <div class="card-badge badge-shop">Активно</div>
-                <div class="card-info">
-                    <div class="card-price">$850</div>
-                    <div class="card-title">Дизайнерский диван (дуб)</div>
-                    <div class="card-location">Душанбе</div>
-                </div>
-            </div>
-        </div>
+        <h3>Мои объявления</h3>
+        <p style="color: #9CA3AF; font-size: 14px; text-align: center; margin-top: 20px;">У вас пока нет активных объявлений</p>
     </div>
 
-    <!-- ПОДВАЛ САЙТА: Информация о платформе в самом низу -->
+    <!-- ИДЕАЛЬНЫЙ ПОДВАЛ: Размещаем информацию о платформе в самом низу -->
     <footer class="platform-footer">
         <div class="footer-brand">MyElon Platform</div>
-        <p class="footer-legal">© 2026 MyElon. Все права защищены. Эмайшь Платформ — безопасный маркетплейс объявлений в Таджикистане.</p>
+        <p class="footer-legal">© 2026 MyElon. Все права защищены. Эмайшь Платформ — безопасный технологичный маркетплейс объявлений в Таджикистане.</p>
         <div class="footer-links">
             <a href="#" onclick="alert('Помощь')">Помощь</a> • 
             <a href="#" onclick="alert('Правила')">Правила безопасности</a> • 

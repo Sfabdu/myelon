@@ -1,44 +1,74 @@
 <!DOCTYPE html>
-<html lang="tg">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>myelon.tj | Премиум торговля Таджикистан</title>
-    <!-- Подключаем наш общий файл краски со всей структурой -->
-    <link rel="stylesheet" href="./style.css">
+    <title>MyElon | Маркетплейс Таджикистана</title>
+    <!-- Подключаем наш один общий файл стилей -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка сайта -->
+    <!-- 1. Шапка сайта -->
     <div class="header">
-        <div class="logo">myelon.tj</div>
-        <div class="lang-switch">Тоҷикӣ</div>
+        <div class="logo">MyElon</div>
+        <div class="header-menu">
+            <button class="btn-profile-nav" onclick="window.location.href='profile.html'">👤 Профиль</button>
+        </div>
     </div>
 
-    <!-- Кнопка переключателя Магазины / Б_У -->
-    <button class="main-toggle" id="toggleBtn" onclick="toggleFeedType()">
-        <span id="toggleText">Показать Б/У вещи</span>
+    <!-- 2. НАША НОВАЯ ПОИСКОВАЯ СИСТЕМА (То, чего не было в коде) -->
+    <div class="search-section">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="main-search" placeholder="Поиск (найдёт даже с ошибками)..." oninput="smartFilter()">
+        </div>
+    </div>
+
+    <!-- 3. Кнопка-переключатель Б/У и Магазины -->
+    <button class="main-toggle" id="toggle-mode" onclick="toggleMarketMode()">
+        <span>Показать Б/У вещи</span>
         <span>➔</span>
     </button>
 
-    <!-- Главная живая лента объявлений -->
-    <div class="market-feed mobile-grid" id="feed-grid">
-        <!-- Картон полностью стерт! Сюда мост будет сам подставлять живые машины из Сингапура -->
+    <!-- 4. Лента товаров (Сетка) -->
+    <div class="market-feed">
+        <div class="mobile-grid">
+            
+            <!-- Товар 1 -->
+            <div class="card" data-type="shop">
+                <img src="https://unsplash.com" class="card-img" alt="Ноутбук">
+                <div class="card-badge badge-shop">Магазин</div>
+                <div class="card-info">
+                    <div class="card-price">$1,200<span>TJS</span></div>
+                    <div class="card-title">Игровой ноутбук Core i7</div>
+                    <div class="card-location">Душанбе</div>
+                </div>
+            </div>
+
+            <!-- Товар 2 -->
+            <div class="card" data-type="bu">
+                <img src="https://unsplash.com" class="card-img" alt="Диван">
+                <div class="card-badge badge-bu">Б/У</div>
+                <div class="card-info">
+                    <div class="card-price">$850<span>TJS</span></div>
+                    <div class="card-title">Оранжевый диван из дуба</div>
+                    <div class="card-location">Худжанд</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Нижняя мобильная панель меню -->
+    <!-- 5. Нижнее меню навигации -->
     <div class="nav-bar">
         <a href="index.html" class="nav-item active">
             <div class="nav-icon">🏠</div>
             <div>Главная</div>
         </a>
-        <a href="catalog.html" class="nav-item">
-            <div class="nav-icon">📂</div>
-            <div>Категории</div>
-        </a>
-        <a href="chats.html" class="nav-item">
+        <a href="chat.html" class="nav-item">
             <div class="nav-icon">💬</div>
-            <div>Чаты</div>
+            <div>Чат</div>
         </a>
         <a href="profile.html" class="nav-item">
             <div class="nav-icon">👤</div>
@@ -46,38 +76,74 @@
         </a>
     </div>
 
-    <!-- Подключаем наш невидимый мост к Сингапуру -->
-    <script src="./supabase-bridge.js"></script>
-    <script>
-        // Переключатель типов объявлений (магазин / б_у)
-        let currentType = "shop";
+<script>
+// Переключатель режимов Б/У и Магазины
+function toggleMarketMode() {
+    let btn = document.getElementById('toggle-mode');
+    btn.classList.toggle('bu-active');
+    if (btn.classList.contains('bu-active')) {
+        btn.querySelector('span').innerText = "Показать новые товары";
+    } else {
+        btn.querySelector('span').innerText = "Показать Б/У вещи";
+    }
+}
 
-        function toggleFeedType() {
-            const btn = document.getElementById("toggleBtn");
-            const text = document.getElementById("toggleText");
-            
-            if (currentType === "shop") {
-                currentType = "bu";
-                btn.classList.add("bu-active");
-                text.innerText = "Показать Магазины";
+// Умный алгоритм, который считает опечатки (Левенштейн)
+function getLevenshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    let matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
             } else {
-                currentType = "shop";
-                btn.classList.remove("bu-active");
-                text.innerText = "Показать Б/У вещи";
-            }
-            
-            // Запускаем живую загрузку из Сингапура под выбранный тип
-            if (typeof loadLiveFeed === "function") {
-                loadLiveFeed(currentType);
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
             }
         }
+    }
+    return matrix[b.length][a.length];
+}
 
-        // Автоматический запуск при открытии сайта
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof loadLiveFeed === "function") {
-                loadLiveFeed(currentType);
+// Живой умный фильтр для поиска
+function smartFilter() {
+    let query = document.getElementById('main-search').value.toLowerCase().trim();
+    let cards = document.querySelectorAll('.card');
+
+    if (query.length < 2) {
+        cards.forEach(card => card.style.display = "block");
+        return;
+    }
+
+    cards.forEach(card => {
+        let title = card.querySelector('.card-title').innerText.toLowerCase();
+        let words = title.split(" ");
+        let isMatch = false;
+
+        words.forEach(word => {
+            if (word.includes(query) || query.includes(word)) {
+                isMatch = true;
+            }
+            let distance = getLevenshteinDistance(query, word);
+            if (distance <= 2) { 
+                isMatch = true;
             }
         });
-    </script>
+
+        if (isMatch) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+</script>
+
 </body>
 </html>
