@@ -9,30 +9,32 @@
 </head>
 <body>
 
-    <!-- 1. Шапка сайта -->
+    <!-- 1. Шапка сайта (Только логотип, кнопку профиля убрали) -->
     <div class="header">
         <div class="logo">MyElon</div>
-        <div class="header-menu">
-            <button class="btn-profile-nav" onclick="window.location.href='profile.html'">👤 Профиль</button>
+    </div>
+
+    <!-- 2. ПОИСКОВИК КАК У АВИТО (Широкий, с фильтром 🎛️ внутри справа) -->
+    <div class="search-section">
+        <div class="search-container-avito">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="main-search" placeholder="Поиск в MyElon" oninput="smartFilter()">
+            <span class="search-filter-avito-btn" onclick="alert('Открываем шторку фильтров...')">🎛️</span>
         </div>
     </div>
 
-    <!-- 2. БОЛЬШОЙ ПОИСКОВИК (ФИЛЬТР ШЕСТЕРЁНКА ЗАКРЫТА ВНУТРИ) -->
-<div class="search-section">
-    <div class="search-container-large">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="main-search" placeholder="Поиск на MyElon..." oninput="smartFilter()">
-        <!-- Шестерёнка теперь строго внутри поисковой строки справа -->
-        <span class="search-filter-inside-btn" onclick="alert('Открываем фильтры...')">⚙️</span>
+    <!-- 3. ИДЕАЛЬНЫЙ РЯД КНОПОК: Переключатель + Категории (Можно листать пальцем вбок) -->
+    <div class="categories-scroll-row">
+        <!-- Наш переключатель: стал шире для удобного нажатия, но высота аккуратная -->
+        <button class="smart-pill-toggle" id="market-mode-btn" onclick="handleMarketToggle()">
+            <span id="toggle-text">Новые товары 🔄</span>
+        </button>
+        
+        <!-- Дальше идут категории, которые система покажет как часто посещаемые -->
+        <div class="category-pill" onclick="alert('Категория: Авто')">Авто</div>
+        <div class="category-pill" onclick="alert('Категория: Электроника')">Электроника</div>
+        <div class="category-pill" onclick="alert('Категория: Одежда')">Одежда</div>
     </div>
-</div>
-
-<!-- 3. ОРАНЖЕВАЯ УМНАЯ КНОПКА-ПЕРЕКЛЮЧАТЕЛЬ (МЕНЯЕТ ФОН И ТЕКСТ) -->
-<div class="toggle-container-block">
-    <button class="smart-market-toggle" id="market-mode-btn" onclick="handleMarketToggle()">
-        <span id="toggle-text">Новые товары 🔄</span>
-    </button>
-</div>
 
 <!-- 4. РЯД ЧАСТО ПОСЕЩАЕМЫХ КАТЕГОРИЙ (Живая система в будущем сама заполнит этот ряд) -->
 <div class="smart-user-categories" id="user-fav-categories">
