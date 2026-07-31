@@ -47,33 +47,23 @@
             <a href="chat-room.html?id=general" class="community-item">
               <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100&auto=format&fit=crop" alt="Общий" class="community-avatar" />
               <div>
-                <h3 class="community-name">Общий чат</h3>
-                <p class="community-desc">Обсуждение всех тем</p>
+                <p class="community-desc">пишите свое мнение для улучшение плошадки</p>
               </div>
               <span class="community-count">1 240</span>
             </a>
             <a href="chat-room.html?id=buy-sell" class="community-item">
               <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=100&auto=format&fit=crop" alt="Купить/Продать" class="community-avatar" />
               <div>
-                <h3 class="community-name">Купить / Продать</h3>
-                <p class="community-desc">Обмен и торговля</p>
-              </div>
               <span class="community-count">890</span>
             </a>
             <a href="chat-room.html?id=help" class="community-item">
               <img src="https://images.unsplash.com/photo-1581091012184-9b9b51d5d0e9?q=80&w=100&auto=format&fit=crop" alt="Помощь" class="community-avatar" />
               <div>
-                <h3 class="community-name">Помощь новичкам</h3>
-                <p class="community-desc">Вопросы и ответы</p>
-              </div>
               <span class="community-count">540</span>
             </a>
             <a href="chat-room.html?id=news" class="community-item">
               <img src="https://images.unsplash.com/photo-1495020879502-9a5a1c4b4bd6?q=80&w=100&auto=format&fit=crop" alt="Новости" class="community-avatar" />
               <div>
-                <h3 class="community-name">Новости и акции</h3>
-                <p class="community-desc">Свежие предложения</p>
-              </div>
               <span class="community-count">320</span>
             </a>
             <a href="support.html" class="community-item">
@@ -87,13 +77,29 @@
           </div>
         </section>
       </main>
-      <nav class="mobile-tabbar" aria-label="Нижняя навигация">
-        <a href="index.html" class="tab-item">🏠<span>Главная</span></a>
-        <a href="categories.html" class="tab-item">📁<span>Категории</span></a>
-        <a href="#" class="tab-item center-tab">🔍</a>
-        <a href="chat.html" class="tab-item active">💬<span>Чат</span></a>
-        <a href="profile.html" class="tab-item">👤<span>Профиль</span></a>
-      </nav>
-    </div>
-  </body>
+      <!-- Идеальное нижнее меню навигации (5 кнопок) -->
+<div class="nav-bar">
+    <a href="index.html" class="nav-item">
+        <div class="nav-icon">🏠</div>
+        <div>Главная</div>
+    </a>
+    <a href="#" class="nav-item" onclick="alert('Открываем Избранное...')">
+        <div class="nav-icon">❤️</div>
+        <div>Избранное</div>
+    </a>
+    <a href="#" class="nav-item nav-add-btn" onclick="alert('Переход к созданию объявления...')">
+        <div class="nav-icon">➕</div>
+        <div>Создать</div>
+    </a>
+    <a href="chat.html" class="nav-item">
+        <div class="nav-icon">💬</div>
+        <div>Чат</div>
+    </a>
+    <a href="profile.html" class="nav-item active">
+        <div class="nav-icon">👤</div>
+        <div>Профиль</div>
+    </a>
+</div>
+
+</body>
 </html>
