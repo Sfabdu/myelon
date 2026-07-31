@@ -17,33 +17,48 @@
         </div>
     </div>
 
-    <!-- 2. НОВАЯ ШИРОКАЯ ПОИСКОВАЯ СИСТЕМА С КНОПКОЙ ФИЛЬТРА -->
+    <!-- 2. БОЛЬШОЙ ПОИСКОВИК (ФИЛЬТР ШЕСТЕРЁНКА ЗАКРЫТА ВНУТРИ) -->
 <div class="search-section">
-    <div class="search-wrapper">
-        <div class="search-container-new">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="main-search" placeholder="Поиск (найдёт даже с ошибками)..." oninput="smartFilter()">
-        </div>
-        <!-- Кнопка Фильтра прямо в конце поисковой строки -->
-        <button class="btn-filter-toggle" onclick="alert('Открываем шторку фильтров со скриншота...')">
-            ⚙️
-        </button>
+    <div class="search-container-large">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="main-search" placeholder="Поиск на MyElon..." oninput="smartFilter()">
+        <!-- Шестерёнка теперь строго внутри поисковой строки справа -->
+        <span class="search-filter-inside-btn" onclick="alert('Открываем фильтры...')">⚙️</span>
     </div>
 </div>
 
-<!-- 3. БЛОК СТИЛЬНЫХ КАТЕГОРИЙ (Вместо старой кнопки Б/У) -->
-<div class="categories-horizontal-block">
-    <div class="category-pill active" onclick="alert('Показываем все товары')">Все</div>
-    <div class="category-pill" onclick="alert('Фильтр: Новые вещи')">Магазины</div>
-    <div class="category-pill" onclick="alert('Фильтр: Б/У вещи')">Б/У товары</div>
+<!-- 3. ОРАНЖЕВАЯ УМНАЯ КНОПКА-ПЕРЕКЛЮЧАТЕЛЬ (МЕНЯЕТ ФОН И ТЕКСТ) -->
+<div class="toggle-container-block">
+    <button class="smart-market-toggle" id="market-mode-btn" onclick="handleMarketToggle()">
+        <span id="toggle-text">Новые товары 🔄</span>
+    </button>
 </div>
 
-<!-- 4. СТРОЧКА: ЧАСТО ПОСЕЩАЕМЫЕ КАТЕГОРИИ -->
-<div class="frequent-categories-title">
-    Часто посещаемые категории
+<!-- 4. РЯД ЧАСТО ПОСЕЩАЕМЫХ КАТЕГОРИЙ (Живая система в будущем сама заполнит этот ряд) -->
+<div class="smart-user-categories" id="user-fav-categories">
+    <!-- Сюда система потом сама подкинет нужные категории по вкусу человека -->
 </div>
 
-    <!-- 4. Лента товаров (Сетка) -->
+<script>
+// Функция переключения режимов (Оранжевый / Тёмный)
+function handleMarketToggle() {
+    let btn = document.getElementById('market-mode-btn');
+    let text = document.getElementById('toggle-text');
+    
+    // Переключаем класс
+    btn.classList.toggle('bu-mode-active');
+    
+    if (btn.classList.contains('bu-mode-active')) {
+        text.innerText = "Б/У товары 🔄";
+    } else {
+        text.innerText = "Новые товары 🔄";
+    }
+    
+    // Сюда вечером прикрутим фильтрацию карточек товаров из Supabase
+}
+</script>
+
+    <!-- 5. Лента товаров (Сетка) -->
     <div class="market-feed">
         <div class="mobile-grid">
             
