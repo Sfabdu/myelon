@@ -53,6 +53,161 @@
         </select>
     </div>
 
+      <!-- ==========================================
+         БЛОК АНКЕТ: ВСТАВЛЯТЬ СТРОГО СЮДА!
+         ========================================== -->
+    
+    <!-- Паспорт 1: Автомобили (Все 12 полей из техпаспорта BYD/Geely) -->
+    <div id="specs-auto" class="dynamic-specs">
+        <h4>Технический паспорт авто</h4>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Кузов</label>
+                <select id="auto-body">
+                    <option value="седан">Седан</option>
+                    <option value="кроссовер">Кроссовер</option>
+                    <option value="хэтчбек">Хэтчбек</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Год выпуска</label>
+                <input type="number" id="auto-year" placeholder="2007">
+            </div>
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Цвет</label>
+                <input type="text" id="auto-color" placeholder="Белый">
+            </div>
+            <div class="input-group">
+                <label>Привод</label>
+                <select id="auto-drive">
+                    <option value="передний">Передний</option>
+                    <option value="задний">Задний</option>
+                    <option value="полный">Полный (4x4)</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Объем двигателя</label>
+                <input type="text" id="auto-engine" placeholder="1.6 л.">
+            </div>
+            <div class="input-group">
+                <label>Пробег, км</label>
+                <input type="number" id="auto-mileage" placeholder="272829">
+            </div>
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Турбина</label>
+                <select id="auto-turbo">
+                    <option value="нет">Нет</option>
+                    <option value="есть">Есть</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Состояние</label>
+                <select id="auto-condition">
+                    <option value="с пробегом">С пробегом</option>
+                    <option value="новый">Новый</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Вид топлива</label>
+                <select id="auto-fuel">
+                    <option value="бензин + газ">Бензин + газ</option>
+                    <option value="бензин">Бензин</option>
+                    <option value="газ">Газ</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Растаможен в РТ</label>
+                <select id="auto-customs">
+                    <option value="да">Да</option>
+                    <option value="нет">Нет</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-row-flex">
+            <div class="input-group">
+                <label>Коробка передач</label>
+                <select id="auto-transmission">
+                    <option value="механика">Механика</option>
+                    <option value="автомат">Автомат</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Лицензия на такси</label>
+                <select id="auto-taxi">
+                    <option value="нет">Нет</option>
+                    <option value="есть">Есть</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Паспорт 2: Недвижимость (Квартиры/Дома) -->
+    <div id="specs-realty" class="dynamic-specs">
+        <h4>Паспорт недвижимости</h4>
+        <div class="input-group">
+            <label>Количество комнат</label>
+            <select id="realty-rooms">
+                <option value="1">1-комнатная</option>
+                <option value="2">2-комнатная</option>
+                <option value="3">3-комнатная</option>
+                <option value="4+">4+ комнатная</option>
+            </select>
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Этаж</label>
+                <input type="number" id="realty-floor" placeholder="5">
+            </div>
+            <div class="input-group">
+                <label>Всего этажей в доме</label>
+                <input type="number" id="realty-total-floors" placeholder="9">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Общая площадь, м²</label>
+            <input type="number" id="realty-area" placeholder="65">
+        </div>
+    </div>
+
+    <!-- Паспорт 3: Электроника и Телефоны -->
+    <div id="specs-electron" class="dynamic-specs">
+        <h4>Паспорт устройства</h4>
+        <div class="input-group">
+            <label>Марка / Бренд</label>
+            <input type="text" id="electron-brand" placeholder="Например, Apple, Samsung">
+        </div>
+        <div class="input-row-flex" style="margin-bottom: 16px;">
+            <div class="input-group">
+                <label>Объем памяти (ГБ)</label>
+                <select id="electron-memory">
+                    <option value="128">128 ГБ</option>
+                    <option value="256">256 ГБ</option>
+                    <option value="512">512 ГБ</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Цвет устройства</label>
+                <input type="text" id="electron-color" placeholder="Titanium">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Состояние</label>
+            <select id="electron-condition">
+                <option value="bu">Б/У (В хорошем состоянии)</option>
+                <option value="new">Новое (В упаковке)</option>
+            </select>
+        </div>
+    </div>
+  
+
     <!-- АНКЕТА ДЛЯ АВТО (Появляется только если выбрать Машины) -->
     <div id="specs-auto" class="dynamic-specs">
         <h4 style="margin: 0 0 12px 0; color: #FF6600;">Характеристики автомобиля</h4>
