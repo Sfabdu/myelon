@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Разместить объявление | MyElon</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #F9FAFB; padding-bottom: 90px; }
+        .form-container { max-width: 600px; margin: 0 auto; padding: 16px; background: #FFFFFF; min-height: 100vh; }
+        .form-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #F3F4F6; }
+        .btn-close-form { background: none; border: none; font-size: 20px; cursor: pointer; color: #111827; }
+        .form-header h2 { margin: 0; font-size: 20px; font-weight: 700; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .input-group label { font-size: 14px; font-weight: 700; color: #111827; }
+        .input-group input, .input-group select, .input-group textarea {
+            background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box;
+        }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #FF6600; background-color: #FFFFFF; }
+        
+        /* Динамические под-анкеты для разных категорий */
+        .dynamic-specs { display: none; background: #F9FAFB; padding: 16px; border-radius: 16px; margin-bottom: 20px; border: 1px solid #F3F4F6; }
+        
+        .btn-publish { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 10px; }
+        .btn-publish:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <!-- Шапка страницы -->
+    <div class="form-header">
+        <button class="btn-close-form" onclick="window.location.href='index.html'">✕</button>
+        <h2>Новое объявление</h2>
+    </div>
+
+    <!-- Основная анкета -->
+    <div class="input-group">
+        <label>Название товара или услуги</label>
+        <input type="text" id="item-title" placeholder="Например, Opel AstraG, 2004">
+    </div>
+
+    <!-- ГЛАВНЫЙ ВЫБОР КАТЕГОРИИ (Меняет анкету на лету) -->
+    <div class="input-group">
+        <label>Категория</label>
+        <select id="item-category" onchange="showCategorySpecs()">
+            <option value="">Выберите категорию...</option>
+            <option value="auto">🚗 Автомобили</option>
+            <option value="realty">🏠 Недвижимость</option>
+            <option value="electron">📱 Электроника</option>
+            <option value="other">📦 Другое</option>
+        </select>
+    </div>
+
+    <!-- АНКЕТА ДЛЯ АВТО (Появляется только если выбрать Машины) -->
+    <div id="specs-auto" class="dynamic-specs">
+        <h4 style="margin: 0 0 12px 0; color: #FF6600;">Характеристики автомобиля</h4>
+        <div class="input-group">
+            <label>Пробег, км</label>
+            <input type="number" id="auto-mileage" placeholder="Например, 180000">
+        </div>
+        <div class="input-group">
+            <label>Год выпуска</label>
+            <input type="number" id="auto-year" placeholder="2008">
+        </div>
+        <div class="input-group">
+            <label>Тип топлива</label>
+            <select id="auto-fuel">
+                <option value="gas">Бензин</option>
+                <option value="gaza">Газ-Бензин</option>
+                <option value="diesel">Дизель</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- АНКЕТА ДЛЯ НЕДВИЖИМОСТИ (Появляется только если выбрать Квартиры) -->
+    <div id="specs-realty" class="dynamic-specs">
+        <h4 style="margin: 0 0 12px 0; color: #FF6600;">Характеристики недвижимости</h4>
+        <div class="input-group">
+            <label>Количество комнат</label>
+            <select id="realty-rooms">
+                <option value="1">1-комнатная</option>
+                <option value="2">2-комнатная</option>
+                <option value="3">3-комнатная</option>
+                <option value="4">4+ комнатная</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Этаж</label>
+            <input type="number" id="realty-floor" placeholder="4">
+        </div>
+    </div>
+
+    <!-- АНКЕТА ДЛЯ ЭЛЕКТРОНИКИ -->
+    <div id="specs-electron" class="dynamic-specs">
+        <h4 style="margin: 0 0 12px 0; color: #FF6600;">Характеристики устройства</h4>
+        <div class="input-group">
+            <label>Марка / Бренд</label>
+            <input type="text" id="electron-brand" placeholder="Apple, Samsung, Xiaomi">
+        </div>
+        <div class="input-group">
+            <label>Состояние</label>
+            <select id="electron-status">
+                <option value="new">Новое (В упаковке)</option>
+                <option value="bu">Б/У (В хорошем состоянии)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Общие поля для всех -->
+    <div class="input-group">
+        <label>Описание</label>
+        <textarea id="item-desc" rows="4" placeholder="Опишите ваш товар подробнее, расскажите про плюсы и минусы..."></textarea>
+    </div>
+
+    <div class="input-group">
+        <label>Цена, TJS</label>
+        <input type="number" id="item-price" placeholder="Укажите цену">
+    </div>
+
+    <div class="input-group">
+        <label>Город</label>
+        <select id="item-city">
+            <option value="dushanbe">Душанбе</option>
+            <option value="khujand">Худжанд</option>
+            <option value="bokhtar">Бохтар</option>
+        </select>
+    </div>
+
+    <!-- Кнопка публикации (Пока просто выдает уведомление, вечером прикрутим к Supabase) -->
+    <button class="btn-publish" onclick="alert('Объявление отправлено в базу данных Supabase!')">Опубликовать</button>
+</div>
+
+<script>
+// Умный моторчик, который прячет и показывает анкеты на лету
+function showCategorySpecs() {
+    // Сначала прячем вообще все анкеты
+    document.querySelectorAll('.dynamic-specs').forEach(block => block.style.display = 'none');
+    
+    // Смотрим, какую категорию выбрал пользователь
+    let selectedCategory = document.getElementById('item-category').value;
+    
+    // Если выбрали что-то конкретное — открываем нужную анкету
+    if (selectedCategory === 'auto') {
+        document.getElementById('specs-auto').style.style.display = 'block';
+    } else if (selectedCategory === 'realty') {
+        document.getElementById('specs-realty').style.display = 'block';
+    } else if (selectedCategory === 'electron') {
+        document.getElementById('specs-electron').style.display = 'block';
+    }
+}
+</script>
+
+</body>
+</html>
