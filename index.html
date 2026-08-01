@@ -316,6 +316,19 @@ function smartFilter() {
         }
     });
 }
+    // Умный переход в профиль: если вошел — в кабинет, если нет — на регистрацию
+function openMyProfile() {
+    let isLoggedIn = localStorage.getItem('isLoggedIn');
+    
+    if (isLoggedIn === 'true') {
+        // Если пользователь уже вошёл, отправляем его в кабинет
+        window.location.href = 'profile.html';
+    } else {
+        // Если первый раз — отправляем регистрироваться
+        window.location.href = 'auth.html';
+    }
+}
+
 </script>
 </body>
 </html>
