@@ -3,129 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход и Регистрация | MyElon</title>
+    <title>Вход по коду | MyElon</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем официальный зашифрованный провод к базе данных Supabase -->
+    <script src="https://jsdelivr.net"></script>
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
         .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; }
-        
         .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
         .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
         .auth-subtitle { font-size: 14px; color: #6B7280; text-align: center; margin-bottom: 24px; padding: 0 10px; line-height: 1.4; }
         
-        /* Переключатель Вход / Регистрация 50/50 */
-        .auth-tabs { display: flex; background-color: #F3F4F6; padding: 4px; border-radius: 12px; margin-bottom: 24px; }
-        .auth-tab-btn { flex: 1; border: none; background: none; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; color: #6B7280; transition: all 0.2s ease; }
-        .auth-tab-btn.active { background-color: #FFFFFF; color: #111827; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-        
-        /* Поля ввода */
         .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; text-align: left; }
         .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
-        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
-        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; }
-        
-        /* Блок профиля (для шага регистрации) */
-        #register-extra-fields { display: none; }
+        .input-group input { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
+        .input-group input:focus { border-color: #FF6600; background-color: #FFFFFF; }
         
         .btn-auth-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 12px; transition: all 0.2s ease; }
         .btn-auth-submit:active { transform: scale(0.98); }
+        
+        /* Разделение шагов */
+        .auth-step { display: none; }
+        .auth-step.active { display: block; }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
-    
     <div class="auth-logo">MyElon</div>
-    <div class="auth-subtitle" id="auth-msg">Зайдите в свой личный профиль маркетплейса</div>
-    
-    <!-- Переключатель режима работы -->
-    <div class="auth-tabs">
-        <button id="tab-login" class="auth-tab-btn active" onclick="setMode('login')">Вход</button>
-        <button id="tab-register" class="auth-tab-btn" onclick="setMode('register')">Регистрация</button>
+
+    <!-- ШАГ 1: ВВОД ПОЧТЫ (Отправка кода) -->
+    <div id="step-email" class="auth-step active">
+        <div class="auth-subtitle">Введите ваш Email. Мы отправим на него секретный одноразовый код для входа</div>
+        <form onsubmit="sendEmailOtp(event)">
+            <div class="input-group">
+                <label>Электронная почта (Email)</label>
+                <input type="email" id="auth-email" placeholder="example@mail.com" required>
+            </div>
+            <button type="submit" id="btn-send" class="btn-auth-submit">Получить код на почту</button>
+        </form>
     </div>
-    
-    <!-- Автоматическая форма -->
-    <form onsubmit="handleAuth(event)">
-        <div class="input-group">
-            <label>Электронная почта (Email)</label>
-            <input type="email" id="auth-email" placeholder="example@mail.com" required>
-        </div>
-        
-        <div class="input-group">
-            <label>Пароль</label>
-            <input type="password" id="auth-password" placeholder="Минимум 6 символов" required>
-        </div>
-        
-        <!-- Дополнительные поля анкеты, которые откроются ТОЛЬКО при регистрации -->
-        <div id="register-extra-fields">
+
+    <!-- ШАГ 2: ВВОД КОДА ИЗ ПИСЬМА (Проверка) -->
+    <div id="step-code" class="auth-step">
+        <div class="auth-subtitle" style="color: #25D366; font-weight: 600;">Письмо отправлено! Проверьте вашу почту и введите код ниже</div>
+        <form onsubmit="verifyEmailOtp(event)">
             <div class="input-group">
-                <label>Ваше имя</label>
-                <input type="text" id="auth-name" placeholder="Как к вам обращаться?">
+                <label>Код подтверждения из письма</label>
+                <input type="number" id="auth-otp-code" placeholder="Например, 5931" required>
             </div>
-            <div class="input-group">
-                <label>Ваш город</label>
-                <select id="auth-city">
-                    <option value="dushanbe">Душанбе</option>
-                    <option value="khujand">Худжанд</option>
-                    <option value="bokhtar">Бохтар</option>
-                </select>
-            </div>
-        </div>
-        
-        <button type="submit" id="btn-submit" class="btn-auth-submit">Войти в аккаунт</button>
-    </form>
+            <button type="submit" id="btn-verify" class="btn-auth-submit" style="background-color: #111827;">Проверить код и войти</button>
+        </form>
+    </div>
 </div>
 
 <script>
-let currentMode = 'login';
+// ТВОИ ЛИЧНЫЕ КЛЮЧИ СИНГАПУРА (Полностью настроены под твой аккаунт)
+const SUPABASE_URL = "https://myelon.tj"; 
+const SUPABASE_ANON_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
 
-function setMode(mode) {
-    currentMode = mode;
-    let extraFields = document.getElementById('register-extra-fields');
-    let tabLogin = document.getElementById('tab-login');
-    let tabRegister = document.getElementById('tab-register');
-    let btnSubmit = document.getElementById('btn-submit');
-    let msg = document.getElementById('auth-msg');
+// Инициализируем робота базы данных Supabase
+let supabase = null;
+if (typeof supabasejs !== 'undefined') {
+    supabase = supabasejs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else if (typeof window.supabase !== 'undefined') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+let userEmail = "";
+
+// 🚀 Функция 1: Робот генерирует код и шлёт на почту пользователя
+async function sendEmailOtp(event) {
+    event.preventDefault();
+    userEmail = document.getElementById('auth-email').value.trim();
+    let btn = document.getElementById('btn-send');
     
-    if (mode === 'register') {
-        extraFields.style.display = 'block';
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        btnSubmit.innerText = 'Создать профиль и зайти';
-        msg.innerText = 'Заполните анкету один раз для создания личного профиля';
-        document.getElementById('auth-name').required = true;
-    } else {
-        extraFields.style.display = 'none';
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        btnSubmit.innerText = 'Войти в аккаунт';
-        msg.innerText = 'Зайдите в свой личный профиль маркетплейса';
-        document.getElementById('auth-name').required = false;
+    btn.innerText = "Отправка...";
+    btn.disabled = true;
+
+    try {
+        if (!supabase) {
+            throw new Error("Библиотека базы данных не загрузилась. Проверьте интернет!");
+        }
+
+        // Главная команда Supabase для бесплатных писем с кодом
+        const { error } = await supabase.auth.signInWithOtp({
+            email: userEmail,
+            options: {
+                shouldCreateUser: true // Авто-регистрация, если пользователя нет в базе
+            }
+        });
+
+        if (error) throw error;
+
+        // Переключаем экран на ввод кода
+        document.getElementById('step-email').classList.remove('active');
+        document.getElementById('step-code').classList.add('active');
+    } catch (err) {
+        alert("Ошибка отправки: " + err.message);
+        btn.innerText = "Получить код на почту";
+        btn.disabled = false;
     }
 }
 
-// Полностью автоматический вход без ручных кодов
-function handleAuth(event) {
+// 🚀 Функция 2: Проверяем код, который ввёл пользователь
+async function verifyEmailOtp(event) {
     event.preventDefault();
+    let code = document.getElementById('auth-otp-code').value.trim();
+    let btn = document.getElementById('btn-verify');
     
-    let email = document.getElementById('auth-email').value.trim();
-    let name = document.getElementById('auth-name').value.trim() || 'Пользователь';
-    let city = document.getElementById('auth-city').value;
-    
-    // Стираем любые старые сессии Азиза на телефоне
-    localStorage.clear();
-    
-    // Записываем данные того, кто реально заходит прямо сейчас
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userEmail', email);
-    localStorage.setItem('userName', currentMode === 'register' ? name : email.split('@')[0]);
-    localStorage.setItem('userCity', city);
-    
-    alert(currentMode === 'register' ? 'Профиль успешно создан!' : 'Вы успешно вошли в систему!');
-    
-    // Мгновенно пускаем на сайт под собственным логином!
-    window.location.href = 'index.html';
+    btn.innerText = "Проверка...";
+    btn.disabled = true;
+
+    try {
+        if (!supabase) {
+            throw new Error("База данных недоступна.");
+        }
+
+        // Отправляем код обратно в Сингапур на проверку
+        const { data, error } = await supabase.auth.verifyOtp({
+            email: userEmail,
+            token: code,
+            type: 'email'
+        });
+
+        if (error) throw error;
+
+        // Если Сингапур подтвердил код — стираем Азиза и записываем НАСТОЯЩИЕ данные
+        localStorage.clear();
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', userEmail);
+        localStorage.setItem('userName', userEmail.split('@')[0]); // Имя до собачки
+        
+        alert("Успешно! Код верный. Добро пожаловать на MyElon!");
+        window.location.href = 'profile.html'; // Пускаем в личный кабинет!
+    } catch (err) {
+        alert("Неверный код или срок его действия истёк: " + err.message);
+        btn.innerText = "Проверить код и войти";
+        btn.disabled = false;
+    }
 }
 </script>
 
