@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход и Регистрация | MyElon</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
+        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 24px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); box-sizing: border-box; position: relative; }
+        
+        /* Кнопка закрытия/назад на главную */
+        .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
+        
+        .auth-logo { font-size: 28px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 24px; letter-spacing: -0.5px; }
+        
+        /* Переключатель Вход / Регистрация (50% на 50%) */
+        .auth-tabs { display: flex; background-color: #F3F4F6; padding: 4px; border-radius: 12px; margin-bottom: 24px; }
+        .auth-tab-btn { flex: 1; border: none; background: none; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; color: #6B7280; transition: all 0.2s ease; }
+        .auth-tab-btn.active { background-color: #FFFFFF; color: #111827; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        
+        /* Поля ввода */
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
+        .input-group input { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
+        .input-group input:focus { border-color: #FF6600; background-color: #FFFFFF; }
+        
+        /* Динамический блок регистрации (скрыт по умолчанию) */
+        #register-fields { display: none; }
+        
+        /* Кнопки действия */
+        .btn-auth-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 8px; transition: all 0.2s ease; }
+        .btn-auth-submit:active { transform: scale(0.98); }
+        
+        .auth-footer-text { text-align: center; font-size: 13px; color: #6B7280; margin-top: 16px; }
+        .auth-footer-text span { color: #FF6600; cursor: pointer; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <!-- Кнопка Назад на главную -->
+    <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
+    
+    <div class="auth-logo">MyElon</div>
+    
+    <!-- Переключатель вкладок -->
+    <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab-btn active" onclick="switchAuthMode('login')">Вход</button>
+        <button id="tab-register" class="auth-tab-btn" onclick="switchAuthMode('register')">Регистрация</button>
+    </div>
+    
+    <!-- Форма -->
+    <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+        
+        <!-- Поля Регистрации (Появятся только при клике на Регистрацию) -->
+        <div id="register-fields">
+            <div class="input-group">
+                <label>Ваше имя</label>
+                <input type="text" id="auth-name" placeholder="Как к вам обращаться?">
+            </div>
+            <div class="input-group">
+                <label>Номер телефона</label>
+                <input type="tel" id="auth-phone" placeholder="+992">
+            </div>
+        </div>
+        
+        <!-- Общие поля для Входа и Регистрации -->
+        <div class="input-group">
+            <label>Электронная почта (Email)</label>
+            <input type="email" id="auth-email" placeholder="example@mail.com" required>
+        </div>
+        
+        <div class="input-group">
+            <label>Пароль</label>
+            <input type="password" id="auth-password" placeholder="Минимум 6 символов" required>
+        </div>
+        
+        <!-- Главная кнопка -->
+        <button type="submit" id="btn-submit-text" class="btn-auth-submit">Войти в аккаунт</button>
+    </form>
+    
+    <div class="auth-footer-text" id="auth-footer-hint">
+        Ещё нет аккаунта? <span onclick="switchAuthMode('register')">Создать аккаунт</span>
+    </div>
+</div>
+
+<script>
+// Умный моторчик переключения между Входом и Регистрацией
+function switchAuthMode(mode) {
+    let regFields = document.getElementById('register-fields');
+    let tabLogin = document.getElementById('tab-login');
+    let tabRegister = document.getElementById('tab-register');
+    let btnSubmit = document.getElementById('btn-submit-text');
+    let footerHint = document.getElementById('auth-footer-hint');
+    
+    if (mode === 'register') {
+        regFields.style.display = 'block';
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        btnSubmit.innerText = 'Зарегистрироваться';
+        footerHint.innerHTML = 'Уже есть аккаунт? <span onclick="switchAuthMode(\'login\')">Войти</span>';
+        
+        // Делаем поля регистрации обязательными
+        document.getElementById('auth-name').required = true;
+        document.getElementById('auth-phone').required = true;
+    } else {
+        regFields.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        btnSubmit.innerText = 'Войти в аккаунт';
+        footerHint.innerHTML = 'Ещё нет аккаунта? <span onclick="switchAuthMode(\'register\')">Создать аккаунт</span>';
+        
+        // Убираем обязательность при обычном входе
+        document.getElementById('auth-name').required = false;
+        document.getElementById('auth-phone').required = false;
+    }
+}
+
+// Заглушка отправки данных (вечером подключим к Supabase Auth)
+function handleAuthSubmit(event) {
+    event.preventDefault();
+    let email = document.getElementById('auth-email').value;
+    alert('Форма заполнена для: ' + email + '\nГотово к подключению авторизации через Supabase!');
+}
+</script>
+
+</body>
+</html>
