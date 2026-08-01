@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход по коду | MyElon</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем официальный зашифрованный провод к базе данных Supabase -->
+    <!-- Подключаем официальную библиотеку Supabase напрямую -->
     <script src="https://jsdelivr.net"></script>
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
@@ -22,7 +22,7 @@
         .btn-auth-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 12px; transition: all 0.2s ease; }
         .btn-auth-submit:active { transform: scale(0.98); }
         
-        /* Разделение шагов */
+        /* Разделение окон */
         .auth-step { display: none; }
         .auth-step.active { display: block; }
     </style>
@@ -33,7 +33,7 @@
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     <div class="auth-logo">MyElon</div>
 
-    <!-- ШАГ 1: ВВОД ПОЧТЫ (Отправка кода) -->
+    <!-- ШАГ 1: ВВОД ПОЧТЫ -->
     <div id="step-email" class="auth-step active">
         <div class="auth-subtitle">Введите ваш Email. Мы отправим на него секретный одноразовый код для входа</div>
         <form onsubmit="sendEmailOtp(event)">
@@ -45,7 +45,7 @@
         </form>
     </div>
 
-    <!-- ШАГ 2: ВВОД КОДА ИЗ ПИСЬМА (Проверка) -->
+    <!-- ШАГ 2: ВВОД КОДА ИЗ ПИСЬМА -->
     <div id="step-code" class="auth-step">
         <div class="auth-subtitle" style="color: #25D366; font-weight: 600;">Письмо отправлено! Проверьте вашу почту и введите код ниже</div>
         <form onsubmit="verifyEmailOtp(event)">
@@ -59,21 +59,16 @@
 </div>
 
 <script>
-// ТВОИ ЛИЧНЫЕ КЛЮЧИ СИНГАПУРА (Полностью настроены под твой аккаунт)
+// Железобетонная привязка к твоему проекту
 const SUPABASE_URL = "https://myelon.tj"; 
 const SUPABASE_ANON_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
 
-// Инициализируем робота базы данных Supabase
-let supabase = null;
-if (typeof supabasejs !== 'undefined') {
-    supabase = supabasejs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} else if (typeof window.supabase !== 'undefined') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
+// Прямая инициализация без лишних капризных проверок
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 let userEmail = "";
 
-// 🚀 Функция 1: Робот генерирует код и шлёт на почту пользователя
+// 🚀 Функция 1: Генерируем код и отправляем письмо в Сингапур
 async function sendEmailOtp(event) {
     event.preventDefault();
     userEmail = document.getElementById('auth-email').value.trim();
@@ -84,20 +79,19 @@ async function sendEmailOtp(event) {
 
     try {
         if (!supabase) {
-            throw new Error("Библиотека базы данных не загрузилась. Проверьте интернет!");
+            throw new Error("Официальная библиотека Supabase не загрузилась на телефоне!");
         }
 
-        // Главная команда Supabase для бесплатных писем с кодом
         const { error } = await supabase.auth.signInWithOtp({
             email: userEmail,
             options: {
-                shouldCreateUser: true // Авто-регистрация, если пользователя нет в базе
+                shouldCreateUser: true // Авто-регистрация нового юзера
             }
         });
 
         if (error) throw error;
 
-        // Переключаем экран на ввод кода
+        // Всё чётко — открываем окно ввода кода
         document.getElementById('step-email').classList.remove('active');
         document.getElementById('step-code').classList.add('active');
     } catch (err) {
@@ -107,7 +101,7 @@ async function sendEmailOtp(event) {
     }
 }
 
-// 🚀 Функция 2: Проверяем код, который ввёл пользователь
+// 🚀 Функция 2: Сверяем код на сервере Supabase
 async function verifyEmailOtp(event) {
     event.preventDefault();
     let code = document.getElementById('auth-otp-code').value.trim();
@@ -121,7 +115,6 @@ async function verifyEmailOtp(event) {
             throw new Error("База данных недоступна.");
         }
 
-        // Отправляем код обратно в Сингапур на проверку
         const { data, error } = await supabase.auth.verifyOtp({
             email: userEmail,
             token: code,
@@ -130,14 +123,14 @@ async function verifyEmailOtp(event) {
 
         if (error) throw error;
 
-        // Если Сингапур подтвердил код — стираем Азиза и записываем НАСТОЯЩИЕ данные
+        // Если код подошёл — полностью стираем старые черновики
         localStorage.clear();
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userEmail', userEmail);
-        localStorage.setItem('userName', userEmail.split('@')[0]); // Имя до собачки
+        localStorage.setItem('userName', userEmail.split('@')[0]); // Обрезаем до собачки
         
         alert("Успешно! Код верный. Добро пожаловать на MyElon!");
-        window.location.href = 'profile.html'; // Пускаем в личный кабинет!
+        window.location.href = 'profile.html'; // Пускаем в личный кабинет
     } catch (err) {
         alert("Неверный код или срок его действия истёк: " + err.message);
         btn.innerText = "Проверить код и войти";
