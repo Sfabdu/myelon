@@ -34,6 +34,42 @@
 <body>
 
 <div class="form-container">
+        <!-- ==========================================
+         БЛОК ЗАГРУЗКИ 10 ФОТОГРАФИЙ (КАМЕРА И ГАЛЕРЕЯ)
+         ========================================== -->
+    <div class="input-group">
+        <label>Фотографии (до 10 штук)</label>
+        <p style="font-size: 12px; color: #6B7280; margin: 0 0 12px 0;">Первое фото станет главным в поиске</p>
+        
+        <!-- Скрытый системный вызов камеры и галереи -->
+        <input type="file" id="photo-upload-input" multiple accept="image/*" style="display: none;" onchange="handlePhotoSelection(this)">
+        
+        <!-- Сетка квадратиков для фото -->
+        <div class="photo-upload-grid">
+            <!-- Главный большой квадрат -->
+            <div class="photo-slot main-slot" onclick="triggerPhotoUpload()">
+                <div class="slot-content">
+                    <span class="slot-icon">📸</span>
+                    <span class="slot-text">Добавить фото</span>
+                </div>
+                <img class="preview-img" id="preview-0">
+            </div>
+            
+            <!-- Остальные 9 маленьких квадратиков -->
+            <div class="photo-slot-sub-grid">
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-1"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-2"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-3"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-4"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-5"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-6"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-7"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-8"></div>
+                <div class="photo-slot mini-slot" onclick="triggerPhotoUpload()"><img class="preview-img" id="preview-9"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Шапка страницы -->
     <div class="form-header">
         <button class="btn-close-form" onclick="window.location.href='index.html'">✕</button>
