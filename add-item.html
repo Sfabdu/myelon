@@ -29,6 +29,23 @@
         
         .btn-publish { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 10px; }
         .btn-publish:active { transform: scale(0.98); }
+        /* Стили сетки для 10 фотографий */
+.photo-upload-grid { display: flex; gap: 10px; margin-bottom: 8px; width: 100%; box-sizing: border-box; }
+.photo-slot { background-color: #F3F4F6; border: 2px dashed #D1D5DB; border-radius: 16px; position: relative; cursor: pointer; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: all 0.2s ease; }
+.photo-slot:active { transform: scale(0.97); }
+
+/* Главный квадрат занимает левую половину */
+.main-slot { width: 45%; height: 140px; }
+.slot-content { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 10px; }
+.slot-icon { font-size: 28px; }
+.slot-text { font-size: 11px; font-weight: 700; color: #4B5563; }
+
+/* Остальные 9 штук собираются в аккуратную прокрутку справа */
+.photo-slot-sub-grid { width: 55%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; height: 140px; overflow-y: auto; padding-right: 2px; }
+.mini-slot { height: 62px; border-radius: 12px; }
+
+/* Картинка-превью, когда пользователь выберет фото */
+.preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; display: none; }
     </style>
 </head>
 <body>
@@ -362,6 +379,35 @@ function showCategorySpecs() {
         document.getElementById('specs-realty').style.display = 'block';
     } else if (selected === 'electron') {
         document.getElementById('specs-electron').style.display = 'block';
+    }
+}
+// Функция силой заставляет телефон открыть Камеру/Галерею
+function triggerPhotoUpload() {
+    document.getElementById('photo-upload-input').click();
+}
+
+// Показываем выбранные фотки в наших квадратиках на экране
+function handlePhotoSelection(input) {
+    const files = input.files;
+    if (files.length > 10) {
+        alert("Максимум можно загрузить 10 фотографий!");
+        return;
+    }
+    
+    // Очищаем старые картинки
+    for (let i = 0; i < 10; i++) {
+        let img = document.getElementById('preview-' + i);
+        if (img) img.style.display = 'none';
+    }
+    
+    // Перебираем новые файлы и вставляем превью
+    for (let i = 0; i < files.length; i++) {
+        if (i >= 10) break;
+        let img = document.getElementById('preview-' + i);
+        if (img) {
+            img.src = URL.createObjectURL(files[i]);
+            img.style.display = 'block';
+        }
     }
 }
 
