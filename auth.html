@@ -3,125 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход и Регистрация | MyElon</title>
+    <title>Авторизация | MyElon</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
-        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 24px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); box-sizing: border-box; position: relative; }
+        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; text-align: center; }
         
-        /* Кнопка закрытия/назад на главную */
         .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
+        .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; margin-bottom: 8px; letter-spacing: -1px; }
+        .auth-subtitle { font-size: 14px; color: #6B7280; margin-bottom: 32px; padding: 0 10px; }
         
-        .auth-logo { font-size: 28px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 24px; letter-spacing: -0.5px; }
+        /* Контейнер для официальной кнопки Telegram */
+        .telegram-widget-box { display: flex; justify-content: center; margin-bottom: 24px; min-height: 44px; }
         
-        /* Переключатель Вход / Регистрация (50% на 50%) */
-        .auth-tabs { display: flex; background-color: #F3F4F6; padding: 4px; border-radius: 12px; margin-bottom: 24px; }
-        .auth-tab-btn { flex: 1; border: none; background: none; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; color: #6B7280; transition: all 0.2s ease; }
-        .auth-tab-btn.active { background-color: #FFFFFF; color: #111827; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .divider { display: flex; align-items: center; text-align: center; color: #9CA3AF; font-size: 12px; margin: 24px 0; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #E5E7EB; }
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
         
-        /* Поля ввода */
-        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
         .input-group input { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
         .input-group input:focus { border-color: #FF6600; background-color: #FFFFFF; }
         
-        /* Динамический блок регистрации (скрыт по умолчанию) */
-        #register-fields { display: none; }
-        
-        /* Кнопки действия */
-        .btn-auth-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2); margin-top: 8px; transition: all 0.2s ease; }
-        .btn-auth-submit:active { transform: scale(0.98); }
-        
-        .auth-footer-text { text-align: center; font-size: 13px; color: #6B7280; margin-top: 16px; }
-        .auth-footer-text span { color: #FF6600; cursor: pointer; font-weight: 600; }
+        .btn-submit-id { width: 100%; background-color: #111827; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-submit-id:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
-    <!-- Кнопка Назад на главную -->
+    <!-- Кнопка назад на главную -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     
     <div class="auth-logo">MyElon</div>
+    <div class="auth-subtitle">Войдите через твой официальный бот, чтобы зайти под своим личным профилем</div>
     
-    <!-- Переключатель вкладок -->
-    <div class="auth-tabs">
-        <button id="tab-login" class="auth-tab-btn active" onclick="switchAuthMode('login')">Вход</button>
-        <button id="tab-register" class="auth-tab-btn" onclick="switchAuthMode('register')">Регистрация</button>
+    <!-- 1. ОФИЦИАЛЬНЫЙ LOGIN WIDGET ТВОЕГО БОТА (@myelon_auth_bot) -->
+    <div class="telegram-widget-box">
+        <script async src="https://telegram.org" 
+                data-telegram-login="myelon_auth_bot" 
+                data-size="large" 
+                data-radius="14" 
+                data-onauth="onTelegramAuth(user)" 
+                data-request-access="write">
+        </script>
     </div>
     
-    <!-- Форма -->
-    <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-        
-        <!-- Поля Регистрации (Появятся только при клике на Регистрацию) -->
-        <div id="register-fields">
-            <div class="input-group">
-                <label>Ваше имя</label>
-                <input type="text" id="auth-name" placeholder="Как к вам обращаться?">
-            </div>
-            <div class="input-group">
-                <label>Номер телефона</label>
-                <input type="tel" id="auth-phone" placeholder="+992">
-            </div>
-        </div>
-        
-        <!-- Общие поля для Входа и Регистрации -->
+    <div class="divider">или зайдите по ID вручную</div>
+    
+    <!-- 2. Форма, чтобы мгновенно сбросить Азиза и протестировать твой аккаунт -->
+    <form onsubmit="handleManualIdLogin(event)">
         <div class="input-group">
-            <label>Электронная почта (Email)</label>
-            <input type="email" id="auth-email" placeholder="example@mail.com" required>
+            <label>Твой персональный Telegram ID</label>
+            <input type="number" id="user-tg-id" placeholder="Введи свой цифровой ID" required>
         </div>
-        
-        <div class="input-group">
-            <label>Пароль</label>
-            <input type="password" id="auth-password" placeholder="Минимум 6 символов" required>
-        </div>
-        
-        <!-- Главная кнопка -->
-        <button type="submit" id="btn-submit-text" class="btn-auth-submit">Войти в аккаунт</button>
+        <button type="submit" class="btn-submit-id">Выйти из Азиза и зайти к себе</button>
     </form>
-    
-    <div class="auth-footer-text" id="auth-footer-hint">
-        Ещё нет аккаунта? <span onclick="switchAuthMode('register')">Создать аккаунт</span>
-    </div>
 </div>
 
 <script>
-// Умный моторчик переключения между Входом и Регистрацией
-function switchAuthMode(mode) {
-    let regFields = document.getElementById('register-fields');
-    let tabLogin = document.getElementById('tab-login');
-    let tabRegister = document.getElementById('tab-register');
-    let btnSubmit = document.getElementById('btn-submit-text');
-    let footerHint = document.getElementById('auth-footer-hint');
-    
-    if (mode === 'register') {
-        regFields.style.display = 'block';
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        btnSubmit.innerText = 'Зарегистрироваться';
-        footerHint.innerHTML = 'Уже есть аккаунт? <span onclick="switchAuthMode(\'login\')">Войти</span>';
-        
-        // Делаем поля регистрации обязательными
-        document.getElementById('auth-name').required = true;
-        document.getElementById('auth-phone').required = true;
-    } else {
-        regFields.style.display = 'none';
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        btnSubmit.innerText = 'Войти в аккаунт';
-        footerHint.innerHTML = 'Ещё нет аккаунта? <span onclick="switchAuthMode(\'register\')">Создать аккаунт</span>';
-        
-        // Убираем обязательность при обычном входе
-        document.getElementById('auth-name').required = false;
-        document.getElementById('auth-phone').required = false;
+// Автоматический вход, если человек нажал официальную синюю кнопку Телеграма
+function onTelegramAuth(user) {
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('telegramId', user.id);
+    localStorage.setItem('userName', user.first_name);
+    if(user.photo_url) {
+        localStorage.setItem('userAvatar', user.photo_url);
     }
+    
+    alert('Поздравляю, Лев! Авторизация через @myelon_auth_bot прошла успешно!\nВы зашли как: ' + user.first_name);
+    window.location.href = 'index.html';
 }
 
-// Заглушка отправки данных (вечером подключим к Supabase Auth)
-function handleAuthSubmit(event) {
+// Ручной вход для мгновенного теста и очистки памяти от старого черновика
+function handleManualIdLogin(event) {
     event.preventDefault();
-    let email = document.getElementById('auth-email').value;
-    alert('Форма заполнена для: ' + email + '\nГотово к подключению авторизации через Supabase!');
+    let tgId = document.getElementById('user-tg-id').value;
+    
+    // Стираем черновик Азиза намертво
+    localStorage.clear();
+    
+    // Записываем твой личный профиль создателя
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userRole', 'admin');
+    localStorage.setItem('telegramId', tgId);
+    localStorage.setItem('userName', 'Абдулоҷон (Создатель) 🦾');
+    
+    alert('Успешно! Старая сессия Азиза полностью удалена.\nСистема перезаписана под твой Telegram ID: ' + tgId);
+    window.location.href = 'index.html';
 }
 </script>
 
