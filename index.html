@@ -249,19 +249,19 @@
     </div>
 
 <script>
-// Скрипты переключения режимов и анимации шторки
+// 1. Переключатель Новые / БУ
 function handleMarketToggle() {
     let btn = document.getElementById('market-mode-btn');
     let text = document.getElementById('toggle-text');
     btn.classList.toggle('bu-mode-active');
     if (btn.classList.contains('bu-mode-active')) {
-        text.innerText = "Б/У товары 🔄";
+        text.innerText = "Б/У товары";
     } else {
-        text.innerText = "Новые товары 🔄";
+        text.innerText = "Новые товары";
     }
 }
 
-// Управление шторкой фильтров
+// 2. Управление шторкой фильтров
 function openFilterModal() {
     document.getElementById('filter-modal').classList.add('open');
 }
@@ -270,6 +270,24 @@ function closeFilterModal() {
 }
 function setSellerType(btn) {
     document.querySelectorAll('.seller-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
 
-            
-    
+// 3. Умный поиск товаров
+function smartFilter() {
+    let query = document.getElementById('main-search').value.toLowerCase().trim();
+    let cards = document.querySelectorAll('.card');
+    if (query.length < 2) {
+        cards.forEach(card => card.style.display = "block");
+        return;
+    }
+    cards.forEach(card => {
+        let title = card.querySelector('.card-title').innerText.toLowerCase();
+        if (title.includes(query)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
