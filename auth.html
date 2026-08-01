@@ -3,94 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Авторизация | MyElon</title>
+    <title>Вход в MyElon</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
-        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; text-align: center; }
+        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; }
         
         .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
-        .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; margin-bottom: 8px; letter-spacing: -1px; }
-        .auth-subtitle { font-size: 14px; color: #6B7280; margin-bottom: 32px; padding: 0 10px; }
+        .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
+        .auth-subtitle { font-size: 14px; color: #6B7280; text-align: center; margin-bottom: 28px; padding: 0 10px; line-height: 1.4; }
         
-        /* Контейнер для официальной кнопки Telegram */
-        .telegram-widget-box { display: flex; justify-content: center; margin-bottom: 24px; min-height: 44px; }
+        /* Кнопки соцсетей (ТГ и Ватсап) */
+        .social-buttons-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .btn-social { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; color: #FFFFFF; border: none; padding: 15px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-decoration: none; box-sizing: border-box; }
+        .btn-social:active { transform: scale(0.98); }
         
-        .divider { display: flex; align-items: center; text-align: center; color: #9CA3AF; font-size: 12px; margin: 24px 0; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #E5E7EB; }
-        .divider:not(:empty)::before { margin-right: .5em; }
-        .divider:not(:empty)::after { margin-left: .5em; }
+        .btn-tg { background-color: #54A9EB; box-shadow: 0 4px 14px rgba(84, 169, 235, 0.25); }
+        .btn-wa { background-color: #25D366; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25); }
+        .soc-icon { font-size: 20px; }
         
+        /* Поля ввода и группы */
         .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
-        .input-group input { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
-        .input-group input:focus { border-color: #FF6600; background-color: #FFFFFF; }
+        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; font-family: inherit; }
+        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; }
         
-        .btn-submit-id { width: 100%; background-color: #111827; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .btn-submit-id:active { transform: scale(0.98); }
+        .btn-action-submit { width: 100%; background-color: #111827; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s ease; }
+        .btn-action-submit:active { transform: scale(0.98); }
+        .btn-orange { background-color: #FF6600; box-shadow: 0 4px 12px rgba(255,102,0,0.2); }
+        
+        /* Шаги (Окна) */
+        .auth-step { display: none; }
+        .auth-step.active { display: block; }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
-    <!-- Кнопка назад на главную -->
+    <!-- Кнопка Назад -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     
     <div class="auth-logo">MyElon</div>
-    <div class="auth-subtitle">Войдите через твой официальный бот, чтобы зайти под своим личным профилем</div>
-    
-    <!-- 1. ОФИЦИАЛЬНЫЙ LOGIN WIDGET ТВОЕГО БОТА (@myelon_auth_bot) -->
-    <div class="telegram-widget-box">
-        <script async src="https://telegram.org" 
-                data-telegram-login="myelon_auth_bot" 
-                data-size="large" 
-                data-radius="14" 
-                data-onauth="onTelegramAuth(user)" 
-                data-request-access="write">
-        </script>
-    </div>
-    
-    <div class="divider">или зайдите по ID вручную</div>
-    
-    <!-- 2. Форма, чтобы мгновенно сбросить Азиза и протестировать твой аккаунт -->
-    <form onsubmit="handleManualIdLogin(event)">
-        <div class="input-group">
-            <label>Твой персональный Telegram ID</label>
-            <input type="number" id="user-tg-id" placeholder="Введи свой цифровой ID" required>
+
+    <!-- ==========================================
+         ШАГ 1: ПОЛУЧЕНИЕ И ВВОД ПАРОЛЯ
+         ========================================== -->
+    <div id="step-one" class="auth-step active">
+        <div class="auth-subtitle">Выберите удобный мессенджер, получите пароль у бота и введите его ниже</div>
+        
+        <div class="social-buttons-box">
+            <!-- Кнопка Telegram ведет прямо в твоего бота -->
+            <a href="https://t.me" target="_blank" class="btn-social btn-tg">
+                <span class="soc-icon">✈️</span>
+                <span>Получить пароль в Telegram</span>
+            </a>
+            <!-- Кнопка WhatsApp (заготовка под твой будущий номер/бот) -->
+            <a href="https://wa.me" target="_blank" class="btn-social btn-wa">
+                <span class="soc-icon">💬</span>
+                <span>Получить пароль в WhatsApp</span>
+            </a>
         </div>
-        <button type="submit" class="btn-submit-id">Выйти из Азиза и зайти к себе</button>
-    </form>
+
+        <form onsubmit="verifyReceivedPassword(event)">
+            <div class="input-group">
+                <label>Введите полученный пароль</label>
+                <input type="text" id="auth-one-time-password" placeholder="Например, 4829" required>
+            </div>
+            <button type="submit" class="btn-action-submit">Проверить пароль</button>
+        </form>
+    </div>
+
+    <!-- ==========================================
+         ШАГ 2: НАСТРОЙКА ИМЕНИ И ГОРОДА (НОВОЕ ОКНО)
+         ========================================== -->
+    <div id="step-two" class="auth-step">
+        <div class="auth-subtitle" style="margin-bottom: 20px;">Пароль верный! Пожалуйста, укажите ваши данные для завершения регистрации</div>
+        
+        <form onsubmit="saveFinalUserProfile(event)">
+            <div class="input-group">
+                <label>Ваше имя</label>
+                <input type="text" id="user-display-name" placeholder="Как к вам обращаться?" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Ваш город</label>
+                <select id="user-home-city" required>
+                    <option value="">Выберите город...</option>
+                    <option value="dushanbe">Душанбе</option>
+                    <option value="khujand">Худжанд</option>
+                    <option value="bokhtar">Бохтар</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-action-submit btn-orange">Готово, открыть доступ!</button>
+        </form>
+    </div>
 </div>
 
 <script>
-// Автоматический вход, если человек нажал официальную синюю кнопку Телеграма
-function onTelegramAuth(user) {
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('telegramId', user.id);
-    localStorage.setItem('userName', user.first_name);
-    if(user.photo_url) {
-        localStorage.setItem('userAvatar', user.photo_url);
-    }
+// Функция проверки пароля (Шаг 1)
+function verifyReceivedPassword(event) {
+    event.preventDefault();
+    let typedPassword = document.getElementById('auth-one-time-password').value.trim();
     
-    alert('Поздравляю, Лев! Авторизация через @myelon_auth_bot прошла успешно!\nВы зашли как: ' + user.first_name);
-    window.location.href = 'index.html';
+    // Пока стоит заглушка: пускает дальше при вводе любого пароля
+    if (typedPassword.length > 0) {
+        // Плавный переход во второе окно (Шаг 2)
+        document.getElementById('step-one').classList.remove('active');
+        document.getElementById('step-two').classList.add('active');
+    } else {
+        alert('Пожалуйста, введите корректный пароль от бота!');
+    }
 }
 
-// Ручной вход для мгновенного теста и очистки памяти от старого черновика
-function handleManualIdLogin(event) {
+// Функция финального сохранения профиля (Шаг 2)
+function saveFinalUserProfile(event) {
     event.preventDefault();
-    let tgId = document.getElementById('user-tg-id').value;
+    let name = document.getElementById('user-display-name').value.trim();
+    let city = document.getElementById('user-home-city').value;
     
-    // Стираем черновик Азиза намертво
+    // Стираем старого Азиза намертво из памяти телефона!
     localStorage.clear();
     
-    // Записываем твой личный профиль создателя
+    // Записываем НАСТОЯЩИЕ данные пользователя, которые он сам ввёл
     localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userRole', 'admin');
-    localStorage.setItem('telegramId', tgId);
-    localStorage.setItem('userName', 'Абдулоҷон (Создатель) 🦾');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userCity', city);
+    localStorage.setItem('userRole', 'user');
     
-    alert('Успешно! Старая сессия Азиза полностью удалена.\nСистема перезаписана под твой Telegram ID: ' + tgId);
+    alert('Регистрация завершена!\nДобро пожаловать, ' + name + '!\nДоступ к MyElon полностью открыт.');
+    
+    // Перекидываем на главную страницу уже под его личным профилем
     window.location.href = 'index.html';
 }
 </script>
