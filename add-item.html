@@ -305,6 +305,25 @@ function showCategorySpecs() {
         document.getElementById('specs-electron').style.display = 'block';
     }
 }
+    function showCategorySpecs() {
+    // 1. Прячем все три анкеты намертво
+    document.getElementById('specs-auto').style.display = 'none';
+    document.getElementById('specs-realty').style.display = 'none';
+    document.getElementById('specs-electron').style.display = 'none';
+    
+    // 2. Смотрим, что выбрал человек в списке категорий
+    let selected = document.getElementById('item-category').value;
+    
+    // 3. Открываем нужную анкету без ошибок
+    if (selected === 'auto') {
+        document.getElementById('specs-auto').style.display = 'block';
+    } else if (selected === 'realty') {
+        document.getElementById('specs-realty').style.display = 'block';
+    } else if (selected === 'electron') {
+        document.getElementById('specs-electron').style.display = 'block';
+    }
+}
+
 </script>
 
 </body>
