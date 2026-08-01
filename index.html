@@ -5,27 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyElon | Маркетплейс</title>
     <link rel="stylesheet" href="style.css">
-    <script src="filter.js" defer></script>
+    
+    <!-- Автономные стили для плавной анимации шторки фильтров -->
+    <style>
+        /* Черный полупрозрачный фон при открытии */
+        .filter-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: flex;
+            align-items: flex-end; /* Прижимает шторку к низу */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .filter-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Сама шторка фильтров */
+        .filter-sheet {
+            background-color: #FFFFFF;
+            width: 100%;
+            max-height: 85vh; /* Занимает 85% высоты экрана телефона */
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%); /* Прячется под экран */
+            transition: transform 0.3s ease;
+        }
+        .filter-backdrop.open .filter-sheet {
+            transform: translateY(0); /* Плавно вылетает вверх */
+        }
+
+        /* Шапка фильтров */
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+        .filter-header h3 { margin: 0; font-size: 18px; font-weight: 700; }
+        .close-filter-btn { font-size: 20px; cursor: pointer; color: #111827; }
+        .reset-filter-btn { font-size: 14px; color: #9CA3AF; cursor: pointer; }
+
+        /* Контент внутри фильтров */
+        .filter-body {
+            padding: 20px 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; }
+        .filter-group label { font-size: 15px; font-weight: 700; color: #111827; }
+
+        /* Стили полей выбора и ввода */
+        .filter-group select, .price-input-row input {
+            background-color: #F3F4F6;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .price-input-row { display: flex; gap: 12px; }
+
+        /* Переключатели продавцов */
+        .seller-toggle-row {
+            display: flex;
+            background-color: #F3F4F6;
+            padding: 4px;
+            border-radius: 12px;
+        }
+        .seller-type-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #4B5563;
+        }
+        .seller-type-btn.active {
+            background-color: #FFFFFF;
+            color: #111827;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Кнопка в самом низу шторки */
+        .filter-footer-btn-box { padding: 16px; border-top: 1px solid #F3F4F6; }
+        .btn-apply-filters {
+            width: 100%;
+            background-color: #111827; /* Стильная черная кнопка как на Авито */
+            color: #FFFFFF;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- 1. Шапка сайта (УБРАЛИ КНОПКУ ПРОФИЛЯ НАВСЕГДА, ОСТАЛСЯ ТОЛЬКО ЛОГОТИП) -->
+    <!-- 1. Шапка сайта -->
     <div class="header">
         <div class="logo">MyElon</div>
     </div>
-
     <!-- 2. ПОИСКОВИК КАК У АВИТО (Широкий, с фильтром 🎛️ внутри справа) -->
     <div class="search-section">
         <div class="search-container-avito">
             <span class="search-icon">🔍</span>
             <input type="text" id="main-search" placeholder="Поиск в MyElon" oninput="smartFilter()">
+            <!-- Железная привязка вылета шторки -->
             <span class="search-filter-avito-btn" onclick="openFilterModal()">🎛️</span>
         </div>
     </div>
 
-    <!-- 3. ДВЕ КНОПКИ РОВНО ПОПОЛАМ (50% на 50%) -->
+    <!-- 3. ДВЕ КНОПКИ РАЗДЕЛЕНЫ ПОПОЛАМ (50% на 50%) -->
     <div class="split-buttons-row">
-        <!-- Левая половина: Твой переключатель режимов -->
+        <!-- Левая половина: Переключатель режимов -->
         <button class="smart-pill-toggle" id="market-mode-btn" onclick="handleMarketToggle()">
             <span id="toggle-text">Новые товары 🔄</span>
         </button>
@@ -36,34 +148,9 @@
         </button>
     </div>
 
-<!-- 4. РЯД ЧАСТО ПОСЕЩАЕМЫХ КАТЕГОРИЙ (Живая система в будущем сама заполнит этот ряд) -->
-<div class="smart-user-categories" id="user-fav-categories">
-    <!-- Сюда система потом сама подкинет нужные категории по вкусу человека -->
-</div>
-
-<script>
-// Функция переключения режимов (Оранжевый / Тёмный)
-function handleMarketToggle() {
-    let btn = document.getElementById('market-mode-btn');
-    let text = document.getElementById('toggle-text');
-    
-    // Переключаем класс
-    btn.classList.toggle('bu-mode-active');
-    
-    if (btn.classList.contains('bu-mode-active')) {
-        text.innerText = "Б/У товары 🔄";
-    } else {
-        text.innerText = "Новые товары 🔄";
-    }
-    
-    // Сюда вечером прикрутим фильтрацию карточек товаров из Supabase
-}
-</script>
-
-    <!-- 5. Лента товаров (Сетка) -->
+    <!-- 4. Лента товаров (Сетка) -->
     <div class="market-feed">
         <div class="mobile-grid">
-            
             <!-- Товар 1 -->
             <div class="card" data-type="shop">
                 <img src="https://unsplash.com" class="card-img" alt="Ноутбук">
@@ -85,102 +172,104 @@ function handleMarketToggle() {
                     <div class="card-location">Худжанд</div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- Идеальное нижнее меню навигации (5 кнопок) -->
-<div class="nav-bar">
-    <a href="index.html" class="nav-item active">
-        <div class="nav-icon">🏠</div>
-        <div>Главная</div>
-    </a>
-    <a href="#" class="nav-item" onclick="alert('Открываем Избранное...')">
-        <div class="nav-icon">❤️</div>
-        <div>Избранное</div>
-    </a>
-    <a href="#" class="nav-item nav-add-btn" onclick="alert('Переход к созданию объявления...')">
-        <div class="nav-icon">➕</div>
-        <div>Создать</div>
-    </a>
-    <a href="chat.html" class="nav-item">
-        <div class="nav-icon">💬</div>
-        <div>Чат</div>
-    </a>
-    <a href="profile.html" class="nav-item">
-        <div class="nav-icon">👤</div>
-        <div>Профиль</div>
-    </a>
-</div>
+    <!-- 5. ВЫЛЕТАЮЩАЯ ШТОРКА ФИЛЬТРОВ АВИТО -->
+    <div id="filter-modal" class="filter-backdrop">
+        <div class="filter-sheet">
+            <!-- Шапка шторки -->
+            <div class="filter-header">
+                <span class="close-filter-btn" onclick="closeFilterModal()">✕</span>
+                <h3>Фильтры</h3>
+                <span class="reset-filter-btn" onclick="alert('Сбросить все фильтры')">Сбросить</span>
+            </div>
+
+            <!-- Тело фильтров -->
+            <div class="filter-body">
+                <!-- Блок Город -->
+                <div class="filter-group">
+                    <label>Где искать</label>
+                    <select id="filter-city">
+                        <option value="all">Весь Таджикистан</option>
+                        <option value="dushanbe">Душанбе</option>
+                        <option value="khujand">Худжанд</option>
+                    </select>
+                </div>
+
+                <!-- Блок Цена -->
+                <div class="filter-group">
+                    <label>Цена, TJS</label>
+                    <div class="price-input-row">
+                        <input type="number" id="price-from" placeholder="от">
+                        <input type="number" id="price-to" placeholder="до">
+                    </div>
+                </div>
+
+                <!-- Блок Продавцы -->
+                <div class="filter-group">
+                    <label>Продавцы</label>
+                    <div class="seller-toggle-row">
+                        <button class="seller-type-btn active" onclick="setSellerType(this)">Все</button>
+                        <button class="seller-type-btn" onclick="setSellerType(this)">Частные</button>
+                        <button class="seller-type-btn" onclick="setSellerType(this)">Компании</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Финальная кнопка шторки -->
+            <div class="filter-footer-btn-box">
+                <button class="btn-apply-filters" onclick="closeFilterModal()">Показать объявления</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Стабильное нижнее меню навигации (5 кнопок) -->
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div>Главная</div>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon">📁</div>
+            <div>Категории</div>
+        </a>
+        <a href="#" class="nav-item nav-add-btn" onclick="alert('Переход к созданию объявления...')">
+            <div class="nav-icon">➕</div>
+            <div>Создать</div>
+        </a>
+        <a href="chat.html" class="nav-item">
+            <div class="nav-icon">💬</div>
+            <div>Чат</div>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div>Профиль</div>
+        </a>
+    </div>
 
 <script>
-// Переключатель режимов Б/У и Магазины
-function toggleMarketMode() {
-    let btn = document.getElementById('toggle-mode');
-    btn.classList.toggle('bu-active');
-    if (btn.classList.contains('bu-active')) {
-        btn.querySelector('span').innerText = "Показать новые товары";
+// Скрипты переключения режимов и анимации шторки
+function handleMarketToggle() {
+    let btn = document.getElementById('market-mode-btn');
+    let text = document.getElementById('toggle-text');
+    btn.classList.toggle('bu-mode-active');
+    if (btn.classList.contains('bu-mode-active')) {
+        text.innerText = "Б/У товары 🔄";
     } else {
-        btn.querySelector('span').innerText = "Показать Б/У вещи";
+        text.innerText = "Новые товары 🔄";
     }
 }
 
-// Умный алгоритм, который считает опечатки (Левенштейн)
-function getLevenshteinDistance(a, b) {
-    if (a.length === 0) return b.length;
-    if (b.length === 0) return a.length;
-    let matrix = [];
-    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-    for (let j = 0; j <= a.length; j++) matrix[j] = j;
-    for (let i = 1; i <= b.length; i++) {
-        for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1,
-                    matrix[i][j - 1] + 1,
-                    matrix[i - 1][j] + 1
-                );
-            }
-        }
-    }
-    return matrix[b.length][a.length];
+// Управление шторкой фильтров
+function openFilterModal() {
+    document.getElementById('filter-modal').classList.add('open');
 }
-
-// Живой умный фильтр для поиска
-function smartFilter() {
-    let query = document.getElementById('main-search').value.toLowerCase().trim();
-    let cards = document.querySelectorAll('.card');
-
-    if (query.length < 2) {
-        cards.forEach(card => card.style.display = "block");
-        return;
-    }
-
-    cards.forEach(card => {
-        let title = card.querySelector('.card-title').innerText.toLowerCase();
-        let words = title.split(" ");
-        let isMatch = false;
-
-        words.forEach(word => {
-            if (word.includes(query) || query.includes(word)) {
-                isMatch = true;
-            }
-            let distance = getLevenshteinDistance(query, word);
-            if (distance <= 2) { 
-                isMatch = true;
-            }
-        });
-
-        if (isMatch) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
+function closeFilterModal() {
+    document.getElementById('filter-modal').classList.remove('open');
 }
-</script>
+function setSellerType(btn) {
+    document.querySelectorAll('.seller-type-btn').forEach(b => b.classList.remove('active'));
 
-</body>
-</html>
+            
+    
