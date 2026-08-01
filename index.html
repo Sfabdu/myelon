@@ -185,9 +185,20 @@
                 <span class="reset-filter-btn" onclick="alert('Сбросить все фильтры')">Сбросить</span>
             </div>
 
-            <!-- Тело фильтров -->
+           <!-- Тело фильтров -->
             <div class="filter-body">
-                <!-- Блок Город -->
+                <!-- Блок 1: Сортировка -->
+                <div class="filter-group">
+                    <label>Сортировка</label>
+                    <select id="filter-sort">
+                        <option value="default">По умолчанию</option>
+                        <option value="newest">Сначала новые</option>
+                        <option value="cheap">Сначала дешевле</option>
+                        <option value="expensive">Сначала дороже</option>
+                    </select>
+                </div>
+
+                <!-- Блок 2: Где искать (Город) -->
                 <div class="filter-group">
                     <label>Где искать</label>
                     <select id="filter-city">
@@ -197,7 +208,19 @@
                     </select>
                 </div>
 
-                <!-- Блок Цена -->
+                <!-- Блок 3: Радиус поиска -->
+                <div class="filter-group">
+                    <label>Радиус поиска</label>
+                    <select id="filter-radius">
+                        <option value="0">Только в этом месте</option>
+                        <option value="1">+ 1 км</option>
+                        <option value="5">+ 5 км</option>
+                        <option value="10">+ 10 км</option>
+                        <option value="50">+ 50 км</option>
+                    </select>
+                </div>
+
+                <!-- Блок 4: Цена -->
                 <div class="filter-group">
                     <label>Цена, TJS</label>
                     <div class="price-input-row">
@@ -206,7 +229,7 @@
                     </div>
                 </div>
 
-                <!-- Блок Продавцы -->
+                <!-- Блок 5: Продавцы -->
                 <div class="filter-group">
                     <label>Продавцы</label>
                     <div class="seller-toggle-row">
@@ -216,6 +239,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Финальная кнопка шторки -->
             <div class="filter-footer-btn-box">
