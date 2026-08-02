@@ -118,8 +118,17 @@ let generatedCode = "";
 
 function selectMessenger(type) {
     currentMessenger = type;
-    document.getElementById('choice-tg').className = type === 'telegram' ? "btn-msg-choice active-tg" : "btn-msg-choice";
-    document.getElementById('choice-wa').className = type === 'whatsapp' ? "btn-msg-choice active-wa" : "btn-msg-choice";
+    
+    let tgBtn = document.getElementById('choice-tg');
+    let waBtn = document.getElementById('choice-wa');
+    
+    if (type === 'telegram') {
+        tgBtn.classList.add('active-tg');
+        waBtn.classList.remove('active-wa');
+    } else {
+        tgBtn.classList.remove('active-tg');
+        waBtn.classList.add('active-wa');
+    }
 }
 
 // 🚀 РОБОТ 1: Генерирует рандом и шлёт в выбранный мессенджер автоматически
