@@ -51,8 +51,8 @@
         <div class="auth-subtitle">Перейдите в бот, получите короткий секретный код подтверждения и введите его ниже</div>
         
         <div class="social-buttons-box">
-            <!-- Прямой вызов приложения Телеграм -->
-            <a href="intent://resolve?domain=myelon_auth_bot&start=get_code#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-social btn-tg">
+            <!-- ЖЕЛЕЗНЫЙ ИНТЕНТ-ВЫЗОВ ТВОЕГО БОТА НА КОМАНДУ /CODE -->
+            <a href="intent://resolve?domain=myelon_auth_bot&start=code#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-social btn-tg">
                 <span>✈️ Получить код в Telegram</span>
             </a>
             <a href="https://wa.me" target="_blank" class="btn-social btn-wa">
@@ -63,7 +63,7 @@
         <form onsubmit="checkCodeFromBot(event)">
             <div class="input-group">
                 <label>Введите код от бота (4-6 цифр)</label>
-                <input type="number" id="one-time-code" placeholder="Например, 5829" required>
+                <input type="number" id="one-time-code" placeholder="Например, 7744" required>
             </div>
             <button type="submit" class="btn-action-submit">Проверить код</button>
         </form>
@@ -99,18 +99,11 @@
 <script>
 let nextIdString = "000001";
 
-// Умный скрипт: считает людей по порядку и дописывает нули слева
+// Считаем людей по порядку и дописываем нули слева
 document.addEventListener("DOMContentLoaded", function() {
-    // Проверяем, какой номер был последним в памяти сайта
     let lastId = localStorage.getItem('lastRegisteredIdCounter');
-    
-    // Если сайт абсолютно чистый — ставим первый номер
     let currentIdCounter = lastId ? parseInt(lastId) + 1 : 1;
-    
-    // Превращаем цифру 1 в красивую строчку "000001" (добавляем нули слева до 6 знаков)
     nextIdString = String(currentIdCounter).padStart(6, '0');
-    
-    // Выводим эту красоту на экран
     document.getElementById('generated-user-id').innerText = "ID " + nextIdString;
 });
 
@@ -118,11 +111,12 @@ function checkCodeFromBot(event) {
     event.preventDefault();
     let code = document.getElementById('one-time-code').value.trim();
     
-    if (code.length >= 4) {
+    // Сверяем с кодом 7744, который выдает твой бот!
+    if (code === "7744") {
         document.getElementById('step-one').classList.remove('active');
         document.getElementById('step-two').classList.add('active');
     } else {
-        alert('Введите корректный код подтверждения!');
+        alert('Неверный код! Проверьте сообщение в боте.');
     }
 }
 
@@ -131,13 +125,13 @@ function finishRegistration(event) {
     let name = document.getElementById('user-real-name').value.trim();
     let city = document.getElementById('user-real-city').value;
     
-    // Сохраняем текущий счетчик, чтобы следующий человек получил номер на 1 больше!
     let numericId = parseInt(nextIdString);
     localStorage.setItem('lastRegisteredIdCounter', numericId);
     
-    // Записываем профиль пользователя
+    // Записываем НАСТОЯЩИЙ чистый профиль
+    localStorage.clear();
     localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userId', nextIdString); // Запишется строгий "000001"
+    localStorage.setItem('userId', nextIdString);
     localStorage.setItem('userName', name);
     localStorage.setItem('userCity', city);
     localStorage.setItem('userRole', name === 'Абдулоҷон' ? 'admin' : 'user');
