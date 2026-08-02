@@ -104,7 +104,7 @@
 </div>
 
 <script>
-// ТВОИ ОФИЦИАЛЬНЫЕ ПРОВЕРЕННЫЕ КЛЮЧИ И СЕРВЕРНЫЕ ССЫЛК
+// ТВОИ ОФИЦИАЛЬНЫЕ ПРОВЕРЕННЫЕ КЛЮЧИ И СЕРВЕРНЫЕ ССЫЛКИ (ИСПРАВЛЕНО)
 const SUPABASE_URL = "https://supabase.co";
 const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
 const TG_BOT_TOKEN = "8757454690:AAFucMiPugEaZ_r8nVmBjADt6g_YAgq4duk";
@@ -123,13 +123,26 @@ function selectMessenger(type) {
     let waBtn = document.getElementById('choice-wa');
     
     if (type === 'telegram') {
-        tgBtn.classList.add('active-tg');
-        waBtn.classList.remove('active-wa');
+        // Железно перекрашиваем кнопку ТГ в синий, а Ватсап тушим
+        tgBtn.style.backgroundColor = "#54A9EB";
+        tgBtn.style.color = "#FFFFFF";
+        tgBtn.style.borderColor = "#54A9EB";
+        
+        waBtn.style.backgroundColor = "#FFFFFF";
+        waBtn.style.color = "#111827";
+        waBtn.style.borderColor = "#E5E7EB";
     } else {
-        tgBtn.classList.remove('active-tg');
-        waBtn.classList.add('active-wa');
+        // Железно перекрашиваем кнопку Ватсапа в зелёный, а ТГ тушим
+        tgBtn.style.backgroundColor = "#FFFFFF";
+        tgBtn.style.color = "#111827";
+        tgBtn.style.borderColor = "#E5E7EB";
+        
+        waBtn.style.backgroundColor = "#25D366";
+        waBtn.style.color = "#FFFFFF";
+        waBtn.style.borderColor = "#25D366";
     }
 }
+
 
 // 🚀 РОБОТ 1: Генерирует рандом и шлёт в выбранный мессенджер автоматически
 async function handleSendCodeRequest(event) {
