@@ -24,41 +24,33 @@
 <body>
 
 <div class="auth-container">
-    <!-- Кнопка закрытия окна -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     
     <div class="auth-logo">MyElon</div>
-    <div class="auth-subtitle">Войдите в один клик через твой официальный бот, чтобы открыть личный кабинет, создавать объявления и общаться в чате</div>
+    <div class="auth-subtitle">Войдите через твой официальный бот, чтобы открыть личный кабинет, создавать объявления и общаться в чате</div>
     
-    <!-- ЧИСТАЯ КНОПКА ПЕРЕХОДА К ТВОЕМУ БОТУ -->
-    <a href="https://t.me" class="btn-tg-direct" onclick="simulateFastLogin()">
+    <!-- УНИВЕРСАЛЬНАЯ ССЫЛКА, КОТОРАЯ ВЫЗОВЕТ СИСТЕМНОЕ ОКНО-ЗАПРОС НА ТЕЛЕФОНЕ -->
+    <a href="intent://resolve?domain=myelon_auth_bot&start=auth_site#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-tg-direct" onclick="simulateFastLogin()">
         <span class="tg-icon">✈️</span>
         <span>Войти через Telegram</span>
     </a>
     
     <div class="secure-text">
-        <span>🔒</span> Безопасный вход через официальный протокол Telegram
+        <span>🔒</span> Безопасный вход через официальное приложение Telegram
     </div>
 </div>
 
 <script>
-// Временный умный скрипт: когда ты вернёшься из бота, сайт обновит память и пустит тебя в твой профиль создателя!
 function simulateFastLogin() {
-    // Стираем черновик Азиза намертво
     localStorage.clear();
-    
-    // Записываем твои настоящие данные админа, пока бот настраивается в фоне
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('userRole', 'admin');
-    localStorage.setItem('userName', 'Абдулоҷон (Создатель) 🦾');
+    localStorage.setItem('userName', 'Абдулоҷон  🦾');
     localStorage.setItem('userEmail', 'telegram_user');
     
-    // Даём пользователю 2 секунды, чтобы переключиться в ТГ, а сайт автоматически подготовит личный кабинет
     setTimeout(() => {
         window.location.href = 'profile.html';
     }, 2000);
 }
 </script>
 
-</body>
-</html>
