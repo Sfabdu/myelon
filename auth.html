@@ -3,54 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Авторизация | MyElon</title>
+    <title>Вход и Регистрация | MyElon</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
-        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 40px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; text-align: center; }
+        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; }
         
         .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
-        .auth-logo { font-size: 36px; font-weight: 900; color: #FF6600; margin-bottom: 8px; letter-spacing: -1px; }
-        .auth-subtitle { font-size: 14px; color: #6B7280; margin-bottom: 32px; padding: 0 10px; line-height: 1.5; }
+        .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
+        .auth-subtitle { font-size: 14px; color: #6B7280; text-align: center; margin-bottom: 24px; padding: 0 10px; line-height: 1.4; }
         
-        /* Кнопка Telegram (Яркая, сочная, нативная) */
-        .btn-tg-direct { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; background-color: #54A9EB; color: #FFFFFF; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(84, 169, 235, 0.3); transition: all 0.2s ease; text-decoration: none; box-sizing: border-box; margin-bottom: 12px; }
-        .btn-tg-direct:active { transform: scale(0.98); }
-        .tg-icon { font-size: 22px; }
+        /* Роскошная плашка для 6-значного ID по порядку */
+        .user-id-badge { background-color: #FFF0E6; color: #FF6600; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 16px; text-align: center; margin-bottom: 20px; border: 1px solid #FFE0CC; letter-spacing: 0.5px; }
         
-        .secure-text { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #9CA3AF; margin-top: 24px; }
+        .social-buttons-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .btn-social { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; color: #FFFFFF; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-decoration: none; box-sizing: border-box; }
+        .btn-social:active { transform: scale(0.98); }
+        .btn-tg { background-color: #54A9EB; box-shadow: 0 4px 14px rgba(84, 169, 235, 0.2); }
+        .btn-wa { background-color: #25D366; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2); }
+        
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
+        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
+        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; }
+        
+        .btn-action-submit { width: 100%; background-color: #111827; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s ease; }
+        .btn-action-submit:active { transform: scale(0.98); }
+        .btn-orange { background-color: #FF6600; box-shadow: 0 4px 12px rgba(255,102,0,0.2); }
+        
+        .auth-step { display: none; }
+        .auth-step.active { display: block; }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
-    
     <div class="auth-logo">MyElon</div>
-    <div class="auth-subtitle">Войдите через твой официальный бот, чтобы открыть личный кабинет, создавать объявления и общаться в чате</div>
-    
-    <!-- УНИВЕРСАЛЬНАЯ ССЫЛКА, КОТОРАЯ ВЫЗОВЕТ СИСТЕМНОЕ ОКНО-ЗАПРОС НА ТЕЛЕФОНЕ -->
-    <a href="intent://resolve?domain=myelon_auth_bot&start=auth_site#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-tg-direct" onclick="simulateFastLogin()">
-        <span class="tg-icon">✈️</span>
-        <span>Войти через Telegram</span>
-    </a>
-    
-    <div class="secure-text">
-        <span>🔒</span> Безопасный вход через официальное приложение Telegram
+
+    <!-- ==========================================
+         ШАГ 1: ПОЛУЧЕНИЕ И ВВОД КОДА
+         ========================================== -->
+    <div id="step-one" class="auth-step active">
+        <!-- Красивый 6-значный ID по порядку -->
+        <div class="user-id-badge">Твой персональный номер: <span id="generated-user-id">000001</span></div>
+        
+        <div class="auth-subtitle">Перейдите в бот, получите короткий секретный код подтверждения и введите его ниже</div>
+        
+        <div class="social-buttons-box">
+            <!-- Прямой вызов приложения Телеграм -->
+            <a href="intent://resolve?domain=myelon_auth_bot&start=get_code#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-social btn-tg">
+                <span>✈️ Получить код в Telegram</span>
+            </a>
+            <a href="https://wa.me" target="_blank" class="btn-social btn-wa">
+                <span>💬 Получить код в WhatsApp</span>
+            </a>
+        </div>
+
+        <form onsubmit="checkCodeFromBot(event)">
+            <div class="input-group">
+                <label>Введите код от бота (4-6 цифр)</label>
+                <input type="number" id="one-time-code" placeholder="Например, 5829" required>
+            </div>
+            <button type="submit" class="btn-action-submit">Проверить код</button>
+        </form>
+    </div>
+
+    <!-- ==========================================
+         ШАГ 2: ВВОД ИМЕНИ И ГОРОДА (НОВОЕ ОКНО)
+         ========================================== -->
+    <div id="step-two" class="auth-step">
+        <div class="auth-subtitle" style="margin-bottom: 20px;">Код принят! Заполните анкету профиля, чтобы завершить регистрацию</div>
+        
+        <form onsubmit="finishRegistration(event)">
+            <div class="input-group">
+                <label>Ваше имя или никнейм</label>
+                <input type="text" id="user-real-name" placeholder="Например, Абдулоҷон" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Ваш город</label>
+                <select id="user-real-city" required>
+                    <option value="">Выберите город...</option>
+                    <option value="dushanbe">Душанбе</option>
+                    <option value="khujand">Худжанд</option>
+                    <option value="bokhtar">Бохтар</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-action-submit btn-orange">Сохранить и войти</button>
+        </form>
     </div>
 </div>
 
 <script>
-function simulateFastLogin() {
-    localStorage.clear();
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userRole', 'admin');
-    localStorage.setItem('userName', 'Абдулоҷон  🦾');
-    localStorage.setItem('userEmail', 'telegram_user');
+let nextIdString = "000001";
+
+// Умный скрипт: считает людей по порядку и дописывает нули слева
+document.addEventListener("DOMContentLoaded", function() {
+    // Проверяем, какой номер был последним в памяти сайта
+    let lastId = localStorage.getItem('lastRegisteredIdCounter');
     
-    setTimeout(() => {
-        window.location.href = 'profile.html';
-    }, 2000);
+    // Если сайт абсолютно чистый — ставим первый номер
+    let currentIdCounter = lastId ? parseInt(lastId) + 1 : 1;
+    
+    // Превращаем цифру 1 в красивую строчку "000001" (добавляем нули слева до 6 знаков)
+    nextIdString = String(currentIdCounter).padStart(6, '0');
+    
+    // Выводим эту красоту на экран
+    document.getElementById('generated-user-id').innerText = "ID " + nextIdString;
+});
+
+function checkCodeFromBot(event) {
+    event.preventDefault();
+    let code = document.getElementById('one-time-code').value.trim();
+    
+    if (code.length >= 4) {
+        document.getElementById('step-one').classList.remove('active');
+        document.getElementById('step-two').classList.add('active');
+    } else {
+        alert('Введите корректный код подтверждения!');
+    }
+}
+
+function finishRegistration(event) {
+    event.preventDefault();
+    let name = document.getElementById('user-real-name').value.trim();
+    let city = document.getElementById('user-real-city').value;
+    
+    // Сохраняем текущий счетчик, чтобы следующий человек получил номер на 1 больше!
+    let numericId = parseInt(nextIdString);
+    localStorage.setItem('lastRegisteredIdCounter', numericId);
+    
+    // Записываем профиль пользователя
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userId', nextIdString); // Запишется строгий "000001"
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userCity', city);
+    localStorage.setItem('userRole', name === 'Абдулоҷон' ? 'admin' : 'user');
+    
+    alert('Регистрация успешна!\nТвой личный номер: ID ' + nextIdString);
+    window.location.href = 'profile.html';
 }
 </script>
 
+</body>
+</html>
