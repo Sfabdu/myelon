@@ -13,7 +13,7 @@
         .auth-logo { font-size: 36px; font-weight: 900; color: #FF6600; margin-bottom: 8px; letter-spacing: -1px; }
         .auth-subtitle { font-size: 14px; color: #6B7280; margin-bottom: 32px; padding: 0 10px; line-height: 1.5; }
         
-        /* Фирменная кнопка Telegram (Швейцарские часы) */
+        /* Кнопка Telegram (Яркая, сочная, нативная) */
         .btn-tg-direct { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; background-color: #54A9EB; color: #FFFFFF; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(84, 169, 235, 0.3); transition: all 0.2s ease; text-decoration: none; box-sizing: border-box; margin-bottom: 12px; }
         .btn-tg-direct:active { transform: scale(0.98); }
         .tg-icon { font-size: 22px; }
@@ -24,14 +24,14 @@
 <body>
 
 <div class="auth-container">
-    <!-- Кнопка закрытия -->
+    <!-- Кнопка закрытия окна -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     
     <div class="auth-logo">MyElon</div>
     <div class="auth-subtitle">Войдите в один клик через твой официальный бот, чтобы открыть личный кабинет, создавать объявления и общаться в чате</div>
     
-        <!-- Умная ссылка-обход, которая силой откроет приложение Телеграм на телефоне -->
-    <a href="https://tele.gg" class="btn-tg-direct" onclick="simulateFastLogin()">
+    <!-- ЧИСТАЯ КНОПКА ПЕРЕХОДА К ТВОЕМУ БОТУ -->
+    <a href="https://t.me" class="btn-tg-direct" onclick="simulateFastLogin()">
         <span class="tg-icon">✈️</span>
         <span>Войти через Telegram</span>
     </a>
@@ -53,10 +53,10 @@ function simulateFastLogin() {
     localStorage.setItem('userName', 'Абдулоҷон (Создатель) 🦾');
     localStorage.setItem('userEmail', 'telegram_user');
     
-    // Даём пользователю 3 секунды, чтобы переключиться в ТГ, а потом сайт будет готов встретить его в кабинете
+    // Даём пользователю 2 секунды, чтобы переключиться в ТГ, а сайт автоматически подготовит личный кабинет
     setTimeout(() => {
         window.location.href = 'profile.html';
-    }, 3000);
+    }, 2000);
 }
 </script>
 
