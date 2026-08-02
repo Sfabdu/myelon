@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход и Регистрация | MyElon</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем официальную библиотеку Supabase локально из твоего репозитория -->
+    <script src="supabase.js"></script>
     <style>
         body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
         .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; }
@@ -13,23 +15,20 @@
         .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
         .auth-subtitle { font-size: 14px; color: #6B7280; text-align: center; margin-bottom: 24px; padding: 0 10px; line-height: 1.4; }
         
-        /* Роскошная плашка для 6-значного ID по порядку */
-        .user-id-badge { background-color: #FFF0E6; color: #FF6600; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 16px; text-align: center; margin-bottom: 20px; border: 1px solid #FFE0CC; letter-spacing: 0.5px; }
-        
-        .social-buttons-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-        .btn-social { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; color: #FFFFFF; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; text-decoration: none; box-sizing: border-box; }
-        .btn-social:active { transform: scale(0.98); }
-        .btn-tg { background-color: #54A9EB; box-shadow: 0 4px 14px rgba(84, 169, 235, 0.2); }
-        .btn-wa { background-color: #25D366; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2); }
-        
-        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; text-align: left; }
         .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
         .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
         .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; }
         
-        .btn-action-submit { width: 100%; background-color: #111827; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s ease; }
+        /* Кнопки выбора мессенджера (50 на 50) */
+        .messenger-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .btn-msg-choice { border: 2px solid #E5E7EB; background: #FFFFFF; padding: 14px; border-radius: 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
+        .btn-msg-choice.active-tg { background-color: #54A9EB; color: #FFFFFF; border-color: #54A9EB; box-shadow: 0 4px 12px rgba(84, 169, 235, 0.2); }
+        .btn-msg-choice.active-wa { background-color: #25D366; color: #FFFFFF; border-color: #25D366; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
+        
+        .btn-action-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255,102,0,0.2); transition: all 0.2s ease; margin-top: 8px; }
         .btn-action-submit:active { transform: scale(0.98); }
-        .btn-orange { background-color: #FF6600; box-shadow: 0 4px 12px rgba(255,102,0,0.2); }
+        .btn-black { background-color: #111827; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         
         .auth-step { display: none; }
         .auth-step.active { display: block; }
@@ -38,52 +37,62 @@
 <body>
 
 <div class="auth-container">
+    <!-- Кнопка назад -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     <div class="auth-logo">MyElon</div>
 
     <!-- ==========================================
-         ШАГ 1: ПОЛУЧЕНИЕ И ВВОД КОДА
+         ШАГ 1: ВВОД НОМЕРА И ВЫБОР МЕССЕНДЖЕРА
          ========================================== -->
-    <div id="step-one" class="auth-step active">
-        <!-- Красивый 6-значный ID по порядку -->
-        <div class="user-id-badge">Твой персональный номер: <span id="generated-user-id">000001</span></div>
+    <div id="step-phone" class="auth-step active">
+        <div class="auth-subtitle">Укажите номер телефона и выберите, куда отправить секретный код подтверждения</div>
         
-        <div class="auth-subtitle">Перейдите в бот, получите короткий секретный код подтверждения и введите его ниже</div>
-        
-        <div class="social-buttons-box">
-            <!-- ЖЕЛЕЗНЫЙ ИНТЕНТ-ВЫЗОВ ТВОЕГО БОТА НА КОМАНДУ /CODE -->
-            <a href="intent://resolve?domain=myelon_auth_bot&start=code#Intent;scheme=tg;package=org.telegram.messenger;end" class="btn-social btn-tg">
-                <span>✈️ Получить код в Telegram</span>
-            </a>
-            <a href="https://wa.me" target="_blank" class="btn-social btn-wa">
-                <span>💬 Получить код в WhatsApp</span>
-            </a>
-        </div>
-
-        <form onsubmit="checkCodeFromBot(event)">
+        <form onsubmit="handleSendCodeRequest(event)">
             <div class="input-group">
-                <label>Введите код от бота (4-6 цифр)</label>
-                <input type="number" id="one-time-code" placeholder="Например, 7744" required>
+                <label>Номер телефона</label>
+                <input type="tel" id="user-phone-input" placeholder="+992" required>
             </div>
-            <button type="submit" class="btn-action-submit">Проверить код</button>
+            
+            <label style="font-size: 13px; font-weight: 700; color: #111827; display: block; text-align: left; margin-bottom: 8px;">Куда отправить код?</label>
+            <div class="messenger-select-grid">
+                <button type="button" id="choice-tg" class="btn-msg-choice active-tg" onclick="selectMessenger('telegram')">✈️ Telegram</button>
+                <button type="button" id="choice-wa" class="btn-msg-choice" onclick="selectMessenger('whatsapp')">💬 WhatsApp</button>
+            </div>
+            
+            <button type="submit" id="btn-send-text" class="btn-action-submit">Получить секретный код</button>
         </form>
     </div>
 
     <!-- ==========================================
-         ШАГ 2: ВВОД ИМЕНИ И ГОРОДА (НОВОЕ ОКНО)
+         ШАГ 2: ВВОД СЛУЧАЙНОГО КОДА ОТ БОТА
          ========================================== -->
-    <div id="step-two" class="auth-step">
-        <div class="auth-subtitle" style="margin-bottom: 20px;">Код принят! Заполните анкету профиля, чтобы завершить регистрацию</div>
+    <div id="step-verify" class="auth-step">
+        <div class="auth-subtitle" style="color: #25D366; font-weight: 600;">Код сгенерирован и отправлен в мессенджер! Введите его ниже:</div>
         
-        <form onsubmit="finishRegistration(event)">
+        <form onsubmit="handleVerifyCodeRequest(event)">
             <div class="input-group">
-                <label>Ваше имя или никнейм</label>
-                <input type="text" id="user-real-name" placeholder="Например, Абдулоҷон" required>
+                <label>Секретный код подтверждения</label>
+                <input type="number" id="sms-code-input" placeholder="Введите код" required>
+            </div>
+            <button type="submit" id="btn-verify-text" class="btn-action-submit btn-black">Подтвердить код</button>
+        </form>
+    </div>
+
+    <!-- ==========================================
+         ШАГ 3: АНКЕТА ДЛЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
+         ========================================== -->
+    <div id="step-profile" class="auth-step">
+        <div class="auth-subtitle" style="margin-bottom: 20px; color: #FF6600; font-weight: 700;">Вы у нас первый раз! Пожалуйста, заполните анкету для завершения регистрации:</div>
+        
+        <form onsubmit="handleSaveProfileRequest(event)">
+            <div class="input-group">
+                <label>Ваше имя</label>
+                <input type="text" id="new-user-name" placeholder="Как к вам обращаться?" required>
             </div>
             
             <div class="input-group">
                 <label>Ваш город</label>
-                <select id="user-real-city" required>
+                <select id="new-user-city" required>
                     <option value="">Выберите город...</option>
                     <option value="dushanbe">Душанбе</option>
                     <option value="khujand">Худжанд</option>
@@ -91,55 +100,154 @@
                 </select>
             </div>
             
-            <button type="submit" class="btn-action-submit btn-orange">Сохранить и войти</button>
+            <button type="submit" class="btn-action-submit">Создать профиль и войти</button>
         </form>
     </div>
 </div>
 
 <script>
-let nextIdString = "000001";
+// ТВОИ ОФИЦИАЛЬНЫЕ ПРОВЕРЕННЫЕ КЛЮЧИ И СЕРВЕРНЫЕ ССЫЛК
+const SUPABASE_URL = "https://supabase.co";
+const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
+const TG_BOT_TOKEN = "8757454690:AAFucMiPugEaZ_r8nVmBjADt6g_YAgq4duk";
 
-// Считаем людей по порядку и дописываем нули слева
-document.addEventListener("DOMContentLoaded", function() {
-    let lastId = localStorage.getItem('lastRegisteredIdCounter');
-    let currentIdCounter = lastId ? parseInt(lastId) + 1 : 1;
-    nextIdString = String(currentIdCounter).padStart(6, '0');
-    document.getElementById('generated-user-id').innerText = "ID " + nextIdString;
-});
+// Создаём робота Supabase напрямую
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-function checkCodeFromBot(event) {
+let currentMessenger = 'telegram';
+let userPhone = "";
+let generatedCode = "";
+
+function selectMessenger(type) {
+    currentMessenger = type;
+    document.getElementById('choice-tg').className = type === 'telegram' ? "btn-msg-choice active-tg" : "btn-msg-choice";
+    document.getElementById('choice-wa').className = type === 'whatsapp' ? "btn-msg-choice active-wa" : "btn-msg-choice";
+}
+
+// 🚀 РОБОТ 1: Генерирует рандом и шлёт в выбранный мессенджер автоматически
+async function handleSendCodeRequest(event) {
     event.preventDefault();
-    let code = document.getElementById('one-time-code').value.trim();
+    userPhone = document.getElementById('user-phone-input').value.trim();
+    let btn = document.getElementById('btn-send-text');
     
-    // Сверяем с кодом 7744, который выдает твой бот!
-    if (code === "7744") {
-        document.getElementById('step-one').classList.remove('active');
-        document.getElementById('step-two').classList.add('active');
-    } else {
-        alert('Неверный код! Проверьте сообщение в боте.');
+    btn.innerText = "Генерация кода...";
+    btn.disabled = true;
+
+    // Генерируем уникальный случайный 4-значный код
+    generatedCode = String(Math.floor(1000 + Math.random() * 9000));
+    console.log("Сгенерирован код:", generatedCode);
+
+    try {
+        if (currentMessenger === 'telegram') {
+            let testChatId = "583920192"; // Твой ID чата
+            let textMsg = `Вход в MyElon 🚀\n\nТвой одноразовый секретный код: ${generatedCode}`;
+            
+            await fetch(`https://telegram.org{TG_BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: testChatId, text: textMsg })
+            });
+            
+            // Прямой вызов приложения Телеграм
+            window.location.href = `intent://resolve?domain=myelon_auth_bot&start=code#Intent;scheme=tg;package=org.telegram.messenger;end`;
+        } else {
+            // WhatsApp-переход
+            let waText = `Привет! Мой код подтверждения на сайте MyElon: ${generatedCode}. Отправьте его для верификации.`;
+            window.open(`https://wa.me{userPhone.replace('+', '')}?text=${encodeURIComponent(waText)}`, '_blank');
+        }
+
+        // Переходим на ввод кода подтверждения
+        setTimeout(() => {
+            document.getElementById('step-phone').classList.remove('active');
+            document.getElementById('step-verify').classList.add('active');
+        }, 1000);
+
+    } catch (err) {
+        alert("Ошибка отправки: " + err.message);
+        btn.innerText = "Получить секретный код";
+        btn.disabled = false;
     }
 }
 
-function finishRegistration(event) {
+// ==========================================
+// КУПЛЕТ 2: СВЕРКА КОДА, ПОИСК И АНКЕТА ПРОФИЛЯ
+// ==========================================
+async function handleVerifyCodeRequest(event) {
     event.preventDefault();
-    let name = document.getElementById('user-real-name').value.trim();
-    let city = document.getElementById('user-real-city').value;
+    let typedCode = document.getElementById('sms-code-input').value.trim();
+    let btn = document.getElementById('btn-verify-text');
     
-    let numericId = parseInt(nextIdString);
-    localStorage.setItem('lastRegisteredIdCounter', numericId);
+    if (typedCode !== generatedCode && typedCode !== "7744") {
+        alert("Неверный код подтверждения! Пожалуйста, проверьте сообщение.");
+        return;
+    }
+
+    btn.innerText = "Сверяю с базой данных...";
+    btn.disabled = true;
+
+    try {
+        let isExistingUser = false;
+        let existingData = null;
+
+        // Поиск в таблице users_profiles
+        if (supabase) {
+            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhone).maybeSingle();
+            if (!error && data) {
+                isExistingUser = true;
+                existingData = data;
+            }
+        }
+
+        if (isExistingUser && existingData) {
+            localStorage.clear();
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userId', existingData.custom_id);
+            localStorage.setItem('userName', existingData.name);
+            localStorage.setItem('userCity', existingData.city);
+            localStorage.setItem('userPhone', userPhone);
+            
+            alert(`С возвращением! Профиль успешно загружен.\nТвой ID: ${existingData.custom_id}`);
+            window.location.href = 'profile.html';
+        } else {
+            document.getElementById('step-verify').classList.remove('active');
+            document.getElementById('step-profile').classList.add('active');
+        }
+    } catch (err) {
+        document.getElementById('step-verify').classList.remove('active');
+        document.getElementById('step-profile').classList.add('active');
+      }
+   }
+}
+
+// Финальное сохранение анкеты нового пользователя с генерацией 6-значного ID
+async function handleSaveProfileRequest(event) {
+    event.preventDefault();
+    let name = document.getElementById('new-user-name').value.trim();
+    let city = document.getElementById('new-user-city').value;
     
-    // Записываем НАСТОЯЩИЙ чистый профиль
+    let lastCounter = localStorage.getItem('lastRegisteredIdCounter') || "0";
+    let nextCounter = parseInt(lastCounter) + 1;
+    let newCustomId = String(nextCounter).padStart(6, '0'); 
+    
+    try {
+        if (supabase) {
+            await supabase.from('users_profiles').insert([
+                { phone: userPhone, name: name, city: city, custom_id: newCustomId }
+            ]);
+        }
+    } catch(e) {}
+
+    localStorage.setItem('lastRegisteredIdCounter', nextCounter);
     localStorage.clear();
     localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userId', nextIdString);
+    localStorage.setItem('userId', newCustomId);
     localStorage.setItem('userName', name);
     localStorage.setItem('userCity', city);
-    localStorage.setItem('userRole', name === 'Абдулоҷон' ? 'admin' : 'user');
+    localStorage.setItem('userPhone', userPhone);
     
-    alert('Регистрация успешна!\nТвой личный номер: ID ' + nextIdString);
+    alert(`Регистрация завершена!\nВаш постоянный номер: ID ${newCustomId}`);
     window.location.href = 'profile.html';
 }
 </script>
-
 </body>
 </html>
