@@ -40,27 +40,25 @@
     <!-- Кнопка назад -->
     <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
     <div class="auth-logo">MyElon</div>
-
+        
     <!-- ==========================================
-         ШАГ 1: ВВОД НОМЕРА И ВЫБОР МЕССЕНДЖЕРА
+         ШАГ 1: ВВОД НОМЕРА И ВЫБОР МЕССЕНДЖЕРА (ИСПРАВЛЕНО)
          ========================================== -->
     <div id="step-phone" class="auth-step active">
         <div class="auth-subtitle">Укажите номер телефона и выберите, куда отправить секретный код подтверждения</div>
         
-        <form onsubmit="handleSendCodeRequest(event)">
-            <div class="input-group">
-                <label>Номер телефона</label>
-                <input type="tel" id="user-phone-input" placeholder="+992" required>
-            </div>
-            
-            <label style="font-size: 13px; font-weight: 700; color: #111827; display: block; text-align: left; margin-bottom: 8px;">Куда отправить код?</label>
-            <div class="messenger-select-grid">
-                <button type="button" id="choice-tg" class="btn-msg-choice active-tg" onclick="selectMessenger('telegram')">✈️ Telegram</button>
-                <button type="button" id="choice-wa" class="btn-msg-choice" onclick="selectMessenger('whatsapp')">💬 WhatsApp</button>
-            </div>
-            
-            <button type="submit" id="btn-send-text" class="btn-action-submit">Получить секретный код</button>
-        </form>
+        <div class="input-group">
+            <label>Номер телефона</label>
+            <input type="tel" id="user-phone-input" placeholder="+992" required>
+        </div>
+        
+        <label style="font-size: 13px; font-weight: 700; color: #111827; display: block; text-align: left; margin-bottom: 8px;">Куда отправить код?</label>
+        <div class="messenger-select-grid">
+            <div id="choice-tg" class="btn-msg-choice active-tg" onclick="selectMessenger('telegram')">✈️ Telegram</div>
+            <div id="choice-wa" class="btn-msg-choice" onclick="selectMessenger('whatsapp')">💬 WhatsApp</div>
+        </div>
+        
+        <button type="button" id="btn-send-text" class="btn-action-submit" onclick="handleSendCodeRequest(event)">Получить секретный код</button>
     </div>
 
     <!-- ==========================================
