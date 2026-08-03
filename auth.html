@@ -7,30 +7,29 @@
     <link rel="stylesheet" href="style.css">
     <script src="supabase.js"></script>
     <style>
-        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        .header-nav { width: 100%; max-width: 500px; background: #FFFFFF; padding: 12px 16px; border-bottom: 1px solid #EAEAEA; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; }
-        .logo-box { font-size: 20px; font-weight: 900; color: #FF6600; letter-spacing: -0.5px; }
-        .search-fake { flex: 1; background: #F5F5F5; margin: 0 12px; padding: 8px 12px; border-radius: 20px; font-size: 14px; color: #999; display: flex; align-items: center; justify-content: space-between; }
-        .btn-orange-sm { background: #FF6600; color: #FFFFFF; border: none; padding: 6px 14px; border-radius: 16px; font-weight: 700; font-size: 13px; }
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        .main-content { flex: 1; width: 100%; max-width: 450px; padding: 24px 16px; box-sizing: border-box; }
-        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 16px; padding: 0; }
         
         .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
         .auth-subtitle { font-size: 14px; color: #666666; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
         
-        /* Плашка DEV-режима */
         .dev-badge-top { background: #E6F4FF; color: #0066CC; padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; text-align: left; margin-bottom: 24px; display: none; border: 1px solid #BAE7FF; }
         .dev-badge-inline { background: #FFF7E6; color: #D46B08; padding: 12px; border-radius: 12px; font-size: 13px; text-align: left; margin-bottom: 20px; border: 1px solid #FFE7BA; line-height: 1.4; }
         
-        /* Поля ввода */
+        /* ДВУХБЛОЧНОЕ ПОЛЕ ВВОДА НОМЕРА */
+        .phone-input-container { display: flex; gap: 8px; margin-bottom: 20px; }
+        .phone-country-code { width: 75px; background: #F3F4F6; border: 1px solid #D9D9D9; padding: 14px 0; border-radius: 12px; font-size: 16px; font-weight: 700; color: #4B5563; text-align: center; box-sizing: border-box; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .phone-main-number { flex: 1; position: relative; }
+        .phone-main-number input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 16px; outline: none; box-sizing: border-box; width: 100%; transition: all 0.2s; color: #111; font-weight: 600; }
+        .phone-main-number input:focus { border-color: #FF6600; box-shadow: 0 0 0 2px rgba(255,102,0,0.1); }
+        
         .input-box { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 20px; }
         .input-box label { font-size: 13px; font-weight: 700; color: #111111; }
-        .input-box input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 16px; outline: none; box-sizing: border-box; width: 100%; transition: all 0.2s; color: #111; }
-        .input-box input:focus { border-color: #FF6600; box-shadow: 0 0 0 2px rgba(255,102,0,0.1); }
+        .input-box input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 16px; outline: none; box-sizing: border-box; width: 100%; text-align: center; }
         
-        /* Кнопки мессенджеров списком */
         .msg-list-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
         .btn-msg-item { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 16px; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; box-sizing: border-box; }
         .btn-msg-item:active { background: #F5F5F5; transform: scale(0.99); }
@@ -39,14 +38,12 @@
         .msg-name { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 2px; }
         .msg-desc { font-size: 12px; color: #888; }
         
-        /* Главные кнопки */
         .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-bottom: 16px; }
         .btn-orange-action:active { background: #E65500; }
         .btn-retry-code { background: none; border: none; color: #888; font-size: 14px; cursor: pointer; }
         
-        /* Подвал */
-        .footer-box { width: 100%; max-width: 500px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; background: #FFFFFF; text-align: left; margin-top: 40px; }
-        .footer-logo-row { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
+        .footer-box { width: 100%; max-width: 450px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; text-align: left; margin-top: 40px; }
+        .footer-logo-row { font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
         .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
         .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
         .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
@@ -57,35 +54,30 @@
 </head>
 <body>
 
-<!-- Шапка сайта -->
-<div class="header-nav">
-    <div class="logo-box">MyElon</div>
-    <div class="search-fake">Найти объявление... <span style="font-size:12px;">🔍</span></div>
-    <button class="btn-orange-sm">Найти</button>
-    <div style="font-size:20px; margin-left:8px; color:#333;">☰</div>
-</div>
-
 <div class="main-content">
-    <!-- Сквозной верхний DEV-индикатор -->
     <div id="dev-top-bar" class="dev-badge-top">ℹ️ DEV режим: код <span id="dev-top-code">000000</span></div>
 
     <div class="auth-card">
-        <!-- Кнопка Назад -->
         <button id="btn-back" class="btn-back-link" onclick="goBackStep()" style="display:none;">‹ Назад</button>
 
         <!-- ==========================================
-             ШАГ 1: ВВОД НОМЕРА ТЕЛЕФОНА
+             ШАГ 1: ВВОД НОМЕРА ТЕЛЕФОНА (ДВУХБЛОЧНЫЙ)
              ========================================== -->
         <div id="step-1" class="auth-step active">
             <div class="auth-title">Вход в MyElon</div>
-            <div class="auth-subtitle">Введите номер телефона</div>
+            <div class="auth-subtitle">Введите ваш номер телефона</div>
             
-            <div class="input-group" style="text-align:left;">
-                <div class="input-box">
-                    <label>Номер телефона</label>
-                    <input type="tel" id="phone-field" value="+992 " oninput="validateTJPhone(this)">
+            <div style="text-align: left; font-size: 13px; font-weight: 700; color: #111111; margin-bottom: 6px;">Номер телефона</div>
+            <div class="phone-input-container">
+                <!-- Левый маленький закрытый квадратик -->
+                <div class="phone-country-code">+992</div>
+                
+                <!-- Правое основное поле ввода -->
+                <div class="phone-main-number">
+                    <input type="tel" id="pure-phone-input" placeholder="901234567" oninput="cleanMainNumber(this)">
                 </div>
             </div>
+            
             <button type="button" class="btn-orange-action" onclick="goToStep2()">Продолжить</button>
         </div>
 
@@ -97,7 +89,7 @@
             <div class="auth-subtitle">Выберите, куда прислать код</div>
             
             <div class="msg-list-box">
-                <button class="btn-msg-item" onclick="triggerCodeSending('telegram')">
+                <button type="button" class="btn-msg-item" onclick="triggerCodeSending('telegram')">
                     <div class="msg-icon-circle" style="background:#E6F4FF; color:#54A9EB;">✈️</div>
                     <div class="msg-text-info">
                         <div class="msg-name">Telegram</div>
@@ -105,7 +97,7 @@
                     </div>
                 </button>
                 
-                <button class="btn-msg-item" onclick="triggerCodeSending('whatsapp')">
+                <button type="button" class="btn-msg-item" onclick="triggerCodeSending('whatsapp')">
                     <div class="msg-icon-circle" style="background:#E8FCEF; color:#25D366;">💬</div>
                     <div class="msg-text-info">
                         <div class="msg-name">WhatsApp</div>
@@ -129,7 +121,7 @@
             
             <div class="input-box">
                 <label>Код из сообщения</label>
-                <input type="number" id="code-field" placeholder="123456" style="text-align:center; letter-spacing:4px; font-weight:700;">
+                <input type="number" id="code-field" placeholder="123456" style="letter-spacing:4px; font-weight:700;">
             </div>
             
             <button type="button" class="btn-orange-action" onclick="verifyReceivedCode()">Войти</button>
@@ -138,20 +130,18 @@
             </div>
         </div>
     </div>
-</div>
 
-<!-- Подвал сайта -->
-<div class="footer-box">
-    <div class="footer-logo-row">MyElon</div>
-    <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
-    
-    <div class="footer-links">
-        <div>Помощь</div>
-        <div style="color:#666; font-size:13px;">Как разместить объявление</div>
-        <div style="color:#666; font-size:13px;">Правила площадки</div>
-        <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+    <div class="footer-box">
+        <div class="footer-logo-row">MyElon</div>
+        <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
+        <div class="footer-links">
+            <div>Помощь</div>
+            <div style="color:#666; font-size:13px;">Как разместить объявление</div>
+            <div style="color:#666; font-size:13px;">Правила площадки</div>
+            <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+        </div>
+        <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
     </div>
-    <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
 </div>
 
 <script>
@@ -160,44 +150,43 @@ const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 let currentStep = 1;
-let userPhoneNumber = "";
+let finalFullPhone = "";
 let currentCode = "";
 
-function validateTJPhone(input) {
-    if (!input.value.startsWith("+992 ")) {
-        input.value = "+992 ";
+// На лету очищаем ввод от букв и лишних первых нулей
+function cleanMainNumber(input) {
+    let clean = input.value.replace(/[^0-9]/g, '');
+    
+    // Если пользователь по привычке пишет ноль в начале (например, 090...), стираем этот ноль
+    if (clean.startsWith("0")) {
+        clean = clean.substring(1);
     }
-    let digits = input.value.replace(/[^0-9]/g, '');
-    if (digits.length > 12) {
-        input.value = input.value.substring(0, input.value.length - 1);
+    
+    // Ограничиваем длину строго девятью цифрами
+    if (clean.length > 9) {
+        clean = clean.substring(0, 9);
     }
+    input.value = clean;
 }
 
 function goToStep2() {
-    let rawPhone = document.getElementById('phone-field').value.trim();
-    // Проверяем длину: +992 (4 цифры) + 9 цифр номера = 13 символов с плюсом, или 12 чистых цифр
-    if (rawPhone.replace(/[^0-9]/g, '').length < 12) {
-        alert("Пожалуйста, введите полный номер телефона Таджикистана!");
+    let rightPart = document.getElementById('pure-phone-input').value.trim();
+    // Номер сотового оператора в Таджикистане должен быть строго 9 цифр
+    if (rightPart.length !== 9) {
+        alert("Ошибка! Номер должен состоять ровно из 9 цифр. Например: 907875772");
         return;
     }
-    userPhoneNumber = rawPhone;
+    // Склеиваем жесткий код +992 и введённые 9 цифр для базы данных
+    finalFullPhone = "+992 " + rightPart;
     switchStep(2);
 }
 
 function triggerCodeSending(messenger) {
-    // Генерация случайного 6-значного кода
     currentCode = String(Math.floor(100000 + Math.random() * 900000));
-
     document.getElementById('dev-top-code').innerText = currentCode;
     document.getElementById('dev-inline-code').innerText = currentCode;
-
     let sub = document.getElementById('verify-msg-subtitle');
-    if (messenger === 'telegram') {
-        sub.innerText = "Код отправлен в Telegram";
-    } else {
-        sub.innerText = "Код отправлен в WhatsApp";
-    }
-
+    sub.innerText = messenger === 'telegram' ? "Код отправлен в Telegram" : "Код отправлен в WhatsApp";
     document.getElementById('dev-top-bar').style.display = "block";
     switchStep(3);
 }
@@ -208,43 +197,34 @@ async function verifyReceivedCode() {
         alert("Неверный код подтверждения! Проверьте DEV-плашку.");
         return;
     }
-
     try {
         let isExisting = false;
         let existingData = null;
-
         if (supabase) {
-            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhoneNumber).maybeSingle();
+            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', finalFullPhone).maybeSingle();
             if (!error && data) {
                 isExisting = true;
                 existingData = data;
             }
         }
-
         localStorage.clear();
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userPhone', userPhoneNumber);
-
+        localStorage.setItem('userPhone', finalFullPhone);
         if (isExisting && existingData) {
             localStorage.setItem('userId', existingData.custom_id);
             localStorage.setItem('userName', existingData.name);
-            alert("Добро пожаловать в MyElon!\nТвой ID: " + existingData.custom_id);
+            alert("С возвращением в MyElon!\nТвой ID: " + existingData.custom_id);
             window.location.href = 'profile.html';
         } else {
             let lastCounter = localStorage.getItem('lastRegisteredIdCounter') || "0";
             let nextCounter = parseInt(lastCounter) + 1;
             let newCustomId = String(nextCounter).padStart(6, '0');
-
             if (supabase) {
-                await supabase.from('users_profiles').insert([
-                    { phone: userPhoneNumber, name: "Новый Пользователь", city: "dushanbe", custom_id: newCustomId }
-                ]);
+                await supabase.from('users_profiles').insert([{ phone: finalFullPhone, name: "Новый Пользователь", city: "dushanbe", custom_id: newCustomId }]);
             }
-
             localStorage.setItem('lastRegisteredIdCounter', nextCounter);
             localStorage.setItem('userId', newCustomId);
             localStorage.setItem('userName', "Новый Пользователь");
-
             alert("Регистрация успешна!\nВаш постоянный номер: ID " + newCustomId);
             window.location.href = 'profile.html';
         }
@@ -258,7 +238,6 @@ function switchStep(step) {
     document.getElementById('step-1').classList.remove('active');
     document.getElementById('step-2').classList.remove('active');
     document.getElementById('step-3').classList.remove('active');
-
     document.getElementById('step-' + step).classList.add('active');
     document.getElementById('btn-back').style.display = step > 1 ? "block" : "none";
 }
