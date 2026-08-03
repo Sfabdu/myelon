@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в MyElon — Шаг 3</title>
+    <link rel="stylesheet" href="../style.css">
+    <!-- Подключаем официальную библиотеку Supabase локально из репозитория -->
+    <script src="../supabase.js"></script>
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 16px; padding: 0; }
+        .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
+        .auth-subtitle { font-size: 14px; color: #25D366; font-weight: 600; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
+        
+        /* ТВОЯ ПРЕМИАЛЬНАЯ DEV-ПЛАШКА ИЗ МАКЕТА */
+        .dev-badge-inline { background: #FFF7E6; color: #D46B08; padding: 16px; border-radius: 12px; font-size: 14px; text-align: left; margin-bottom: 24px; border: 1px solid #FFE7BA; line-height: 1.5; }
+        
+        /* Поле ввода кода */
+        .input-box { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 20px; }
+        .input-box label { font-size: 13px; font-weight: 700; color: #111111; }
+        .input-box input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 18px; outline: none; box-sizing: border-box; width: 100%; transition: all 0.2s; color: #111; text-align: center; letter-spacing: 4px; font-weight: 700; }
+        .input-box input:focus { border-color: #FF6600; box-shadow: 0 0 0 2px rgba(255,102,0,0.1); }
+        
+        .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-bottom: 16px; }
+        .btn-orange-action:active { background: #E65500; }
+        .btn-retry-code { background: none; border: none; color: #888; font-size: 14px; cursor: pointer; font-weight: 500; }
+        
+        .footer-box { width: 100%; max-width: 450px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; text-align: left; margin-top: 40px; }
+        .footer-logo-row { font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
+        .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
+        .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
+        .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="auth-card">
+        <!-- Кнопка Назад вернёт на выбор мессенджера -->
+        <button class="btn-back-link" onclick="window.location.href='choose.html'">‹ Назад</button>
+
+        <div class="auth-title">Вход в MyElon</div>
+        <!-- Текст меняется на лету под ТГ или Ватсап -->
+        <div id="verify-subtitle" class="auth-subtitle">Код отправлен</div>
+        
+        <!-- Роскошная инлайн DEV-плашка по твоему скриншоту -->
+        <div class="dev-badge-inline">
+            <strong>DEV код: <span id="dev-code-display">000000</span></strong><br>
+            <span style="color:#666; font-size:12px;">Реальная отправка появится после настройки интеграций.</span>
+        </div>
+        
+        <div class="input-box">
+            <label>Код из сообщения</label>
+            <input type="number" id="code-field" placeholder="123456" oninput="limitCodeLength(this)">
+        </div>
+        
+        <button type="button" class="btn-orange-action" onclick="checkCodeAndNext()">Войти</button>
+        <div>
+            <button type="button" class="btn-retry-code" onclick="window.location.href='choose.html'">Отправить код повторно</button>
+        </div>
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-logo-row">MyElon</div>
+        <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
+        <div class="footer-links">
+            <div>Помощь</div>
+            <div style="color:#666; font-size:13px;">Как разместить объявление</div>
+            <div style="color:#666; font-size:13px;">Правила площадки</div>
+            <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+        </div>
+        <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
+    </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://supabase.co";
+const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+let generatedCode = "";
+let userPhone = "";
+
+document.addEventListener("DOMContentLoaded", function() {
+    userPhone = sessionStorage.getItem('tempUserPhone');
+    let choice = sessionStorage.getItem('tempMessengerChoice');
+    
+    // Если памяти нет — гоним в начало
+    if (!userPhone || !choice) {
+        window.location.href = "phone.html";
+        return;
+    }
+    
+    // Настраиваем подзаголовок по макету
+    let sub = document.getElementById('verify-subtitle');
+    if (choice === 'telegram') {
+        sub.innerText = "Код отправлен в Telegram";
+        sub.style.color = "#54A9EB"; // Красивый синий цвет ТГ
+    } else {
+        sub.innerText = "Код отправлен в WhatsApp";
+        sub.style.color = "#25D366"; // Красивый зелёный цвет Ватсапа
+    }
+    
+    // Генерируем случайный 6-значный DEV-код для плашки
+    generatedCode = String(Math.floor(100000 + Math.random() * 900000));
+    document.getElementById('dev-code-display').innerText = generatedCode;
+});
+
+function limitCodeLength(input) {
+    if (input.value.length > 6) {
+        input.value = input.value.slice(0, 6);
+    }
+}
+
+async function checkCodeAndNext() {
+    let inputCode = document.getElementById('code-field').value.trim();
+    
+    // Проверяем код (DEV или тестовый админский 7744)
+    if (inputCode !== generatedCode && inputCode !== "7744") {
+        alert("Неверный код подтверждения! Проверьте DEV-плашку.");
+        return;
+    }
+    
+    try {
+        let isExistingUser = false;
+        let existingData = null;
+
+        // Стучимся в Сингапур: ищем, есть ли уже этот номер телефона в базе
+        if (supabase) {
+            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhone).maybeSingle();
+            if (!error && data) {
+                isExistingUser = true;
+                existingData = data;
+            }
+        }
+
+        if (isExistingUser && existingData) {
+            // ЕСЛИ СТАРЫЙ ПОЛЬЗОВАТЕЛЬ: база узнала его! Логиним и шлём сразу в профиль
+            localStorage.clear();
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userId', existingData.custom_id);
+            localStorage.setItem('userName', existingData.name);
+            localStorage.setItem('userCity', existingData.city);
+            localStorage.setItem('userPhone', userPhone);
+            
+            alert("С возвращением в MyElon!\nТвой ID: " + existingData.custom_id);
+            window.location.href = '../profile.html';
+        } else {
+            // ЕСЛИ НОВЫЙ ПОЛЬЗОВАТЕЛЬ: перебрасываем на четвёртый шаг — анкету регистрации!
+            window.location.href = "register.html";
+        }
+    } catch (err) {
+        // Если таблицы ещё не созданы, пускаем на анкету для теста
+        window.location.href = "register.html";
+    }
+}
+</script>
+</body>
+</html>
