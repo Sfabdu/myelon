@@ -3,121 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет | MyElon</title>
+    <title>Мой профиль | MyElon</title>
     <link rel="stylesheet" href="style.css">
+    <script src="supabase.js"></script>
     <style>
-        body { background-color: #F9FAFB; padding-bottom: 90px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        .profile-container { max-width: 600px; margin: 0 auto; padding: 16px; box-sizing: border-box; }
+        body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
         
-        /* Карточка пользователя */
-        .user-card { background: #FFFFFF; padding: 24px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-        .user-info { display: flex; align-items: center; gap: 16px; }
-        .user-avatar { width: 60px; height: 60px; background-color: #FF6600; color: #FFFFFF; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; }
-        .user-meta h3 { margin: 0 0 4px 0; font-size: 18px; font-weight: 800; color: #111827; }
-        .user-meta p { margin: 0; font-size: 14px; color: #6B7280; }
+        /* Главный контейнер смартфона */
+        .main-container { width: 100%; max-width: 480px; background: #F9FAFB; min-height: 100vh; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding-bottom: 80px; }
         
-        /* Кнопка Выхода */
-        .btn-logout { background: none; border: 1px solid #E5E7EB; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #EF4444; cursor: pointer; transition: all 0.2s ease; }
-        .btn-logout:active { background-color: #FEF2F2; }
+        /* Верхняя премиальная шапка профиля */
+        .profile-header-card { background: #FFFFFF; border-bottom: 1px solid #E5E7EB; padding: 24px 16px; box-sizing: border-box; }
+        .user-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .user-info-left { display: flex; align-items: center; gap: 16px; }
         
-        /* Раздел объявлений */
-        .my-items-section { margin-top: 32px; }
-        .my-items-section h4 { font-size: 16px; font-weight: 800; color: #111827; margin: 0 0 16px 0; }
-        .empty-box { background: #FFFFFF; border-radius: 20px; padding: 40px 20px; text-align: center; border: 1px dashed #E5E7EB; color: #9CA3AF; font-size: 14px; }
+        /* Аватарка с верифицированной галочкой */
+        .avatar-wrapper { position: relative; }
+        .avatar-circle { width: 64px; height: 64px; background: #FF6600; color: #FFFFFF; font-weight: 800; font-size: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,102,0,0.2); }
+        .verified-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #25D366; color: white; border-radius: 50%; font-size: 12px; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; font-weight: bold; }
+        
+        .user-text-box { text-align: left; }
+        .user-name-title { font-size: 20px; font-weight: 800; color: #111827; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .user-meta-sub { font-size: 13px; color: #6B7280; font-weight: 500; }
+        
+        .btn-logout-top { background: #F3F4F6; color: #EF4444; border: none; padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .btn-logout-top:active { transform: scale(0.97); background: #FEE2E2; }
+        
+        /* Блок кошелька и рейтинга (Из Uzum и Kaspi) */
+        .stats-grid-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .stat-card-item { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 16px; padding: 14px; text-align: left; box-sizing: border-box; }
+        .stat-label { font-size: 12px; color: #6B7280; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 16px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 4px; }
+        
+        /* Быстрые действия круглыми иконками */
+        .quick-actions-row { display: flex; justify-content: space-around; background: #FFFFFF; padding: 16px; border-bottom: 1px solid #E5E7EB; box-sizing: border-box; }
+        .action-circle-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; width: 70px; }
+        .icon-circle-bg { width: 46px; height: 46px; background: #FFF0E6; color: #FF6600; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s; }
+        .action-circle-btn:active .icon-circle-bg { background: #FF6600; color: #FFFFFF; }
+        .action-btn-text { font-size: 12px; font-weight: 700; color: #374151; }
+        
+        /* Табы объявлений (Из Авито) */
+        .tabs-container-row { display: flex; background: #FFFFFF; padding: 4px 16px; border-bottom: 1px solid #E5E7EB; box-sizing: border-box; gap: 16px; }
+        .tab-item-link { font-size: 15px; font-weight: 700; color: #6B7280; padding: 12px 4px; cursor: pointer; position: relative; border: none; background: none; }
+        .tab-item-link.tab-active { color: #FF6600; }
+        .tab-item-link.tab-active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: #FF6600; border-radius: 3px 3px 0 0; }
+        
+        /* Секция списка объявлений */
+        .ads-content-section { flex: 1; padding: 24px 16px; box-sizing: border-box; }
+        .empty-ads-box { text-align: center; padding: 40px 16px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; box-sizing: border-box; }
+        .empty-box-icon { width: 54px; height: 54px; background: #F3F4F6; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px auto; }
+        .empty-title { font-size: 16px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+        .empty-desc { font-size: 13px; color: #6B7280; line-height: 1.4; margin-bottom: 20px; }
+        
+        .btn-create-ad-orange { background: #FF6600; color: #FFFFFF; border: none; padding: 12px 24px; border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(255,102,0,0.15); }
+        
+        /* Нижнее меню навигации */
+        .bottom-nav-bar { position: fixed; bottom: 0; width: 100%; max-width: 480px; background: #FFFFFF; border-top: 1px solid #E5E7EB; display: grid; grid-template-columns: repeat(5, 1fr); padding: 8px 0; box-sizing: border-box; z-index: 999; }
+        .nav-item-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; color: #9CA3AF; text-decoration: none; font-size: 11px; font-weight: 600; }
+        .nav-item-btn.nav-active { color: #FF6600; }
+        .nav-icon { font-size: 20px; }
     </style>
 </head>
 <body>
 
-<div class="profile-container">
-    <!-- Шапка кабинета -->
-    <div style="margin-bottom: 24px;">
-        <h2 style="margin: 0; font-size: 24px; font-weight: 900; color: #111827;">Мой профиль</h2>
-    </div>
-
-    <!-- Карточка юзера -->
-    <div class="user-card">
-        <div class="user-info">
-            <div class="user-avatar" id="user-letter">U</div>
-            <div class="user-meta">
-                <h3 id="profile-name">Загрузка...</h3>
-                <p id="profile-email">email@example.com</p>
+<div class="main-container">
+    
+    <!-- Карточка профиля -->
+    <div class="profile-header-card">
+        <div class="user-row">
+            <div class="user-info-left">
+                <div class="avatar-wrapper">
+                    <div id="user-avatar-letter" class="avatar-circle">A</div>
+                    <div class="verified-badge">✓</div>
+                </div>
+                <div class="user-text-box">
+                    <div id="user-name-display" class="user-name-title">Загрузка...</div>
+                    <div id="user-id-display" class="user-meta-sub">ID 000000</div>
+                </div>
+            </div>
+            <button class="btn-logout-top" onclick="handleLogoutUser()">Выйти</button>
+        </div>
+        
+        <!-- Блок кошелька и рейтинга -->
+        <div class="stats-grid-box">
+            <div class="stat-card-item">
+                <div class="stat-label">Мой Баланс</div>
+                <div class="stat-value" style="color: #25D366;">0.00 c.</div>
+            </div>
+            <div class="stat-card-item">
+                <div class="stat-label">Мой Рейтинг</div>
+                <div class="stat-value" style="color: #FFB000;">5.0 <span style="font-size:13px;">⭐️</span></div>
             </div>
         </div>
-        <!-- Кнопка выйти напрочь стирает сессию -->
-        <button class="btn-logout" onclick="handleLogout()">Выйти</button>
     </div>
-
-    <!-- Список моих объявлений (заготовка под Supabase) -->
-    <div class="my-items-section">
-        <h4>Мои объявления</h4>
-        <div class="empty-box">
-            <span style="font-size: 32px; display: block; margin-bottom: 8px;">📦</span>
-            У вас пока нет активных объявлений.<br>Нажмите «Создать» ➕, чтобы добавить первое!
+    
+    <!-- Быстрые круглые кнопки действий -->
+    <div class="quick-actions-row">
+        <button class="action-circle-btn" onclick="alert('Кошелёк в разработке')">
+            <div class="icon-circle-bg">💵</div>
+            <div class="action-btn-text">Кошелёк</div>
+        </button>
+        <button class="action-circle-btn" onclick="alert('Настройки в разработке')">
+            <div class="icon-circle-bg">⚙️</div>
+            <div class="action-btn-text">Настройки</div>
+        </button>
+        <button class="action-circle-btn" onclick="alert('Ссылка скопирована')">
+            <div class="icon-circle-bg">🔗</div>
+            <div class="action-btn-text">Поделиться</div>
+        </button>
+    </div>
+    
+    <!-- Вкладки объявлений -->
+    <div class="tabs-container-row">
+        <button class="tab-item-link tab-active" onclick="switchAdTab('active')">Активные</button>
+        <button class="tab-item-link" onclick="switchAdTab('archive')">Архив</button>
+    </div>
+    
+    <!-- Раздел объявлений -->
+    <div class="ads-content-section">
+        <div class="empty-ads-box">
+            <div class="empty-box-icon">📦</div>
+            <div class="empty-title">У вас пока нет активных объявлений</div>
+            <div class="empty-desc">Нажмите кнопку ниже, чтобы быстро добавить ваше первое объявление на MyElon!</div>
+            <button class="btn-create-ad-orange" onclick="window.location.href='create.html'">+ Создать объявление</button>
         </div>
     </div>
-</div>
+    
+    <!-- Нижнее фиксированное меню -->
+    <div class="bottom-nav-bar">
+        <a href="index.html" class="nav-item-btn">
+            <span class="nav-icon">🏠</span><span>Главная</span>
+        </a>
+        <a href="categories.html" class="nav-item-btn">
+            <span class="nav-icon">📂</span><span>Категории</span>
+        </a>
+        <a href="create.html" class="nav-item-btn">
+            <span class="nav-icon">➕</span><span>Создать</span>
+        </a>
+        <a href="chats.html" class="nav-item-btn">
+            <span class="nav-icon">💬</span><span>Чат</span>
+        </a>
+        <a href="profile.html" class="nav-item-btn nav-active">
+            <span class="nav-icon">👤</span><span>Профиль</span>
+        </a>
+    </div>
 
-<!-- Стабильное нижнее меню навигации (5 кнопок) -->
-<div class="nav-bar">
-    <a href="index.html" class="nav-item">
-        <div class="nav-icon">🏠</div>
-        <div>Главная</div>
-    </a>
-    <a href="categories.html" class="nav-item">
-        <div class="nav-icon">📁</div>
-        <div>Категории</div>
-    </a>
-    <a href="add-item.html" class="nav-item nav-add-btn">
-        <div class="nav-icon">➕</div>
-        <div>Создать</div>
-    </a>
-    <a href="chat.html" class="nav-item">
-        <div class="nav-icon">💬</div>
-        <div>Чат</div>
-    </a>
-    <a href="#" class="nav-item active" onclick="openMyProfile()">
-        <div class="nav-icon">👤</div>
-        <div>Профиль</div>
-    </a>
 </div>
 
 <script>
-// Автоматически вытаскиваем данные вошедшего пользователя из памяти телефона
+// Автоматически подтягиваем данные, которые сайт сохранил в память при регистрации
 document.addEventListener("DOMContentLoaded", function() {
     let isLoggedIn = localStorage.getItem('isLoggedIn');
+    let name = localStorage.getItem('userName') || "Пользователь";
+    let customId = localStorage.getItem('userId') || "000001";
     
-    // Если паче чаяния юзер не вошел, а забрел сюда — гоним его на авторизацию
+    // Если юзер не залогинен — силой гоним его регистрироваться в папку auth
     if (isLoggedIn !== 'true') {
-        window.location.href = 'auth.html';
+        window.location.href = 'auth/phone.html';
         return;
     }
     
-    let email = localStorage.getItem('userEmail') || 'Не указан';
-    let name = localStorage.getItem('userName') || email.split('@')[0];
+    // Подставляем Имя и ID в новые сочные блоки профиля
+    document.getElementById('user-name-display').innerText = name;
+    document.getElementById('user-id-display').innerText = "ID " + customId;
     
-    // Вставляем данные на экран
-    document.getElementById('profile-name').innerText = name;
-    document.getElementById('profile-email').innerText = email;
-    document.getElementById('user-letter').innerText = name.charAt(0).toUpperCase();
+    // Вытаскиваем первую букву имени для круглой аватарки
+    if (name.length > 0) {
+        document.getElementById('user-avatar-letter').innerText = name.charAt(0).toUpperCase();
+    }
 });
 
-// Умная кнопка профиля для нижнего меню
-function openMyProfile() {
-    let isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true') {
-        window.location.href = 'profile.html';
+// Твоя идеальная функция переключения вкладок через индексы (Исправлено!)
+function switchAdTab(type) {
+    let tabs = document.querySelectorAll('.tab-item-link');
+    
+    // Переключаем визуальный фокус между кнопками намертво
+    tabs[0].className = type === 'active' ? 'tab-item-link tab-active' : 'tab-item-link';
+    tabs[1].className = type === 'archive' ? 'tab-item-link tab-active' : 'tab-item-link';
+    
+    // Меняем контент на экране в зависимости от выбранного таба
+    let adsBox = document.querySelector('.ads-content-section');
+    if (type === 'active') {
+        adsBox.innerHTML = `
+            <div class="empty-ads-box">
+                <div class="empty-box-icon">📦</div>
+                <div class="empty-title">У вас пока нет активных объявлений</div>
+                <div class="empty-desc">Нажмите кнопку ниже, чтобы быстро добавить ваше первое объявление на MyElon!</div>
+                <button class="btn-create-ad-orange" onclick="window.location.href='create.html'">+ Создать объявление</button>
+            </div>
+        `;
     } else {
-        window.location.href = 'auth.html';
+        adsBox.innerHTML = `
+            <div class="empty-ads-box" style="border-color: #E5E7EB; background: #FAFAFA;">
+                <div class="empty-box-icon" style="background: #E5E7EB;">📁</div>
+                <div class="empty-title" style="color: #4B5563;">Архив пуст</div>
+                <div class="empty-desc">Сюда будут попадать объявления, у которых закончился срок публикации или которые вы сняли с продажи.</div>
+            </div>
+        `;
     }
 }
 
-// Функция выхода: очищает память и перекидывает на главную
-function handleLogout() {
+function handleLogoutUser() {
     localStorage.clear();
-    alert('Вы вышли из профиля.');
-    window.location.href = 'index.html';
+    sessionStorage.clear();
+    alert("Вы вышли из профиля");
+    window.location.href = 'auth/phone.html';
 }
-</script>
-
-</body>
-</html>
+    
