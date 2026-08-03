@@ -3,32 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход и Регистрация | MyElon</title>
+    <title>Вход в MyElon</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем официальную библиотеку Supabase локально из твоего репозитория -->
     <script src="supabase.js"></script>
     <style>
-        body { background-color: #F9FAFB; font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 16px; box-sizing: border-box; }
-        .auth-container { width: 100%; max-width: 400px; background: #FFFFFF; padding: 32px 24px; border-radius: 28px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); box-sizing: border-box; position: relative; }
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .header-nav { width: 100%; max-width: 500px; background: #FFFFFF; padding: 12px 16px; border-bottom: 1px solid #EAEAEA; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; }
+        .logo-box { font-size: 20px; font-weight: 900; color: #FF6600; letter-spacing: -0.5px; }
+        .search-fake { flex: 1; background: #F5F5F5; margin: 0 12px; padding: 8px 12px; border-radius: 20px; font-size: 14px; color: #999; display: flex; align-items: center; justify-content: space-between; }
+        .btn-orange-sm { background: #FF6600; color: #FFFFFF; border: none; padding: 6px 14px; border-radius: 16px; font-weight: 700; font-size: 13px; }
         
-        .btn-close-auth { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #9CA3AF; }
-        .auth-logo { font-size: 32px; font-weight: 900; color: #FF6600; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
-        .auth-subtitle { font-size: 14px; color: #6B7280; text-align: center; margin-bottom: 24px; padding: 0 10px; line-height: 1.4; }
+        .main-content { flex: 1; width: 100%; max-width: 450px; padding: 24px 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; }
+        .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 16px; padding: 0; }
         
-        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; text-align: left; }
-        .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
-        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; }
-        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; }
+        .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
+        .auth-subtitle { font-size: 14px; color: #666666; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
         
-        /* Кнопки выбора мессенджера (50 на 50) */
-        .messenger-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .btn-msg-choice { border: 2px solid #E5E7EB; background: #FFFFFF; padding: 14px; border-radius: 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
-        .btn-msg-choice.active-tg { background-color: #54A9EB; color: #FFFFFF; border-color: #54A9EB; box-shadow: 0 4px 12px rgba(84, 169, 235, 0.2); }
-        .btn-msg-choice.active-wa { background-color: #25D366; color: #FFFFFF; border-color: #25D366; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
+        /* Плашка DEV-режима */
+        .dev-badge-top { background: #E6F4FF; color: #0066CC; padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; text-align: left; margin-bottom: 24px; display: none; border: 1px solid #BAE7FF; }
+        .dev-badge-inline { background: #FFF7E6; color: #D46B08; padding: 12px; border-radius: 12px; font-size: 13px; text-align: left; margin-bottom: 20px; border: 1px solid #FFE7BA; line-height: 1.4; }
         
-        .btn-action-submit { width: 100%; background-color: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(255,102,0,0.2); transition: all 0.2s ease; margin-top: 8px; }
-        .btn-action-submit:active { transform: scale(0.98); }
-        .btn-black { background-color: #111827; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        /* Поля ввода */
+        .input-box { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 20px; }
+        .input-box label { font-size: 13px; font-weight: 700; color: #111111; }
+        .input-box input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 16px; outline: none; box-sizing: border-box; width: 100%; transition: all 0.2s; color: #111; }
+        .input-box input:focus { border-color: #FF6600; box-shadow: 0 0 0 2px rgba(255,102,0,0.1); }
+        
+        /* Кнопки мессенджеров списком */
+        .msg-list-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .btn-msg-item { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 16px; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; box-sizing: border-box; }
+        .btn-msg-item:active { background: #F5F5F5; transform: scale(0.99); }
+        .msg-icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .msg-text-info { flex: 1; }
+        .msg-name { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 2px; }
+        .msg-desc { font-size: 12px; color: #888; }
+        
+        /* Главные кнопки */
+        .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-bottom: 16px; }
+        .btn-orange-action:active { background: #E65500; }
+        .btn-retry-code { background: none; border: none; color: #888; font-size: 14px; cursor: pointer; }
+        
+        /* Подвал */
+        .footer-box { width: 100%; max-width: 500px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; background: #FFFFFF; text-align: left; margin-top: 40px; }
+        .footer-logo-row { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
+        .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
+        .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
+        .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
         
         .auth-step { display: none; }
         .auth-step.active { display: block; }
@@ -36,238 +57,218 @@
 </head>
 <body>
 
-<div class="auth-container">
-    <!-- Кнопка назад -->
-    <button class="btn-close-auth" onclick="window.location.href='index.html'">✕</button>
-    <div class="auth-logo">MyElon</div>
-        
-    <!-- ==========================================
-         ШАГ 1: ВВОД НОМЕРА И ВЫБОР МЕССЕНДЖЕРА (ИСПРАВЛЕНО)
-         ========================================== -->
-    <div id="step-phone" class="auth-step active">
-        <div class="auth-subtitle">Укажите номер телефона и выберите, куда отправить секретный код подтверждения</div>
-        
-        <div class="input-group">
-            <label>Номер телефона</label>
-            <input type="tel" id="user-phone-input" placeholder="+992" required>
-        </div>
-        
-        <label style="font-size: 13px; font-weight: 700; color: #111827; display: block; text-align: left; margin-bottom: 8px;">Куда отправить код?</label>
-        <div class="messenger-select-grid">
-            <div id="choice-tg" class="btn-msg-choice active-tg" onclick="selectMessenger('telegram')">✈️ Telegram</div>
-            <div id="choice-wa" class="btn-msg-choice" onclick="selectMessenger('whatsapp')">💬 WhatsApp</div>
-        </div>
-        
-        <button type="button" id="btn-send-text" class="btn-action-submit" onclick="handleSendCodeRequest(event)">Получить секретный код</button>
-    </div>
+<!-- Шапка сайта -->
+<div class="header-nav">
+    <div class="logo-box">MyElon</div>
+    <div class="search-fake">Найти объявление... <span style="font-size:12px;">🔍</span></div>
+    <button class="btn-orange-sm">Найти</button>
+    <div style="font-size:20px; margin-left:8px; color:#333;">☰</div>
+</div>
 
-    <!-- ==========================================
-         ШАГ 2: ВВОД СЛУЧАЙНОГО КОДА ОТ БОТА
-         ========================================== -->
-    <div id="step-verify" class="auth-step">
-        <div class="auth-subtitle" style="color: #25D366; font-weight: 600;">Код сгенерирован и отправлен в мессенджер! Введите его ниже:</div>
-        
-        <form onsubmit="handleVerifyCodeRequest(event)">
-            <div class="input-group">
-                <label>Секретный код подтверждения</label>
-                <input type="number" id="sms-code-input" placeholder="Введите код" required>
+<div class="main-content">
+    <!-- Сквозной верхний DEV-индикатор -->
+    <div id="dev-top-bar" class="dev-badge-top">ℹ️ DEV режим: код <span id="dev-top-code">000000</span></div>
+
+    <div class="auth-card">
+        <!-- Кнопка Назад -->
+        <button id="btn-back" class="btn-back-link" onclick="goBackStep()" style="display:none;">‹ Назад</button>
+
+        <!-- ==========================================
+             ШАГ 1: ВВОД НОМЕРА ТЕЛЕФОНА
+             ========================================== -->
+        <div id="step-1" class="auth-step active">
+            <div class="auth-title">Вход в MyElon</div>
+            <div class="auth-subtitle">Введите номер телефона</div>
+            
+            <div class="input-group" style="text-align:left;">
+                <div class="input-box">
+                    <label>Номер телефона</label>
+                    <input type="tel" id="phone-field" value="+992 " oninput="validateTJPhone(this)">
+                </div>
             </div>
-            <button type="submit" id="btn-verify-text" class="btn-action-submit btn-black">Подтвердить код</button>
-        </form>
-    </div>
+            <button type="button" class="btn-orange-action" onclick="goToStep2()">Продолжить</button>
+        </div>
 
-    <!-- ==========================================
-         ШАГ 3: АНКЕТА ДЛЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
-         ========================================== -->
-    <div id="step-profile" class="auth-step">
-        <div class="auth-subtitle" style="margin-bottom: 20px; color: #FF6600; font-weight: 700;">Вы у нас первый раз! Пожалуйста, заполните анкету для завершения регистрации:</div>
-        
-        <form onsubmit="handleSaveProfileRequest(event)">
-            <div class="input-group">
-                <label>Ваше имя</label>
-                <input type="text" id="new-user-name" placeholder="Как к вам обращаться?" required>
+        <!-- ==========================================
+             ШАГ 2: ВЫБОР МЕССЕНДЖЕРА
+             ========================================== -->
+        <div id="step-2" class="auth-step">
+            <div class="auth-title">Вход в MyElon</div>
+            <div class="auth-subtitle">Выберите, куда прислать код</div>
+            
+            <div class="msg-list-box">
+                <button class="btn-msg-item" onclick="triggerCodeSending('telegram')">
+                    <div class="msg-icon-circle" style="background:#E6F4FF; color:#54A9EB;">✈️</div>
+                    <div class="msg-text-info">
+                        <div class="msg-name">Telegram</div>
+                        <div class="msg-desc">Код придёт от бота</div>
+                    </div>
+                </button>
+                
+                <button class="btn-msg-item" onclick="triggerCodeSending('whatsapp')">
+                    <div class="msg-icon-circle" style="background:#E8FCEF; color:#25D366;">💬</div>
+                    <div class="msg-text-info">
+                        <div class="msg-name">WhatsApp</div>
+                        <div class="msg-desc">Код придёт в мессенджер</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             ШАГ 3: ВВОД СЕКРЕТНОГО КОДА
+             ========================================== -->
+        <div id="step-3" class="auth-step">
+            <div class="auth-title">Вход в MyElon</div>
+            <div id="verify-msg-subtitle" class="auth-subtitle">Код отправлен</div>
+            
+            <div class="dev-badge-inline">
+                <strong>DEV код: <span id="dev-inline-code">000000</span></strong><br>
+                <span style="color:#666; font-size:12px;">Реальная отправка появится после настройки интеграций.</span>
             </div>
             
-            <div class="input-group">
-                <label>Ваш город</label>
-                <select id="new-user-city" required>
-                    <option value="">Выберите город...</option>
-                    <option value="dushanbe">Душанбе</option>
-                    <option value="khujand">Худжанд</option>
-                    <option value="bokhtar">Бохтар</option>
-                </select>
+            <div class="input-box">
+                <label>Код из сообщения</label>
+                <input type="number" id="code-field" placeholder="123456" style="text-align:center; letter-spacing:4px; font-weight:700;">
             </div>
             
-            <button type="submit" class="btn-action-submit">Создать профиль и войти</button>
-        </form>
+            <button type="button" class="btn-orange-action" onclick="verifyReceivedCode()">Войти</button>
+            <div>
+                <button type="button" class="btn-retry-code" onclick="goToStep2()">Отправить код повторно</button>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- Подвал сайта -->
+<div class="footer-box">
+    <div class="footer-logo-row">MyElon</div>
+    <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
+    
+    <div class="footer-links">
+        <div>Помощь</div>
+        <div style="color:#666; font-size:13px;">Как разместить объявление</div>
+        <div style="color:#666; font-size:13px;">Правила площадки</div>
+        <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+    </div>
+    <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
+</div>
+
 <script>
-// ТВОИ ОФИЦИАЛЬНЫЕ ПРОВЕРЕННЫЕ КЛЮЧИ И СЕРВЕРНЫЕ ССЫЛКИ (ИСПРАВЛЕНО)
 const SUPABASE_URL = "https://supabase.co";
 const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
-const TG_BOT_TOKEN = "8757454690:AAFucMiPugEaZ_r8nVmBjADt6g_YAgq4duk";
-
-// Создаём робота Supabase напрямую
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-let currentMessenger = 'telegram';
-let userPhone = "";
-let generatedCode = "";
+let currentStep = 1;
+let userPhoneNumber = "";
+let currentCode = "";
 
-function selectMessenger(type) {
-    currentMessenger = type;
-    
-    let tgBtn = document.getElementById('choice-tg');
-    let waBtn = document.getElementById('choice-wa');
-    
-    if (type === 'telegram') {
-        // Железно перекрашиваем кнопку ТГ в синий, а Ватсап тушим
-        tgBtn.style.backgroundColor = "#54A9EB";
-        tgBtn.style.color = "#FFFFFF";
-        tgBtn.style.borderColor = "#54A9EB";
-        
-        waBtn.style.backgroundColor = "#FFFFFF";
-        waBtn.style.color = "#111827";
-        waBtn.style.borderColor = "#E5E7EB";
+function validateTJPhone(input) {
+    if (!input.value.startsWith("+992 ")) {
+        input.value = "+992 ";
+    }
+    let digits = input.value.replace(/[^0-9]/g, '');
+    if (digits.length > 12) {
+        input.value = input.value.substring(0, input.value.length - 1);
+    }
+}
+
+function goToStep2() {
+    let rawPhone = document.getElementById('phone-field').value.trim();
+    // Проверяем длину: +992 (4 цифры) + 9 цифр номера = 13 символов с плюсом, или 12 чистых цифр
+    if (rawPhone.replace(/[^0-9]/g, '').length < 12) {
+        alert("Пожалуйста, введите полный номер телефона Таджикистана!");
+        return;
+    }
+    userPhoneNumber = rawPhone;
+    switchStep(2);
+}
+
+function triggerCodeSending(messenger) {
+    // Генерация случайного 6-значного кода
+    currentCode = String(Math.floor(100000 + Math.random() * 900000));
+
+    document.getElementById('dev-top-code').innerText = currentCode;
+    document.getElementById('dev-inline-code').innerText = currentCode;
+
+    let sub = document.getElementById('verify-msg-subtitle');
+    if (messenger === 'telegram') {
+        sub.innerText = "Код отправлен в Telegram";
     } else {
-        // Железно перекрашиваем кнопку Ватсапа в зелёный, а ТГ тушим
-        tgBtn.style.backgroundColor = "#FFFFFF";
-        tgBtn.style.color = "#111827";
-        tgBtn.style.borderColor = "#E5E7EB";
-        
-        waBtn.style.backgroundColor = "#25D366";
-        waBtn.style.color = "#FFFFFF";
-        waBtn.style.borderColor = "#25D366";
+        sub.innerText = "Код отправлен в WhatsApp";
     }
+
+    document.getElementById('dev-top-bar').style.display = "block";
+    switchStep(3);
 }
 
-
-// 🚀 РОБОТ 1: Генерирует рандом и шлёт в выбранный мессенджер автоматически
-async function handleSendCodeRequest(event) {
-    event.preventDefault();
-    userPhone = document.getElementById('user-phone-input').value.trim();
-    let btn = document.getElementById('btn-send-text');
-    
-    btn.innerText = "Генерация кода...";
-    btn.disabled = true;
-
-    // Генерируем уникальный случайный 4-значный код
-    generatedCode = String(Math.floor(1000 + Math.random() * 9000));
-    console.log("Сгенерирован код:", generatedCode);
-
-    try {
-        if (currentMessenger === 'telegram') {
-            let testChatId = "583920192"; // Твой ID чата
-            let textMsg = `Вход в MyElon 🚀\n\nТвой одноразовый секретный код: ${generatedCode}`;
-            
-            await fetch(`https://telegram.org{TG_BOT_TOKEN}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: testChatId, text: textMsg })
-            });
-            
-            // Прямой вызов приложения Телеграм
-            window.location.href = `intent://resolve?domain=myelon_auth_bot&start=code#Intent;scheme=tg;package=org.telegram.messenger;end`;
-        } else {
-            // WhatsApp-переход
-            let waText = `Привет! Мой код подтверждения на сайте MyElon: ${generatedCode}. Отправьте его для верификации.`;
-            window.open(`https://wa.me{userPhone.replace('+', '')}?text=${encodeURIComponent(waText)}`, '_blank');
-        }
-
-        // Переходим на ввод кода подтверждения
-        setTimeout(() => {
-            document.getElementById('step-phone').classList.remove('active');
-            document.getElementById('step-verify').classList.add('active');
-        }, 1000);
-
-    } catch (err) {
-        alert("Ошибка отправки: " + err.message);
-        btn.innerText = "Получить секретный код";
-        btn.disabled = false;
-    }
-}
-
-// ==========================================
-// КУПЛЕТ 2: СВЕРКА КОДА, ПОИСК И АНКЕТА ПРОФИЛЯ
-// ==========================================
-async function handleVerifyCodeRequest(event) {
-    event.preventDefault();
-    let typedCode = document.getElementById('sms-code-input').value.trim();
-    let btn = document.getElementById('btn-verify-text');
-    
-    if (typedCode !== generatedCode && typedCode !== "7744") {
-        alert("Неверный код подтверждения! Пожалуйста, проверьте сообщение.");
+async function verifyReceivedCode() {
+    let inputCode = document.getElementById('code-field').value.trim();
+    if (inputCode !== currentCode && inputCode !== "7744") {
+        alert("Неверный код подтверждения! Проверьте DEV-плашку.");
         return;
     }
 
-    btn.innerText = "Сверяю с базой данных...";
-    btn.disabled = true;
-
     try {
-        let isExistingUser = false;
+        let isExisting = false;
         let existingData = null;
 
-        // Поиск в таблице users_profiles
         if (supabase) {
-            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhone).maybeSingle();
+            const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhoneNumber).maybeSingle();
             if (!error && data) {
-                isExistingUser = true;
+                isExisting = true;
                 existingData = data;
             }
         }
 
-        if (isExistingUser && existingData) {
-            localStorage.clear();
-            localStorage.setItem('isLoggedIn', 'true');
+        localStorage.clear();
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userPhone', userPhoneNumber);
+
+        if (isExisting && existingData) {
             localStorage.setItem('userId', existingData.custom_id);
             localStorage.setItem('userName', existingData.name);
-            localStorage.setItem('userCity', existingData.city);
-            localStorage.setItem('userPhone', userPhone);
-            
-            alert(`С возвращением! Профиль успешно загружен.\nТвой ID: ${existingData.custom_id}`);
+            alert("Добро пожаловать в MyElon!\nТвой ID: " + existingData.custom_id);
             window.location.href = 'profile.html';
         } else {
-            document.getElementById('step-verify').classList.remove('active');
-            document.getElementById('step-profile').classList.add('active');
+            let lastCounter = localStorage.getItem('lastRegisteredIdCounter') || "0";
+            let nextCounter = parseInt(lastCounter) + 1;
+            let newCustomId = String(nextCounter).padStart(6, '0');
+
+            if (supabase) {
+                await supabase.from('users_profiles').insert([
+                    { phone: userPhoneNumber, name: "Новый Пользователь", city: "dushanbe", custom_id: newCustomId }
+                ]);
+            }
+
+            localStorage.setItem('lastRegisteredIdCounter', nextCounter);
+            localStorage.setItem('userId', newCustomId);
+            localStorage.setItem('userName', "Новый Пользователь");
+
+            alert("Регистрация успешна!\nВаш постоянный номер: ID " + newCustomId);
+            window.location.href = 'profile.html';
         }
-    } catch (err) {
-        document.getElementById('step-verify').classList.remove('active');
-        document.getElementById('step-profile').classList.add('active');
-      }
-   }
+    } catch (e) {
+        window.location.href = 'profile.html';
+    }
 }
 
-// Финальное сохранение анкеты нового пользователя с генерацией 6-значного ID
-async function handleSaveProfileRequest(event) {
-    event.preventDefault();
-    let name = document.getElementById('new-user-name').value.trim();
-    let city = document.getElementById('new-user-city').value;
-    
-    let lastCounter = localStorage.getItem('lastRegisteredIdCounter') || "0";
-    let nextCounter = parseInt(lastCounter) + 1;
-    let newCustomId = String(nextCounter).padStart(6, '0'); 
-    
-    try {
-        if (supabase) {
-            await supabase.from('users_profiles').insert([
-                { phone: userPhone, name: name, city: city, custom_id: newCustomId }
-            ]);
-        }
-    } catch(e) {}
+function switchStep(step) {
+    currentStep = step;
+    document.getElementById('step-1').classList.remove('active');
+    document.getElementById('step-2').classList.remove('active');
+    document.getElementById('step-3').classList.remove('active');
 
-    localStorage.setItem('lastRegisteredIdCounter', nextCounter);
-    localStorage.clear();
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userId', newCustomId);
-    localStorage.setItem('userName', name);
-    localStorage.setItem('userCity', city);
-    localStorage.setItem('userPhone', userPhone);
-    
-    alert(`Регистрация завершена!\nВаш постоянный номер: ID ${newCustomId}`);
-    window.location.href = 'profile.html';
+    document.getElementById('step-' + step).classList.add('active');
+    document.getElementById('btn-back').style.display = step > 1 ? "block" : "none";
 }
-</script>
-</body>
-</html>
+
+function goBackStep() {
+    if (currentStep === 3) {
+        document.getElementById('dev-top-bar').style.display = "none";
+        switchStep(2);
+    } else if (currentStep === 2) {
+        switchStep(1);
+    }
+}
+    
