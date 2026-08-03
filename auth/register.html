@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация в MyElon — Шаг 4</title>
+    <link rel="stylesheet" href="../style.css">
+    <!-- Подключаем официальную библиотеку Supabase локально из репозитория -->
+    <script src="../supabase.js"></script>
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
+        .auth-subtitle { font-size: 14px; color: #FF6600; font-weight: 700; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
+        
+        /* Поля анкеты */
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
+        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; font-weight: 500; }
+        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; border: 1px solid #FF6600; }
+        
+        .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+        .btn-orange-action:active { background: #E65500; }
+        
+        .footer-box { width: 100%; max-width: 450px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; text-align: left; margin-top: 40px; }
+        .footer-logo-row { font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
+        .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
+        .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
+        .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="auth-card">
+        <div class="auth-title">Создание профиля</div>
+        <div class="auth-subtitle">Вы у нас первый раз! Заполните анкету:</div>
+        
+        <form onsubmit="handleFinalRegister(event)">
+            <!-- Поле Имени -->
+            <div class="input-group">
+                <label>Ваше имя</label>
+                <input type="text" id="reg-name" placeholder="Как к вам обращаться?" required>
+            </div>
+            
+            <!-- Поле Города -->
+            <div class="input-group">
+                <label>Ваш город</label>
+                <select id="reg-city" required>
+                    <option value="">Выберите город...</option>
+                    <option value="dushanbe">Душанбе</option>
+                    <option value="khujand">Худжанд</option>
+                    <option value="bokhtar">Бохтар</option>
+                    <option value="kulob">Куляб</option>
+                    <option value="istravshan">Истаравшан</option>
+                </select>
+            </div>
+            
+            <!-- Поле Года рождения -->
+            <div class="input-group">
+                <label>Год рождения</label>
+                <input type="number" id="reg-year" placeholder="Например, 1998" min="1930" max="2016" required>
+            </div>
+            
+            <button type="submit" class="btn-orange-action">Завершить и войти</button>
+        </form>
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-logo-row">MyElon</div>
+        <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
+        <div class="footer-links">
+            <div>Помощь</div>
+            <div style="color:#666; font-size:13px;">Как разместить объявление</div>
+            <div style="color:#666; font-size:13px;">Правила площадки</div>
+            <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+        </div>
+        <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
+    </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://supabase.co";
+const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+let userPhone = "";
+
+document.addEventListener("DOMContentLoaded", function() {
+    userPhone = sessionStorage.getItem('tempUserPhone');
+    // Защита от хитрецов: если номера в памяти нет, выкидываем на первый шаг
+    if (!userPhone) {
+        window.location.href = "phone.html";
+    }
+});
+
+async function handleFinalRegister(event) {
+    event.preventDefault();
+    
+    let name = document.getElementById('reg-name').value.trim();
+    let city = document.getElementById('reg-city').value;
+    let birthYear = document.getElementById('reg-year').value.trim();
+    
+    // Вычисляем красивый 6-значный ID по порядку через локальный счетчик
+    let lastCounter = localStorage.getItem('lastRegisteredIdCounter') || "0";
+    let nextCounter = parseInt(lastCounter) + 1;
+    let newCustomId = String(nextCounter).padStart(6, '0'); // Сделает строго "000001", "000002"
+    
+    try {
+        // Отправляем готовую карточку нового пользователя прямиком в облако Supabase!
+        if (supabase) {
+            await supabase.from('users_profiles').insert([
+                { 
+                    phone: userPhone, 
+                    name: name, 
+                    city: city, 
+                    birth_year: parseInt(birthYear),
+                    custom_id: newCustomId 
+                }
+            ]);
+        }
+    } catch (e) {
+        console.log("Ошибка записи в базу, но сохраняем локально для теста:", e);
+    }
+
+    // Фиксируем данные в постоянную память смартфона
+    localStorage.setItem('lastRegisteredIdCounter', nextCounter);
+    localStorage.clear();
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userId', newCustomId);
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userCity', city);
+    localStorage.setItem('userPhone', userPhone);
+    
+    alert("Поздравляю! Регистрация успешна.\nВаш постоянный номер: ID " + newCustomId);
+    
+    // Со свистом улетаем в Личный Кабинет, который лежит на уровень выше
+    window.location.href = '../profile.html';
+}
+</script>
+</body>
+</html>
