@@ -64,15 +64,16 @@
 
 <script>
 function cleanMainNumber(input) {
+    // Оставляем только чистые цифры
     let clean = input.value.replace(/[^0-9]/g, '');
-    if (clean.startsWith("0")) { 
-        clean = clean.substring(1); 
-    }
+    
+    // Больше никакой силой ноль не стираем! Просто режем длину до 9 знаков
     if (clean.length > 9) { 
         clean = clean.substring(0, 9); 
     }
     input.value = clean;
 }
+    
 
 function savePhoneAndNext() {
     let digits = document.getElementById('pure-phone-input').value.trim();
