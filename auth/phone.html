@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в MyElon — Шаг 1</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
+        .auth-subtitle { font-size: 14px; color: #666666; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
+        
+        /* ДВУХБЛОЧНЫЙ ДИЗАЙН ВВОД НОМЕРА */
+        .phone-input-container { display: flex; gap: 8px; margin-bottom: 20px; }
+        .phone-country-code { width: 75px; background: #F3F4F6; border: 1px solid #D9D9D9; padding: 14px 0; border-radius: 12px; font-size: 16px; font-weight: 700; color: #4B5563; text-align: center; box-sizing: border-box; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .phone-main-number { flex: 1; }
+        .phone-main-number input { background: #FFFFFF; border: 1px solid #D9D9D9; padding: 14px; border-radius: 12px; font-size: 16px; outline: none; box-sizing: border-box; width: 100%; transition: all 0.2s; color: #111; font-weight: 600; }
+        .phone-main-number input:focus { border-color: #FF6600; box-shadow: 0 0 0 2px rgba(255,102,0,0.1); }
+        
+        .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-bottom: 16px; }
+        .btn-orange-action:active { background: #E65500; }
+        
+        .footer-box { width: 100%; max-width: 450px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; text-align: left; margin-top: 40px; }
+        .footer-logo-row { font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
+        .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
+        .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
+        .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="auth-card">
+        <div class="auth-title">Вход в MyElon</div>
+        <div class="auth-subtitle">Введите ваш номер телефона</div>
+        
+        <div style="text-align: left; font-size: 13px; font-weight: 700; color: #111111; margin-bottom: 6px;">Номер телефона</div>
+        <div class="phone-input-container">
+            <div class="phone-country-code">+992</div>
+            <div class="phone-main-number">
+                <!-- Поле принимает только 9 цифр и автоматически удаляет лишние нули на старте -->
+                <input type="tel" id="pure-phone-input" placeholder="901234567" oninput="cleanMainNumber(this)" required>
+            </div>
+        </div>
+        
+        <button type="button" class="btn-orange-action" onclick="savePhoneAndNext()">Продолжить</button>
+    </div>
+
+    <div class="footer-box">
+        <div class="footer-logo-row">MyElon</div>
+        <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
+        <div class="footer-links">
+            <div>Помощь</div>
+            <div style="color:#666; font-size:13px;">Как разместить объявление</div>
+            <div style="color:#666; font-size:13px;">Правила площадки</div>
+            <div style="color:#666; font-size:13px;">Безопасность сделок</div>
+        </div>
+        <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
+    </div>
+</div>
+
+<script>
+function cleanMainNumber(input) {
+    let clean = input.value.replace(/[^0-9]/g, '');
+    if (clean.startsWith("0")) { 
+        clean = clean.substring(1); 
+    }
+    if (clean.length > 9) { 
+        clean = clean.substring(0, 9); 
+    }
+    input.value = clean;
+}
+
+function savePhoneAndNext() {
+    let digits = document.getElementById('pure-phone-input').value.trim();
+    if (digits.length !== 9) {
+        alert("Ошибка! Номер должен состоять ровно из 9 цифр.");
+        return;
+    }
+    
+    // Временно запоминаем номер телефона в памяти браузера, чтобы передать на следующие страницы
+    sessionStorage.setItem('tempUserPhone', "+992 " + digits);
+    
+    // Перебрасываем на вторую отдельную страницу выбора мессенджера!
+    window.location.href = "choose.html";
+}
+</script>
+</body>
+</html>
