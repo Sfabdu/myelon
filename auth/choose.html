@@ -9,12 +9,9 @@
         body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
         .auth-card { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        
         .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 16px; padding: 0; }
         .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
         .auth-subtitle { font-size: 14px; color: #666666; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
-        
-        /* Кнопки мессенджеров списком по макету */
         .msg-list-box { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
         .btn-msg-item { background: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 16px; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; box-sizing: border-box; }
         .btn-msg-item:active { background: #F5F5F5; transform: scale(0.99); }
@@ -22,36 +19,27 @@
         .msg-text-info { flex: 1; }
         .msg-name { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 2px; }
         .msg-desc { font-size: 12px; color: #888; }
-        
-        .footer-box { width: 100%; max-width: 450px; padding: 32px 16px; box-sizing: border-box; border-top: 1px solid #EAEAEA; text-align: left; margin-top: 40px; }
-        .footer-logo-row { font-weight: 900; font-size: 18px; margin-bottom: 8px; color: #FF6600; }
-        .footer-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
-        .footer-links { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #111; font-weight: 500; }
-        .footer-copy { margin-top: 24px; font-size: 12px; color: #999; }
     </style>
 </head>
 <body>
 
 <div class="main-content">
     <div class="auth-card">
-        <!-- Кнопка Назад вернёт на ввод телефона -->
         <button class="btn-back-link" onclick="window.location.href='phone.html'">‹ Назад</button>
-
         <div class="auth-title">Вход в MyElon</div>
-        <div class="auth-subtitle">Выберите, куда прислать код</div>
+        <div class="auth-subtitle">Нажмите на Telegram для мгновенного получения кода подтверждения в боте</div>
         
         <div class="msg-list-box">
-            <!-- Кнопка Telegram -->
-            <button type="button" class="btn-msg-item" onclick="selectMessengerAndNext('telegram')">
+            <!-- Кнопка Telegram с авто-переходом -->
+            <button type="button" class="btn-msg-item" onclick="redirectToBotWithCode()">
                 <div class="msg-icon-circle" style="background:#E6F4FF; color:#54A9EB;">✈️</div>
                 <div class="msg-text-info">
                     <div class="msg-name">Telegram</div>
-                    <div class="msg-desc">Код придёт от бота</div>
+                    <div class="msg-desc">Перейти в бота и нажать «Старт»</div>
                 </div>
             </button>
             
-            <!-- Кнопка WhatsApp -->
-            <button type="button" class="btn-msg-item" onclick="selectMessengerAndNext('whatsapp')">
+            <button type="button" class="btn-msg-item" onclick="alert('WhatsApp шлюз настраивается отдельно')">
                 <div class="msg-icon-circle" style="background:#E8FCEF; color:#25D366;">💬</div>
                 <div class="msg-text-info">
                     <div class="msg-name">WhatsApp</div>
@@ -60,34 +48,23 @@
             </button>
         </div>
     </div>
-
-    <div class="footer-box">
-        <div class="footer-logo-row">MyElon</div>
-        <div class="footer-desc">Доска объявлений с подтверждением через Telegram и WhatsApp.</div>
-        <div class="footer-links">
-            <div>Помощь</div>
-            <div style="color:#666; font-size:13px;">Как разместить объявление</div>
-            <div style="color:#666; font-size:13px;">Правила площадки</div>
-            <div style="color:#666; font-size:13px;">Безопасность сделок</div>
-        </div>
-        <div class="footer-copy">© 2026 MyElon. Все права защищены.</div>
-    </div>
 </div>
 
 <script>
-// Защита: если юзер зашёл сюда в обход ввода телефона, силой возвращаем на Шаг 1
-document.addEventListener("DOMContentLoaded", function() {
-    let savedPhone = sessionStorage.getItem('tempUserPhone');
-    if (!savedPhone) {
-        window.location.href = "phone.html";
-    }
-});
-
-function selectMessengerAndNext(messengerType) {
-    // Запоминаем, какой мессенджер выбрал человек
-    sessionStorage.setItem('tempMessengerChoice', messengerType);
+function redirectToBotWithCode() {
+    // 1. Генерируем случайный 6-значный код
+    let secretCode = String(Math.floor(100000 + Math.random() * 900000));
     
-    // Перебрасываем на третий изолированный файл ввода кода!
+    // 2. Прячем его в сессию, чтобы verify.html знал, что проверять
+    sessionStorage.setItem('realAuthCode', secretCode);
+    sessionStorage.setItem('tempMessengerChoice', 'telegram');
+    
+    // 3. Формируем глубокую ссылку. Код цепляется параметром ?start=код
+    let deepLink = "https://t.me" + secretCode;
+    
+    // 4. Открываем бота в новой вкладке, чтобы юзер нажал Старт, 
+    // а текущую вкладку сайта переключаем на Шаг 3 (ввод кода)
+    window.open(deepLink, '_blank');
     window.location.href = "verify.html";
 }
 </script>
