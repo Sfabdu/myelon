@@ -82,55 +82,52 @@ const SUPABASE_URL = "https://supabase.co";
 const SUPABASE_KEY = "sb_publishable_2pF3IxIXA7Ckp_HWGFbGsg_KoyCvW8J";
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
-let generatedCode = "";
+let correctCode = "";
 let userPhone = "";
 
 document.addEventListener("DOMContentLoaded", function() {
     userPhone = sessionStorage.getItem('tempUserPhone');
     let choice = sessionStorage.getItem('tempMessengerChoice');
+    correctCode = sessionStorage.getItem('realAuthCode');
     
-    // Если памяти нет — гоним в начало
-    if (!userPhone || !choice) {
+    // Защита памяти
+    if (!userPhone || !choice || !correctCode) {
         window.location.href = "phone.html";
         return;
     }
     
-    // Настраиваем подзаголовок по макету
+    // Настраиваем заголовок по макету
     let sub = document.getElementById('verify-subtitle');
     if (choice === 'telegram') {
-        sub.innerText = "Код отправлен в Telegram";
-        sub.style.color = "#54A9EB"; // Красивый синий цвет ТГ
+        sub.innerText = "Код отправлен! Запустите бота для получения цифр";
+        sub.style.color = "#54A9EB";
     } else {
-        sub.innerText = "Код отправлен в WhatsApp";
-        sub.style.color = "#25D366"; // Красивый зелёный цвет Ватсапа
+        sub.innerText = "Код подготовлен! Отправьте сообщение в чат WhatsApp";
+        sub.style.color = "#25D366";
     }
-    
-    // Генерируем случайный 6-значный DEV-код для плашки
-    generatedCode = String(Math.floor(100000 + Math.random() * 900000));
-    document.getElementById('dev-code-display').innerText = generatedCode;
 });
 
 function limitCodeLength(input) {
-    if (input.value.length > 6) {
-        input.value = input.value.slice(0, 6);
-    }
+    if (input.value.length > 6) { input.value = input.value.slice(0, 6); }
 }
 
-async function checkCodeAndNext() {
+// НАША ОБНОВЛЕННАЯ БРОНЕБОЙНАЯ ФУНКЦИЯ ВХОДА СУЩЕСТВУЮЩИХ ПОЛЬЗОВАТЕЛЕЙ
+async function checkRealReceivedCode() {
     let inputCode = document.getElementById('code-field').value.trim();
     
-    // Проверяем код (DEV или тестовый админский 7744)
-    if (inputCode !== generatedCode && inputCode !== "7744") {
-        alert("Неверный код подтверждения! Проверьте DEV-плашку.");
+    // Проверяем код (введенный юзером или админский 7744 для тестов)
+    if (inputCode !== correctCode && inputCode !== "7744") {
+        alert("Неверный код подтверждения! Проверьте сообщение в мессенджере.");
         return;
     }
     
     try {
+        console.log("Код совпал! Проверяем базу Supabase на старого пользователя...");
         let isExistingUser = false;
         let existingData = null;
 
-        // Стучимся в Сингапур: ищем, есть ли уже этот номер телефона в базе
         if (supabase) {
+            // Ищем строчку с этим номером телефона в Сингапуре
             const { data, error } = await supabase.from('users_profiles').select('*').eq('phone', userPhone).maybeSingle();
             if (!error && data) {
                 isExistingUser = true;
@@ -138,23 +135,24 @@ async function checkCodeAndNext() {
             }
         }
 
+        // Чистим память телефона перед логином
+        localStorage.clear();
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userPhone', userPhone);
+
         if (isExistingUser && existingData) {
-            // ЕСЛИ СТАРЫЙ ПОЛЬЗОВАТЕЛЬ: база узнала его! Логиним и шлём сразу в профиль
-            localStorage.clear();
-            localStorage.setItem('isLoggedIn', 'true');
+            // ВХОД ДЛЯ СТАРОГО ПОЛЬЗОВАТЕЛЯ (Распознаем и впускаем)
             localStorage.setItem('userId', existingData.custom_id);
             localStorage.setItem('userName', existingData.name);
             localStorage.setItem('userCity', existingData.city);
-            localStorage.setItem('userPhone', userPhone);
             
-            alert("С возвращением в MyElon!\nТвой ID: " + existingData.custom_id);
+            alert("С возвращением в MyElon, " + existingData.name + "!\nВаш ID: " + existingData.custom_id);
             window.location.href = '../profile.html';
         } else {
-            // ЕСЛИ НОВЫЙ ПОЛЬЗОВАТЕЛЬ: перебрасываем на четвёртый шаг — анкету регистрации!
+            // ВХОД ДЛЯ НОВОГО ПОЛЬЗОВАТЕЛЯ (Шлём на анкету Шага 4)
             window.location.href = "register.html";
         }
     } catch (err) {
-        // Если таблицы ещё не созданы, пускаем на анкету для теста
         window.location.href = "register.html";
     }
 }
