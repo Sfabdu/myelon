@@ -78,10 +78,10 @@
                 </div>
                 <div class="user-text-box">
                     <div id="user-name-display" class="user-name-title">Загрузка...</div>
-                    <div id="user-id-display" class="user-meta-sub">ID 000000</div>
+                    <div id="user-id-display" class="user-meta-sub">ID 0000000</div>
                 </div>
             </div>
-            <button class="btn-logout-top" onclick="handleLogoutUser()">Выйти</button>
+            <button class="btn-logout-top" onclick="localStorage.clear(); sessionStorage.clear(); alert('Вы успешно вышли из профиля MyElon'); window.location.href='auth/phone.html';">Выйти</button>
         </div>
         
         <!-- Блок кошелька и рейтинга -->
