@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyElon Попутчики — Найти поездку</title>
+    <title>MyElon Попутчики</title>
     <link rel="stylesheet" href="../style.css">
     <script src="../supabase.js"></script>
     <style>
@@ -15,34 +15,46 @@
         
         .main-content { width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; flex: 1; display: flex; flex-direction: column; gap: 16px; }
         
-        /* Блок фильтров городов */
-        .filter-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 16px; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
+        /* Роскошные переключатели: Пассажирские / Грузовые */
+        .trips-type-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #E5E7EB; padding: 4px; border-radius: 14px; box-sizing: border-box; }
+        .tab-btn { background: none; border: none; padding: 10px; font-size: 14px; font-weight: 700; color: #4B5563; cursor: pointer; border-radius: 10px; transition: all 0.2s; }
+        .tab-btn.active-orange-tab { background: #FF6600; color: #FFFFFF; box-shadow: 0 2px 6px rgba(255,102,0,0.15); }
+        
+        /* Блок фильтров */
+        .filter-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 16px; box-sizing: border-box; }
         .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .filter-select { background: #F3F4F6; border: 1px solid transparent; padding: 12px; border-radius: 12px; font-size: 14px; outline: none; font-weight: 600; color: #111; width: 100%; box-sizing: border-box; }
         .filter-select:focus { border-color: #FF6600; background: #FFFFFF; }
         .btn-search-trips { width: 100%; background: #111827; color: #FFFFFF; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
         
         /* Карточка поездки */
-        .trip-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 16px; text-align: left; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,0.01); display: flex; flex-direction: column; gap: 12px; }
+        .trip-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 16px; text-align: left; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
         .trip-top-row { display: flex; justify-content: space-between; align-items: center; }
         .trip-price { font-size: 20px; font-weight: 900; color: #FF6600; }
         .trip-seats-badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: #FFF0E6; color: #FF6600; }
         .trip-route { font-size: 15px; font-weight: 700; color: #111827; }
         .trip-details-row { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #6B7280; font-weight: 500; }
         .detail-tag { background: #F3F4F6; padding: 4px 8px; border-radius: 8px; }
-        .btn-book-orange { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-book-orange { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="header-nav">
     <button class="btn-back" onclick="window.location.href='../index.html'">‹</button>
-    <div class="header-title">MyElon Попутчики</div>
-    <button class="btn-orange-add" onclick="window.location.href='create-trip.html'">+ Водитель</button>
+    <div class="header-title" id="page-nav-title">Пассажирские рейсы</div>
+    <button class="btn-orange-add" onclick="goToCreatePage()">+ Создать</button>
 </div>
 
 <div class="main-content">
-    <!-- Блок фильтрации рейсов -->
+    
+    <!-- Твои новые табы разделения бизнеса -->
+    <div class="trips-type-tabs">
+        <button type="button" id="tab-pass" class="tab-btn active-orange-tab" onclick="switchTripType('passenger')">🙋‍♂️ Пассажирские</button>
+        <button type="button" id="tab-cargo" class="tab-btn" onclick="switchTripType('cargo')">📦 Грузовые</button>
+    </div>
+
+    <!-- Фильтры городов -->
     <div class="filter-card">
         <div class="filter-grid">
             <select id="from-city" class="filter-select">
@@ -60,45 +72,78 @@
                 <option value="kulob">Куляб</option>
             </select>
         </div>
-        <button type="button" class="btn-search-trips" onclick="filterAvailableTrips()">Найти машины</button>
+        <button type="button" class="btn-search-trips" onclick="filterAvailableTrips()">Найти транспорт</button>
     </div>
 
-    <div style="font-size: 14px; font-weight: 800; color: #111; text-align: left; margin-top: 8px;">Доступные поездки на сегодня</div>
+    <!-- Динамический заголовок ленты -->
+    <div id="list-title" style="font-size: 14px; font-weight: 800; color: #111; text-align: left; margin-top: 4px;">Свободные машины для пассажиров</div>
 
-    <!-- Список поездок -->
+    <!-- ЛЕНТА ОБЪЯВЛЕНИЙ -->
     <div id="trips-list-container" style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
         
-        <!-- Тестовая карточка поездки -->
-        <div class="trip-card" data-from="dushanbe" data-to="khujand">
+        <!-- Карточка 1: Тестовый ПАССАЖИРСКИЙ рейс -->
+        <div class="trip-card" data-type="passenger" data-from="dushanbe" data-to="khujand">
             <div class="trip-top-row">
-                <div class="trip-price">120 TJS <span style="font-size:13px; color:#666; font-weight:500;">/ место</span></div>
+                <div class="trip-price">120 TJS <span style="font-size:12px; color:#666; font-weight:500;">/ место</span></div>
                 <div class="trip-seats-badge">Осталось 3 места</div>
             </div>
             <div class="trip-route">Душанбе ➔ Худжанд</div>
             <div class="trip-details-row">
-                <div class="detail-tag">🕒 Выезд: 14:30</div>
+                <div class="detail-tag">🕒 Выезд: Сегодня 14:30</div>
                 <div class="detail-tag">🚗 Opel Zafira</div>
                 <div class="detail-tag">❄️ Кондиционер</div>
-                <div class="detail-tag">💼 Багаж включен</div>
             </div>
-            <button type="button" class="btn-book-orange" onclick="goToBookingDetails('000001', '120', 'dushanbe', 'khujand')">Забронировать место</button>
+            <button type="button" class="btn-book-orange" onclick="goToBookingDetails('passenger', '120', 'dushanbe', 'khujand')">Забронировать место</button>
+        </div>
+
+        <!-- Карточка 2: Тестовый ГРУЗОВОЙ рейс (скрыт на старте) -->
+        <div class="trip-card" data-type="cargo" data-from="dushanbe" data-to="khujand" style="display: none;">
+            <div class="trip-top-row">
+                <div class="trip-price">40 TJS <span style="font-size:12px; color:#666; font-weight:500;">/ за коробку</span></div>
+                <div class="trip-seats-badge" style="background:#E6F4FF; color:#54A9EB;">Свободный багажник</div>
+            </div>
+            <div class="trip-route">Душанбе ➔ Худжанд</div>
+            <div class="trip-details-row">
+                <div class="detail-tag">🕒 Выезд: Сегодня 16:00</div>
+                <div class="detail-tag">🚚 Mercedes Sprinter</div>
+                <div class="detail-tag">📦 Принимаю: Сумки, Коробки, Грузы</div>
+            </div>
+            <button type="button" class="btn-book-orange" style="background:#111827;" onclick="goToBookingDetails('cargo', '40', 'dushanbe', 'khujand')">Передать попутный груст</button>
         </div>
 
     </div>
 </div>
 
 <script>
+let currentGlobalType = 'passenger';
+
+function switchTripType(type) {
+    currentGlobalType = type;
+    
+    // Переключаем кнопки табов визуально
+    document.getElementById('tab-pass').className = type === 'passenger' ? 'tab-btn active-orange-tab' : 'tab-btn';
+    document.getElementById('tab-cargo').className = type === 'cargo' ? 'tab-btn active-orange-tab' : 'tab-btn';
+    
+    // Меняем заголовки на экране
+    document.getElementById('page-nav-title').innerText = type === 'passenger' ? 'Пассажирские рейсы' : 'Передача грузов';
+    document.getElementById('list-title').innerText = type === 'passenger' ? 'Свободные машины для пассажиров' : 'Попутный груз (Спринтеры и фуры)';
+    
+    // Сбрасываем фильтр и показываем нужный тип
+    filterAvailableTrips();
+}
+
 function filterAvailableTrips() {
     let from = document.getElementById('from-city').value;
     let to = document.getElementById('to-city').value;
     let cards = document.querySelectorAll('.trip-card');
     
-    // Сверхлёгкий текстовый фильтр без перегрузки сервера
     cards.forEach(card => {
+        let cardType = card.getAttribute('data-type');
         let cardFrom = card.getAttribute('data-from');
         let cardTo = card.getAttribute('data-to');
         
-        if ((from === "" || from === cardFrom) && (to === "" || to === cardTo)) {
+        // Проверяем совпадение и по ТИПУ (пассажир/груз), и по ГОРОДАМ
+        if (cardType === currentGlobalType && (from === "" || from === cardFrom) && (to === "" || to === cardTo)) {
             card.style.display = "flex";
         } else {
             card.style.display = "none";
@@ -106,12 +151,16 @@ function filterAvailableTrips() {
     });
 }
 
-function goToBookingDetails(driverId, price, from, to) {
-    // Временно запоминаем детали в память, чтобы передать на страницу бронирования `book.html`
-    sessionStorage.setItem('bookDriverId', driverId);
+function goToCreatePage() {
+    // Передаем выбранный тип в память, чтобы страница создания сразу открывалась в нужном режиме
+    sessionStorage.setItem('createTripType', currentGlobalType);
+    window.location.href = "create-trip.html";
+}
+
+function goToBookingDetails(type, price, from, to) {
+    sessionStorage.setItem('bookTripType', type);
     sessionStorage.setItem('bookPrice', price);
     sessionStorage.setItem('bookRoute', from + " ➔ " + to);
-    
     window.location.href = "book.html";
 }
 </script>
