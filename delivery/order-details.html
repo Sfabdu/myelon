@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали заказа | MyElon Доставка</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../supabase.js"></script>
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .header-nav { width: 100%; max-width: 480px; background: #FFFFFF; padding: 16px; border-bottom: 1px solid #EAEAEA; display: flex; align-items: center; gap: 12px; box-sizing: border-box; }
+        .btn-back { background: none; border: none; font-size: 20px; cursor: pointer; color: #333; padding: 0; }
+        .header-title { font-size: 18px; font-weight: 800; color: #111; }
+        
+        .main-content { width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; flex: 1; display: flex; flex-direction: column; gap: 16px; width: 100%; }
+        .details-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 24px; padding: 24px; text-align: left; box-sizing: border-box; }
+        
+        .product-preview-row { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #F3F4F6; padding-bottom: 16px; }
+        .item-photo-box { width: 70px; height: 70px; background: #F3F4F6; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 1px solid #E5E7EB; }
+        .item-meta-text { flex: 1; }
+        .item-name-lbl { font-size: 16px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+        .price-big-tag { font-size: 20px; font-weight: 900; color: #FF6600; }
+        
+        .profile-section-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 16px; padding: 14px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .profile-avatar-circle { width: 44px; height: 44px; background: #FF6600; color: #FFFFFF; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .profile-info-text { flex: 1; }
+        .profile-username { font-weight: 700; font-size: 15px; color: #111827; }
+        .btn-phone-call-link { color: #54A9EB; font-weight: 700; font-size: 13px; text-decoration: none; display: inline-block; margin-top: 2px; }
+        
+        .route-info-block { background: #FAFAFA; border-left: 3px solid #FF6600; padding: 10px 14px; font-size: 13px; color: #4B5563; font-weight: 600; line-height: 1.4; margin-bottom: 24px; }
+        
+        .btn-action-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn-delivery { width: 100%; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; box-sizing: border-box; text-decoration: none; display: block; transition: all 0.2s; }
+        .btn-orange { background: #FF6600; color: #FFFFFF; box-shadow: 0 4px 12px rgba(255,102,0,0.15); }
+        .btn-navi-yandex { background: #111827; color: #FFF000; font-weight: 800; display: none; }
+        
+        .finish-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; display: none; }
+        .btn-success { background: #25D366; color: #FFFFFF; }
+        .btn-cancel-return { background: #EF4444; color: #FFFFFF; }
+        
+        .status-accepted-banner { padding: 12px; border-radius: 14px; font-weight: 700; text-align: center; font-size: 14px; margin-bottom: 16px; display: none; }
+        .banner-ok { background: #E8FCEF; color: #25D366; border: 1px solid #D1FAE5; }
+        .banner-err { background: #FEE2E2; color: #EF4444; border: 1px solid #FCA5A5; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="header-nav">
+    <button class="btn-back" onclick="window.location.href='delivery.html'">‹ Назад</button>
+    <div class="header-title">Детали Доставки</div>
+</div>
+
+<div class="main-content">
+    <div class="status-accepted-banner banner-ok" id="accepted-banner">✓ Заказ принят вами!</div>
+    <div class="status-accepted-banner banner-err" id="expired-banner">✕ Заказ устарел и больше недоступен (истекло 1.5 часа)</div>
+
+    <div class="details-card">
+        <div class="product-preview-row">
+            <div class="item-photo-box" id="item-icon">💻</div>
+            <div class="item-meta-text">
+                <div class="item-name-lbl" id="item-name">Игровой ноутбук</div>
+                <div class="price-big-tag" id="item-price">15.00 TJS</div>
+            </div>
+        </div>
+        
+        <div class="profile-section-box">
+            <div class="profile-avatar-circle">А</div>
+            <div class="profile-info-text">
+                <div class="profile-username">Продавец: Абдулоҷон (ID 000001)</div>
+                <a href="tel:+992907875772" class="btn-phone-call-link">📞 Позвонить продавцу (+992 907 875 772)</a>
+            </div>
+        </div>
+        
+        <div class="route-info-block">
+            📍 <strong>Откуда:</strong> Душанбе, ул. Рудаки 45<br>
+            🏁 <strong>Куда:</strong> Душанбе, ул. Айни 12
+        </div>
+        
+        <div class="btn-action-group">
+            <button type="button" id="btn-accept" class="btn-delivery btn-orange" onclick="processOrderAcceptance()">Принять заказ</button>
+            
+            <a href="#" id="btn-navi" class="btn-delivery btn-navi-yandex" onclick="launchYandexNavi()">🚀 В ПУТИ (Открыть Яндекс.Навигатор)</a>
+            
+            <div class="finish-grid" id="finish-buttons-block">
+                <button type="button" class="btn-delivery btn-cancel-return" onclick="finishOrderAction('return')">↩️ Возврат</button>
+                <button type="button" class="btn-delivery btn-success" onclick="finishOrderAction('success')">✅ Успешно</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const sellerLat = 38.5762;
+const sellerLon = 68.7797;
+
+document.addEventListener("DOMContentLoaded", function() {
+    let name = sessionStorage.getItem('currentOrderName') || 'Игровой ноутбук';
+    let price = sessionStorage.getItem('currentOrderPrice') || '15.00';
+    let icon = sessionStorage.getItem('currentOrderIcon') || '💻';
+    
+    document.getElementById('item-name').innerText = name;
+    document.getElementById('item-price').innerText = price + " TJS";
+    document.getElementById('item-icon').innerText = icon;
+
+    // ВНУТРЕННИЙ ФИЛЬТР БЕЗОПАСНОСТИ 1.5 ЧАСА
+    // Симулируем: если курьер открыл карточку старого заказа, блокируем её
+    if (price === "20.00") { 
+        document.getElementById('expired-banner').style.display = "block";
+        let btnAccept = document.getElementById('btn-accept');
+        btnAccept.disabled = true;
+        btnAccept.style.background = "#9CA3AF";
+        btnAccept.innerText = "Время заказа истекло";
+    }
+});
+
+function processOrderAcceptance() {
+    document.getElementById('accepted-banner').style.display = "block";
+    alert("Уведомление отправлено продавцу: Курьер принял ваше объявление на доставку!");
+    document.getElementById('btn-accept').style.display = "none";
+    document.getElementById('btn-navi').style.display = "block";
+}
+
+function launchYandexNavi() {
+    let yandexNaviUrl = `yandexnavi://build_route_on_map?lat_to=${sellerLat}&lon_to=${sellerLon}`;
+    window.location.href = yandexNaviUrl;
+    
+    setTimeout(() => {
+        document.getElementById('btn-navi').style.display = "none";
+        document.getElementById('finish-buttons-block').style.display = "grid";
+    }, 1500);
+}
+
+function finishOrderAction(status) {
+    if (status === 'success') {
+        alert("Заказ успешно завершён! Деньги зачислены курьеру.");
+    } else {
+        alert("Оформлен возврат товара продавцу.");
+    }
+    window.location.href = "delivery.html";
+}
+</script>
+</body>
+</html>
