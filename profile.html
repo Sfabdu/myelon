@@ -204,9 +204,13 @@ function switchAdTab(type) {
 }
 
 function handleLogoutUser() {
+    // Железно стираем все ключи входа из памяти смартфона
     localStorage.clear();
     sessionStorage.clear();
-    alert("Вы вышли из профиля");
+    
+    alert("Вы успешно вышли из профиля MyElon");
+    
+    // Моментально шлём пользователя на Шаг 1 авторизации в нашу новую папку
     window.location.href = 'auth/phone.html';
 }
     
