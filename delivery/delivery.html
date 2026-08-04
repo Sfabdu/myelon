@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель Курьера | MyElon Доставка</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../supabase.js"></script>
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .header-nav { width: 100%; max-width: 480px; background: #FFFFFF; padding: 16px; border-bottom: 1px solid #EAEAEA; display: flex; align-items: center; gap: 12px; box-sizing: border-box; }
+        .btn-back { background: none; border: none; font-size: 20px; cursor: pointer; color: #333; padding: 0; }
+        .header-title { font-size: 18px; font-weight: 800; color: #111; }
+        
+        .main-content { width: 100%; max-width: 480px; padding: 16px; box-sizing: border-box; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+        
+        /* Блок статуса курьера */
+        .courier-status-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 20px; padding: 16px; text-align: left; box-sizing: border-box; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; background: #E8FCEF; color: #25D366; margin-bottom: 8px; }
+        .gps-info { font-size: 13px; color: #6B7280; font-weight: 500; }
+        
+        .section-title { font-size: 16px; font-weight: 800; color: #111; text-align: left; margin: 12px 0 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* КАРТОЧКА ЗАКАЗА В РАДИУСЕ 3-5 КМ */
+        .order-card { background: #FFFFFF; border: 1px solid #FF6600; border-radius: 24px; padding: 20px; text-align: left; box-sizing: border-box; box-shadow: 0 4px 12px rgba(255,102,0,0.04); position: relative; }
+        .order-price { font-size: 22px; font-weight: 900; color: #FF6600; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .order-distance-tag { font-size: 12px; background: #FFF0E6; color: #FF6600; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+        
+        .route-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; position: relative; padding-left: 20px; }
+        .route-row::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: #E5E7EB; border-style: dashed; }
+        .route-point { font-size: 14px; color: #374151; font-weight: 600; position: relative; }
+        .route-point::after { content: '•'; position: absolute; left: -18px; top: -2px; font-size: 18px; }
+        .point-a::after { color: #FF6600; }
+        .point-b::after { color: #54A9EB; }
+        
+        /* Профиль продавца внутри активного заказа */
+        .seller-profile-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 16px; padding: 12px; margin-bottom: 16px; }
+        .seller-name { font-weight: 700; font-size: 14px; color: #111827; margin-bottom: 4px; }
+        .btn-call-seller { color: #54A9EB; font-weight: 700; font-size: 13px; text-decoration: none; display: inline-block; margin-top: 4px; }
+        
+        /* Кнопки управления заказом */
+        .btn-action-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-delivery { width: 100%; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; box-sizing: border-box; text-decoration: none; display: block; }
+        .btn-orange { background: #FF6600; color: #FFFFFF; box-shadow: 0 4px 12px rgba(255,102,0,0.15); }
+        .btn-navi-yandex { background: #111827; color: #FFF000; font-weight: 800; display: none; } /* Стиль под Яндекс */
+        
+        .finish-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; display: none; }
+        .btn-success { background: #25D366; color: #FFFFFF; }
+        .btn-cancel-return { background: #EF4444; color: #FFFFFF; }
+    </style>
+</head>
+<body>
+
+<div class="header-nav">
+    <button class="btn-back" onclick="window.location.href='../index.html'">‹</button>
+    <div class="header-title">Радар Заказов Доставки</div>
+</div>
+
+<div class="main-content">
+    
+    <!-- Статус курьера -->
+    <div class="courier-status-card">
+        <div class="status-badge">● Радар активен</div>
+        <div class="gps-info" id="courier-coords">Определяем ваш радиус поиска...</div>
+    </div>
+    
+    <div class="section-title">Доступные заказы рядом (до 5 км)</div>
+    
+    <!-- ЛЕНТА ЗАКАЗОВ -->
+    <div id="orders-list-wrapper" class="orders-container">
+        
+        <!-- Карточка тестового заказа -->
+        <div class="order-card" id="active-order-box">
+            <div class="order-price">
+                <span>15.00 TJS</span>
+                <span class="order-distance-tag" id="order-dist-val">~ 1.8 км от вас</span>
+            </div>
+            
+            <div class="route-row">
+                <div class="route-point point-a">Точка А: Душанбе, ул. Рудаки 45 (Продавец)</div>
+                <div class="route-point point-b">Точка Б: Душанбе, ул. Айни 12 (Покупатель)</div>
+            </div>
+            
+            <!-- Скрытый профиль продавца (откроется после принятия заказа) -->
+            <div class="seller-profile-box" id="seller-profile" style="display: none;">
+                <div class="seller-name">Продавец: Абдулоҷон (ID 000001)</div>
+                <a href="tel:+992907875772" class="btn-call-seller">📞 Позвонить продавцу (+992 907 875 772)</a>
+            </div>
+            
+            <!-- Цепочка кнопок управления заказом -->
+            <div class="btn-action-group">
+                <!-- Кнопка 1: Принять заказ -->
+                <button type="button" id="btn-accept" class="btn-delivery btn-orange" onclick="acceptCourierOrder()">Принять заказ</button>
+                
+                <!-- Кнопка 2: В ПУТИ (БЕСПЛАТНЫЙ ИНТЕНТ-ПЕРЕХОД В ЯНДЕКС.НАВИГАТОР) -->
+                <a href="#" id="btn-navi" class="btn-delivery btn-navi-yandex" onclick="startNaviRoute()">🚀 В ПУТИ (Открыть Яндекс.Навигатор)</a>
+                
+                <!-- Кнопка 3: Финал (Успешно / Возврат) -->
+                <div class="finish-grid" id="finish-buttons-block">
+                    <button type="button" class="btn-delivery btn-cancel-return" onclick="finishOrderAction('return')">↩️ Возврат</button>
+                    <button type="button" class="btn-delivery btn-success" onclick="finishOrderAction('success')">✅ Успешно</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+
+<script>
+// Координаты Точки А (продавца) для теста: центр Душанбе
+const sellerLat = 38.5762;
+const sellerLon = 68.7797;
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Автоматически запрашиваем реальный GPS водителя, чтобы высчитать радиус 3-5 км!
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            let userLat = position.coords.latitude;
+            let userLon = position.coords.longitude;
+            
+            document.getElementById('courier-coords').innerText = `Ваш GPS: ${userLat.toFixed(4)}, ${userLon.toFixed(4)}`;
+            
+            // Считаем точное расстояние по формуле Гаверсинуса (без карт Яндекса!)
+            let distance = calculateDistanceKm(userLat, userLon, sellerLat, sellerLon);
+            document.getElementById('order-dist-val').innerText = `~ ${distance.toFixed(1)} км от вас`;
+            
+            // Сверхлёгкий фильтр нагрузки сервера: если продавец дальше 5 км — убираем заказ с экрана!
+            if (distance > 5.0) {
+                document.getElementById('active-order-box').style.display = "none";
+                document.getElementById('orders-list-wrapper').innerHTML = `<div style="text-align:center; color:#888; padding:20px;">В радиусе 5 км заказов не найдено.</div>`;
+            }
+        }, function() {
+            // Если курьер запретил GPS, ставим симуляцию 1.8 км, чтобы не ломать тест
+            document.getElementById('courier-coords').innerText = "GPS отключен. Режим симуляции радиуса.";
+        });
+    }
+});
+
+// Математическая формула Гаверсинуса (Считает километры по воздуху мгновенно, сервер не нагружается!)
+function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Радиус Земли в км
+    let dLat = (lat2 - lat1) * Math.PI / 180;
+    let dLon = (lon2 - lon1) * Math.PI / 180;
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+function acceptCourierOrder() {
+    // 1. Показываем скрытый профиль и телефон продавца
+    document.getElementById('seller-profile').style.display = "block";
+    // 2. Скрываем кнопку принятия, открываем кнопку Навигатора Яндекса
+    document.getElementById('btn-accept').style.display = "none";
+    document.getElementById('btn-navi').style.display = "block";
+}
+
+function startNaviRoute() {
+    // ЖЕЛЕЗНЫЙ ИНТЕНТ-ПЕРЕХОД: Сайт сам сворачивается и бесплатно открывает приложение Яндекс.Навигатор 
+    // Он строит маршрут прямо до Точки А (продавца) по GPS-координатам!
+    let yandexNaviUrl = `yandexnavi://build_route_on_map?lat_to=${sellerLat}&lon_to=${sellerLon}`;
+    
+    // Запасная ссылка, если приложения Яндекс.Навигатор нет на телефоне курьера (откроет браузерную карту Яндекса)
+    let webBackupUrl = `https://yandex.ru{sellerLat},${sellerLon}&rtt=pd`;
+    
+    // Пытаемся запустить навигатор курьера силой
+    window.location.href = yandexNaviUrl;
+    
+      // Через 1.5 секунды открываем кнопки финала сделки
+    setTimeout(() => {
+        document.getElementById('btn-navi').style.display = "none";
+        document.getElementById('finish-buttons-block').style.display = "grid";
+    }, 1500);
+}
+
+function finishOrderAction(status) {
+    if (status === 'success') {
+        alert("Заказ успешно завершён! 15 сомони начислены на ваш баланс.");
+    } else {
+        alert("Оформлен возврат товара продавцу.");
+    }
+    // Перезагружаем радар для поиска новых заказов
+    window.location.reload();
+}
+
