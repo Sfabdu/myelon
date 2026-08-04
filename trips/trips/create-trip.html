@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать поездку | MyElon Попутчики</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../supabase.js"></script>
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 20px; padding: 0; }
+        .auth-title { font-size: 24px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: left; }
+        .auth-subtitle { font-size: 14px; color: #6B7280; margin: 0 0 24px 0; text-align: left; line-height: 1.4; }
+        
+        /* Табы для водителя: рейс или груз */
+        .create-type-tabs { display: grid; grid-template-columns: 1fr 1fr; background: #E5E7EB; padding: 4px; border-radius: 14px; box-sizing: border-box; margin-bottom: 20px; }
+        .tab-btn { background: none; border: none; padding: 10px; font-size: 13px; font-weight: 700; color: #4B5563; cursor: pointer; border-radius: 10px; transition: all 0.2s; }
+        .tab-btn.active-orange-tab { background: #FF6600; color: #FFFFFF; box-shadow: 0 2px 6px rgba(255,102,0,0.15); }
+        
+        /* Поля формы */
+        .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; text-align: left; }
+        .input-group label { font-size: 13px; font-weight: 700; color: #111827; }
+        .input-group input, .input-group select { background-color: #F3F4F6; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; font-weight: 500; }
+        .input-group input:focus, .input-group select:focus { border-color: #FF6600; background-color: #FFFFFF; border: 1px solid #FF6600; }
+        
+        .btn-orange-action { width: 100%; background: #FF6600; color: #FFFFFF; border: none; padding: 16px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+        .btn-orange-action:active { background: #E65500; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="auth-card">
+        <button class="btn-back-link" onclick="window.location.href='trips.html'">‹ Назад к списку</button>
+        
+        <div class="auth-title">Создать поездку</div>
+        <div class="auth-subtitle">Заполните детали маршрута, чтобы пассажиры или отправители грузов могли найти вас</div>
+        
+        <!-- Выбор типа создаваемого объявления -->
+        <div class="create-type-tabs">
+            <button type="button" id="form-tab-pass" class="tab-btn active-orange-tab" onclick="setFormType('passenger')">🙋‍♂️ Пассажирский рейс</button>
+            <button type="button" id="form-tab-cargo" class="tab-btn" onclick="setFormType('cargo')">📦 Попутный груз</button>
+        </div>
+        
+        <form onsubmit="handlePublishTrip(event)">
+            <!-- Города откуда / куда -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group">
+                    <label>Откуда</label>
+                    <select id="trip-from" required>
+                        <option value="dushanbe">Душанбе</option>
+                        <option value="khujand">Худжанд</option>
+                        <option value="bokhtar">Бохтар</option>
+                        <option value="kulob">Куляб</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Куда</label>
+                    <select id="trip-to" required>
+                        <option value="khujand">Худжанд</option>
+                        <option value="dushanbe">Душанбе</option>
+                        <option value="bokhtar">Бохтар</option>
+                        <option value="kulob">Куляб</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Время выезда и Марка авто -->
+            <div class="input-group">
+                <label>Время выезда</label>
+                <input type="text" id="trip-time" placeholder="Например: Сегодня в 15:00" required>
+            </div>
+            
+            <div class="input-group">
+                <label>Марка и модель машины</label>
+                <input type="text" id="trip-car" placeholder="Например: Opel Zafira" required>
+            </div>
+            
+            <!-- Цена и Места / Описание груза -->
+            <div class="input-group">
+                <label id="label-price">Цена за 1 место (сомони)</label>
+                <input type="number" id="trip-price" placeholder="100" required>
+            </div>
+            
+            <div class="input-group">
+                <label id="label-capacity">Количество свободных мест</label>
+                <input type="text" id="trip-capacity" placeholder="4" required>
+            </div>
+            
+            <button type="submit" class="btn-orange-action">Опубликовать рейс</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let currentFormType = 'passenger';
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Автоматически выставляем тот тип, который водитель нажал на главной доске
+    let savedType = sessionStorage.getItem('createTripType') || 'passenger';
+    setFormType(savedType);
+});
+
+function setFormType(type) {
+    currentFormType = type;
+    
+    // Переключаем табы визуально
+    document.getElementById('form-tab-pass').className = type === 'passenger' ? 'tab-btn active-orange-tab' : 'tab-btn';
+    document.getElementById('form-tab-cargo').className = type === 'cargo' ? 'tab-btn active-orange-tab' : 'tab-btn';
+    
+    // Меняем подписи к полям на лету под твой разделенный бизнес!
+    let labelPrice = document.getElementById('label-price');
+    let labelCapacity = document.getElementById('label-capacity');
+    let inputCapacity = document.getElementById('trip-capacity');
+    
+    if (type === 'passenger') {
+        labelPrice.innerText = "Цена за 1 место (сомони)";
+        labelCapacity.innerText = "Количество свободных мест";
+        inputCapacity.placeholder = "4";
+    } else {
+        labelPrice.innerText = "Цена за коробку/сумку (сомони)";
+        labelCapacity.innerText = "Что готовы взять в багажник?";
+        inputCapacity.placeholder = "Коробки, сумки, документы";
+    }
+}
+
+function handlePublishTrip(event) {
+    event.preventDefault();
+    
+    alert("Рейс успешно создан! После настройки Supabase он будет мгновенно появляться на общей доске.");
+    
+    // Улетаем обратно на главную доску попутчиков
+    window.location.href = "trips.html";
+}
+</script>
+</body>
+</html>
