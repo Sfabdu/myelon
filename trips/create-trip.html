@@ -46,25 +46,31 @@
         </div>
         
         <form onsubmit="handlePublishTrip(event)">
-            <!-- Города откуда / куда -->
+              <!-- Города откуда / куда с умными подсказками (Datalist) -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="input-group">
                     <label>Откуда</label>
-                    <select id="trip-from" required>
-                        <option value="dushanbe">Душанбе</option>
-                        <option value="khujand">Худжанд</option>
-                        <option value="bokhtar">Бохтар</option>
-                        <option value="kulob">Куляб</option>
-                    </select>
+                    <input type="text" id="trip-from" list="popular-cities-from" placeholder="Город отправления" required>
+                   <datalist id="popular-cities-from">
+                        <option value="Душанбе">
+                        <option value="Худжанд">
+                        <option value="Бохтар">
+                        <option value="Куляб">
+                        <option value="Истаравшан">
+                    </datalist>
                 </div>
                 <div class="input-group">
                     <label>Куда</label>
-                    <select id="trip-to" required>
-                        <option value="khujand">Худжанд</option>
-                        <option value="dushanbe">Душанбе</option>
-                        <option value="bokhtar">Бохтар</option>
-                        <option value="kulob">Куляб</option>
-                    </select>
+                    <input type="text" id="trip-to" list="popular-cities-to" placeholder="Город назначения" required>
+                    <datalist id="popular-cities-to">
+                        <option value="Худжанд">
+                        <option value="Душанбе">
+                        <option value="Бохтар">
+                        <option value="Куляб">
+                        <option value="Исфара">
+                        <option value="Вахдат">
+                        <option value="Гиссар">
+                    </datalist>
                 </div>
             </div>
             
