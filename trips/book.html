@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты водителя | MyElon Попутчики</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { background-color: #FAFAFA; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-content { width: 100%; max-width: 450px; padding: 16px; box-sizing: border-box; }
+        .auth-card { background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 24px; padding: 32px 24px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        .btn-back-link { background: none; border: none; color: #666; font-size: 14px; display: flex; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 20px; padding: 0; }
+        .auth-title { font-size: 22px; font-weight: 800; color: #111111; margin: 0 0 6px 0; text-align: center; }
+        .auth-subtitle { font-size: 14px; color: #6B7280; margin: 0 0 24px 0; text-align: center; line-height: 1.4; }
+        
+        /* Чекбокс успешного выбора */
+        .success-icon-circle { width: 56px; height: 56px; background: #FFF0E6; color: #FF6600; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px auto; }
+        
+        /* Блок информации о поездке */
+        .summary-info-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 16px; padding: 16px; text-align: left; margin-bottom: 24px; box-sizing: border-box; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 14px; color: #374151; margin-bottom: 8px; font-weight: 500; }
+        .summary-row:last-child { margin-bottom: 0; }
+        .summary-label { color: #6B7280; font-weight: 600; }
+        .summary-val { font-weight: 700; color: #111827; }
+        
+        /* Водила профиль */
+        .driver-card-box { display: flex; align-items: center; gap: 12px; border-top: 1px solid #E5E7EB; padding-top: 16px; margin-top: 16px; text-align: left; }
+        .driver-avatar { width: 44px; height: 44px; background: #FF6600; color: #FFFFFF; font-weight: 800; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .driver-name { font-weight: 700; font-size: 15px; color: #111827; }
+        .driver-rate { font-size: 12px; color: #FFB000; font-weight: 600; margin-top: 2px; }
+        
+        /* Мощные кнопки связи */
+        .btn-communication-group { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+        .btn-comm { width: 100%; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
+        .btn-comm:active { transform: scale(0.98); }
+        .btn-phone-call { background: #FF6600; color: #FFFFFF; box-shadow: 0 4px 12px rgba(255,102,0,0.15); }
+        .btn-wa-chat { background: #25D366; color: #FFFFFF; box-shadow: 0 4px 12px rgba(37,211,102,0.15); }
+        .btn-home-gray { background: #111827; color: #FFFFFF; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="auth-card">
+        <button class="btn-back-link" onclick="window.location.href='trips.html'">‹ Назад к списку</button>
+        
+        <div class="success-icon-circle">🚗</div>
+        <div class="auth-title" id="book-title-header">Маршрут выбран!</div>
+        <div class="auth-subtitle">Свяжитесь с водителем напрямую, чтобы подтвердить бронь и договориться о месте встречи. Сделка оплачивается наличными при посадке.</div>
+        
+        <!-- Блок сводки рейса -->
+        <div class="summary-info-box">
+            <div class="summary-row">
+                <span class="summary-label">Маршрут:</span>
+                <span class="summary-val" id="sum-route">Душанбе ➔ Худжанд</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Тип поездки:</span>
+                <span class="summary-val" id="sum-type">Пассажирская</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Стоимость:</span>
+                <span class="summary-val" id="sum-price" style="color:#FF6600;">120 TJS</span>
+            </div>
+            
+            <!-- Профиль водилы -->
+            <div class="driver-card-box">
+                <div class="driver-avatar" id="drv-letter">A</div>
+                <div>
+                    <div class="driver-name" id="drv-name">Абдулло (Водитель)</div>
+                    <div class="driver-rate">⭐️ 5.0 • Проверенный профиль</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ДВЕ ГЛАВНЫЕ КНОПКИ СВЯЗИ -->
+        <div class="btn-communication-group">
+            <!-- Прямой звонок по сотовой сети -->
+            <a href="tel:+992907875772" class="btn-comm btn-phone-call">
+                <span>📞 Позвонить водителю</span>
+            </a>
+            
+            <!-- Прямой вылет в Ватсап с авто-текстом -->
+            <a href="#" id="wa-intent-link" target="_blank" class="btn-comm btn-wa-chat">
+                <span>💬 Написать в WhatsApp</span>
+            </a>
+            
+            <!-- Вернуться на главную -->
+            <a href="../index.html" class="btn-comm btn-home-gray">На главную страницу</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Вытаскиваем детали рейса из памяти смартфона
+    let type = sessionStorage.getItem('bookTripType') || 'passenger';
+    let price = sessionStorage.getItem('bookPrice') || '120';
+    let route = sessionStorage.getItem('bookRoute') || 'Душанбе ➔ Худжанд';
+    
+    // Подставляем тексты на лету под макет
+    document.getElementById('sum-route').innerText = route;
+    document.getElementById('sum-price').innerText = price + " TJS";
+    
+    let typeLabel = document.getElementById('sum-type');
+    let titleHeader = document.getElementById('book-title-header');
+    
+    if (type === 'passenger') {
+        typeLabel.innerText = "Пассажирская";
+        titleHeader.innerText = "Маршрут выбран!";
+    } else {
+        typeLabel.innerText = "Грузовая (Попутный груз)";
+        titleHeader.innerText = "Свободный багажник найден!";
+    }
+    
+    // Номер водителя (для теста жестко твой, потом привяжем к базе)
+    let driverPhone = "907875772"; 
+    
+    // Шьем красивый, готовый шаблон сообщения курьеру в WhatsApp, чтобы пассажиру не надо было писать руками
+    let textMessage = `Привет! Нашёл ваше объявление на сайте MyElon по маршруту ${route}. Хочу забронировать место. Выезжаем сегодня?`;
+    if (type === 'cargo') {
+        textMessage = `Привет! Нашёл ваше грузовое объявление на сайте MyElon по маршруту ${route}. Нужно передать попутную коробку/сумку. Возьмёте?`;
+    }
+    
+    // Создаем ссылку для Ватсапа
+    document.getElementById('wa-intent-link').href = `https://wa.me{driverPhone}?text=${encodeURIComponent(textMessage)}`;
+});
+</script>
+</body>
+</html>
